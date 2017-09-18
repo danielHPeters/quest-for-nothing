@@ -11,9 +11,10 @@ class Player extends GameObject {
      * @param width
      * @param height
      * @param {CollisionBounds} collisionBox
+     * @param {Material} material
      */
-    constructor(name, x, y, width, height, collisionBox) {
-        super(x, y, width, height, collisionBox);
+    constructor(name, x, y, width, height, collisionBox, material) {
+        super(x, y, width, height, collisionBox, material);
         this.name = name;
         this.speed = 10;
         this.speedIncrease = 10;
