@@ -27,6 +27,10 @@ class KeyActions {
 
     }
 
+    shiftAction(){
+        this.game.player.toggleRun();
+    }
+
     escapeAction() {
 
     }

@@ -10,7 +10,7 @@ class Player extends GameObject {
      * @param y
      * @param width
      * @param height
-     * @param collisionBox
+     * @param {CollisionBounds} collisionBox
      */
     constructor(name, x, y, width, height, collisionBox) {
         super(x, y, width, height, collisionBox);

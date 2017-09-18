@@ -6,14 +6,12 @@ class Game {
 
     /**
      *
-     * @param map
+     * @param {Map }map
      * @param {Player} player
-     * @param obstacles
      */
-    constructor(map, player, obstacles) {
+    constructor(map, player) {
         this.map = map;
         this.player = player;
-        this.obstacles = obstacles;
     }
 
     update() {

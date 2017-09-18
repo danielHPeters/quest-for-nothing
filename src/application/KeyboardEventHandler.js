@@ -18,29 +18,32 @@ class KeyboardEventHandler {
      */
     initializeKeyHandler(keyActions) {
 
-        window.addEventListener("keydown", function (event) {
+        window.addEventListener('keydown', function (event) {
             if (event.defaultPrevented) {
                 return; // Do nothing if the event was already processed
             }
 
             switch (event.key) {
-                case "ArrowDown":
+                case 'ArrowDown':
                     keyActions.keyDownAction();
                     break;
-                case "ArrowUp":
+                case 'ArrowUp':
                     keyActions.keyUpAction();
                     break;
-                case "ArrowLeft":
+                case 'ArrowLeft':
                     keyActions.keyLeftAction();
                     break;
-                case "ArrowRight":
+                case 'ArrowRight':
                     keyActions.keyRightAction();
                     break;
-                case "Enter":
+                case 'Enter':
                     keyActions.enterAction();
                     break;
-                case "Escape":
+                case 'Escape':
                     keyActions.escapeAction();
+                    break;
+                case 'Shift':
+                    keyActions.shiftAction();
                     break;
                 default:
                     return; // Quit when this doesn't handle the key event.
