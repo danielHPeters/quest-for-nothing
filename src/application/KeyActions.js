@@ -3,6 +3,10 @@
  */
 class KeyActions {
 
+    /**
+     *
+     * @param {Game} game
+     */
     constructor(game) {
         this.game = game;
     }
@@ -34,4 +38,14 @@ class KeyActions {
     escapeAction() {
 
     }
+
+    keyPAction(){
+        if(this.game.running){
+            this.game.pause();
+        } else {
+            this.game.run();
+        }
+    }
+
+
 }

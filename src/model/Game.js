@@ -6,12 +6,33 @@ class Game {
 
     /**
      *
-     * @param {Map }map
+     * @param {Map} map
      * @param {Player} player
      */
     constructor(map, player) {
         this.map = map;
         this.player = player;
+        this.running = false;
+    }
+
+    run(){
+        this.running = true;
+    }
+
+    pause() {
+        this.running = false;
+    }
+
+    gameIsRunning(){
+        return this.running;
+    }
+
+    /**
+     *
+     * @returns {Map|*}
+     */
+    getMap(){
+        return this.map
     }
 
     update() {

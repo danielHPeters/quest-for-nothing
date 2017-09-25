@@ -2,6 +2,7 @@
  * Created by Daniel on 2017-09-18.
  */
 "use strict";
+
 class CollisionBounds {
 
     /**

@@ -5,19 +5,19 @@ class Player extends GameObject {
 
     /**
      *
-     * @param name
-     * @param x
-     * @param y
-     * @param width
-     * @param height
+     * @param {string} name
+     * @param {number} x
+     * @param {number} y
+     * @param {number} width
+     * @param {number} height
      * @param {CollisionBounds} collisionBox
      * @param {Material} material
      */
-    constructor(name, x, y, width, height, collisionBox, material) {
-        super(x, y, width, height, collisionBox, material);
+    constructor(name, x, y, width, height, material) {
+        super(x, y, width, height, material);
         this.name = name;
-        this.speed = 10;
-        this.speedIncrease = 10;
+        this.speed = 5;
+        this.speedIncrease = 5;
         this.running = false;
     }
 
@@ -31,16 +31,16 @@ class Player extends GameObject {
 
         switch (direction) {
             case DirectionsEnum.UP():
-                this.y += this.speed;
+                this.y -= moveDistance;
                 break;
             case DirectionsEnum.DOWN():
-                this.y -= this.speed;
+                this.y += moveDistance;
                 break;
             case DirectionsEnum.LEFT():
-                this.x += this.speed;
+                this.x -= moveDistance;
                 break;
             case DirectionsEnum.RIGHT():
-                this.x -= this.speed;
+                this.x += moveDistance;
                 break;
             default:
                 return;

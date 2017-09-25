@@ -6,25 +6,16 @@
 class MainLoop {
 
     constructor(game) {
-        this.running = false;
-        this.paused = false;
         this.game = game;
     }
 
-    start() {
-        this.running = true;
-        this.loop();
-    }
+    init(callback) {
 
-    loop(){
-        while (this.running && !this.paused){
-            this.game.update();
+        this.game.run();
+
+        while (this.game.gameIsRunning()) {
+            callback();
         }
     }
-
-    stop() {
-        this.running = false;
-    }
-
 
 }

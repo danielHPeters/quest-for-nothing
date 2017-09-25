@@ -7,8 +7,9 @@ class KeyboardEventHandler {
      *
      * @param {KeyActions} keyActions
      */
-    constructor(keyActions) {
+    constructor(keyActions, canvas) {
         this.keyActions = keyActions;
+        this.canvas = canvas;
         this.initializeKeyHandler(this.keyActions);
     }
 
@@ -18,22 +19,22 @@ class KeyboardEventHandler {
      */
     initializeKeyHandler(keyActions) {
 
-        window.addEventListener('keydown', function (event) {
+        this.canvas.addEventListener('keydown', function (event) {
             if (event.defaultPrevented) {
                 return; // Do nothing if the event was already processed
             }
 
             switch (event.key) {
-                case 'ArrowDown':
+                case 's':
                     keyActions.keyDownAction();
                     break;
-                case 'ArrowUp':
+                case 'w':
                     keyActions.keyUpAction();
                     break;
-                case 'ArrowLeft':
+                case 'a':
                     keyActions.keyLeftAction();
                     break;
-                case 'ArrowRight':
+                case 'd':
                     keyActions.keyRightAction();
                     break;
                 case 'Enter':
@@ -44,6 +45,9 @@ class KeyboardEventHandler {
                     break;
                 case 'Shift':
                     keyActions.shiftAction();
+                    break;
+                case 'P':
+                    keyActions.keyPAction();
                     break;
                 default:
                     return; // Quit when this doesn't handle the key event.
