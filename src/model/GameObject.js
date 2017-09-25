@@ -21,6 +21,11 @@ class GameObject {
         this.material = material;
     }
 
+    setPosition(x, y){
+        this.x = x;
+        this.y = y;
+    }
+
     getCollisionBox() {
         return new CollisionBounds(this.x, this.y, this.width, this.height);
     }

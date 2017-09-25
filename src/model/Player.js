@@ -19,6 +19,9 @@ class Player extends GameObject {
         this.speed = 5;
         this.speedIncrease = 5;
         this.running = false;
+        this.lives = 3;
+        this.falling = true;
+        this.previous = [];
     }
 
     /**
@@ -26,6 +29,8 @@ class Player extends GameObject {
      * @param direction
      */
     move(direction) {
+
+        this.previous.push(new Vector(this.x, this.y));
 
         let moveDistance = this.running ? (this.speed + this.speedIncrease) : this.speed;
 
@@ -45,6 +50,49 @@ class Player extends GameObject {
             default:
                 return;
         }
+    }
+
+    checkOutOfBounds(map){
+        if (this.x + this.width > map.width) {
+            this.x = map.width - this.width;
+        }
+        if (this.x < 0) {
+            this.x = 0;
+        }
+
+        if (this.y + this.height > map.height) {
+            this.y = map.height - this.height;
+        }
+        if (this.y < 0) {
+            this.y = 0;
+        }
+    }
+
+    goBack(){
+        if(this.previous.length != 0){
+            this.x = this.previous[this.previous.length -1].x;
+            this.y = this.previous[this.previous.length -1].y;
+        }
+    }
+
+    getLives() {
+        return this.lives;
+    }
+
+    /**
+     *
+     * @param {number} lives
+     */
+    setLives(lives) {
+        this.lives = lives;
+    }
+
+    gainLife() {
+        this.lives += 1;
+    }
+
+    loseLife() {
+        this.lives -= 1;
     }
 
     toggleRun() {

@@ -13,7 +13,7 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">WebSiteName</a>
+                <a class="navbar-brand" href="#">Jump and Run</a>
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
@@ -26,10 +26,11 @@
     <canvas id="game" class="well">
 
     </canvas>
+    <div id="unsupported"></div>
+    <footer>©Cassandra Corrodi, Timothy Hill, Daniel Peters, Oliver Stalder</footer>
 </div>
-<div id="unsupported"></div>
-<footer>©Cassandra Corrodi, Timothy Hill, Daniel Peters, Oliver Stalder</footer>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="src/model/Vector.js" async></script>
 <script src="src/model/CollisionBounds.js" async></script>
 <script src="src/model/GameObject.js" async></script>
 <script src="src/model/DirectionsEnum.js" async></script>
@@ -41,7 +42,6 @@
 <script src="src/application/KeyboardEventHandler.js" async></script>
 <script src="src/application/CollisionHandler.js" async></script>
 <script src="src/application/AssetManager.js" async></script>
-<script src="src/application/MainLoop.js" async></script>
 <script src="src/app.js" async></script>
 </body>
 </html>
