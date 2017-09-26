@@ -16,43 +16,55 @@ class Player extends GameObject {
     constructor(name, x, y, width, height, material) {
         super(x, y, width, height, material);
         this.name = name;
-        this.speed = 5;
-        this.speedIncrease = 5;
+        this.speed = 3;
         this.running = false;
         this.lives = 3;
-        this.falling = true;
+        this.jumping = false;
         this.previous = [];
+        this.friction = 0.8;
+        this.gravity = 0.2;
+        this.velX = 0;
+        this.velY = 0;
     }
 
     /**
      *
      * @param direction
      */
-    move(direction) {
+    move(map) {
 
         this.previous.push(new Vector(this.x, this.y));
 
-        let moveDistance = this.running ? (this.speed + this.speedIncrease) : this.speed;
+        if (this.keyActionsRegister['w']) {
 
-        switch (direction) {
-            case DirectionsEnum.UP():
-                this.y -= moveDistance;
-                break;
-            case DirectionsEnum.DOWN():
-                this.y += moveDistance;
-                break;
-            case DirectionsEnum.LEFT():
-                this.x -= moveDistance;
-                break;
-            case DirectionsEnum.RIGHT():
-                this.x += moveDistance;
-                break;
-            default:
-                return;
+            if (!this.jumping) {
+                this.jumping = true;
+                this.velY = -this.speed*2;
+            }
         }
+
+        if (this.keyActionsRegister['a']) {
+            if (this.velX > -this.speed) {
+                this.velX--;
+            }
+        }
+
+        if (this.keyActionsRegister['d']) {
+            if (this.velX < this.speed) {
+                this.velX++;
+            }
+        }
+
+        this.velX *= this.friction;
+        this.velY += this.gravity;
+
+        this.x += this.velX;
+        this.y += this.velY;
+
+        this.checkOutOfBounds(map);
     }
 
-    checkOutOfBounds(map){
+    checkOutOfBounds(map) {
         if (this.x + this.width > map.width) {
             this.x = map.width - this.width;
         }
@@ -62,16 +74,17 @@ class Player extends GameObject {
 
         if (this.y + this.height > map.height) {
             this.y = map.height - this.height;
+            this.jumping = false;
         }
         if (this.y < 0) {
             this.y = 0;
         }
     }
 
-    goBack(){
-        if(this.previous.length != 0){
-            this.x = this.previous[this.previous.length -1].x;
-            this.y = this.previous[this.previous.length -1].y;
+    goBack() {
+        if (this.previous.length != 0) {
+            this.x = this.previous[this.previous.length - 1].x;
+            this.y = this.previous[this.previous.length - 1].y;
         }
     }
 

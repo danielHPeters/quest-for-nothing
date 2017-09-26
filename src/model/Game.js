@@ -23,7 +23,7 @@ class Game {
         this.running = false;
     }
 
-    gameIsRunning(){
+    isRunning(){
         return this.running;
     }
 

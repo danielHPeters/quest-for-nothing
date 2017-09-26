@@ -7,54 +7,25 @@ class KeyboardEventHandler {
      *
      * @param {KeyActions} keyActions
      */
-    constructor(keyActions, canvas) {
+    constructor(keyActions, canvas, keyActionsRegister) {
         this.keyActions = keyActions;
         this.canvas = canvas;
         this.initializeKeyHandler(this.keyActions);
+        this.keyActionsRegister = keyActionsRegister;
     }
 
     /**
      *
      * @param {KeyActions} keyActions
      */
-    initializeKeyHandler(keyActions) {
+    initializeKeyHandler() {
 
-        this.canvas.addEventListener('keydown', function (event) {
-            if (event.defaultPrevented) {
-                return; // Do nothing if the event was already processed
-            }
+        this.canvas.addEventListener('keydown', event => {
+            this.keyActionsRegister[event.key] = true;
+        });
+        this.canvas.addEventListener('keyup', event => {
+            this.keyActionsRegister[event.key] = false;
+        });
 
-            switch (event.key) {
-                case 's':
-                    keyActions.keyDownAction();
-                    break;
-                case 'w':
-                    keyActions.keyUpAction();
-                    break;
-                case 'a':
-                    keyActions.keyLeftAction();
-                    break;
-                case 'd':
-                    keyActions.keyRightAction();
-                    break;
-                case 'Enter':
-                    keyActions.enterAction();
-                    break;
-                case 'Escape':
-                    keyActions.escapeAction();
-                    break;
-                case 'Shift':
-                    keyActions.shiftAction();
-                    break;
-                case 'P':
-                    keyActions.keyPAction();
-                    break;
-                default:
-                    return; // Quit when this doesn't handle the key event.
-            }
-
-            // Cancel the default action to avoid it being handled twice
-            event.preventDefault();
-        }, true);
     }
 }

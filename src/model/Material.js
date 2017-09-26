@@ -27,4 +27,8 @@ class Material {
     getSprite(){
         return this.sprite;
     }
+
+    getResource(){
+        return this.resource;
+    }
 }
