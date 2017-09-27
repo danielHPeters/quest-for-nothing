@@ -21,7 +21,7 @@ function draw() {
         let ctx = canvas.getContext('2d');
         let player = new Player("Player1", 20, 20, 25, 25, new Material('assets/player.png'));
         let map = new Map(0, 0, canvas.width, canvas.height, new Material('assets/background.jpg'));
-        let block = new Block(50, 50, 40, 40, new Material('assets/stone-block.jpg'));
+        let block = new Block(canvas.width - 200, canvas.height - 50, 40, 40, new Material('assets/stone-block.jpg'));
         let gameObjects = [];
         let game = new Game(map, player);
         let assetManager = new AssetManager();
@@ -38,7 +38,7 @@ function draw() {
 
         // Download all sprites
         assetManager.downLoadAll(() => {
-            // Assign the sprites to the correct material
+            // Assign the sprites to the correct materiala
             gameObjects.forEach(obj => obj.material.setSprite(assetManager.getAsset(obj.material.getResource())));
             // After the sprites are initialized start drawing
             animate(ctx, gameObjects, assetManager, collisionHandler);
@@ -68,10 +68,7 @@ function animate(ctx, gameObjects, assetManager, collisionHandler) {
 
     //gameObjects[1].checkOutOfBounds(gameObjects[0]);
     gameObjects[1].move(gameObjects[0]);
-    /**collisionHandler.handleCollision(gameObjects[1].getCollisionBox(), gameObjects[2], () => {
-        gameObjects[1].goBack();
-        gameObjects[1].jumping = false;
-    });*/
+    collisionHandler.colCheck(gameObjects[1], gameObjects[2]);
     // Draw the sprites on the canvas
     gameObjects.forEach(obj => ctx.drawImage(obj.material.getSprite(), obj.x, obj.y, obj.width, obj.height));
 }

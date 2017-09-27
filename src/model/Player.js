@@ -83,7 +83,7 @@ class Player extends GameObject {
 
     goBack() {
         if (this.previous.length != 0) {
-            this.x = this.previous[this.previous.length - 1].x;
+            this.x = this.previous[this.previous.length - 1 ].x;
             this.y = this.previous[this.previous.length - 1].y;
         }
     }
