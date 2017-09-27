@@ -6,11 +6,11 @@ class Game {
 
     /**
      *
-     * @param {Map} map
+     * @param {Canvas} canvas
      * @param {Player} player
      */
-    constructor(map, player) {
-        this.map = map;
+    constructor(canvas, player) {
+        this.canvas = canvas;
         this.player = player;
         this.running = false;
     }
@@ -29,10 +29,10 @@ class Game {
 
     /**
      *
-     * @returns {Map|*}
+     * @returns {Canvas|*}
      */
-    getMap(){
-        return this.map
+    getCanvas(){
+        return this.canvas;
     }
 
     update() {

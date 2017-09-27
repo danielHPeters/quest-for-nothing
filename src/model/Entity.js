@@ -3,7 +3,7 @@
  */
 "use strict";
 
-class GameObject {
+class Entity {
 
     /**
      *

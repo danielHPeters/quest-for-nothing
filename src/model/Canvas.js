@@ -1,7 +1,7 @@
 /**
  * Created by Daniel on 2017-09-18.
  */
-class Map extends GameObject{
+class Canvas extends Entity{
 
     /**
      *

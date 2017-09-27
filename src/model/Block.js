@@ -1,4 +1,4 @@
-class Block extends GameObject {
+class Block extends Entity {
 
     /**
      *

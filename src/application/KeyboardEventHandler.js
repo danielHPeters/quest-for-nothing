@@ -7,11 +7,11 @@ class KeyboardEventHandler {
      *
      * @param {KeyActions} keyActions
      */
-    constructor(keyActions, canvas, keyActionsRegister) {
+    constructor(keyActions, canvas) {
         this.keyActions = keyActions;
         this.canvas = canvas;
         this.initializeKeyHandler(this.keyActions);
-        this.keyActionsRegister = keyActionsRegister;
+        this.keyActionsRegister = [];
     }
 
     /**
@@ -27,5 +27,9 @@ class KeyboardEventHandler {
             this.keyActionsRegister[event.key] = false;
         });
 
+    }
+
+    getKeyActionsRegister(){
+        return this.keyActionsRegister;
     }
 }
