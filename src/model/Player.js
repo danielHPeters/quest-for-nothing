@@ -36,7 +36,7 @@ class Player extends Entity {
 
         //this.previous.push(new Vector(this.x, this.y));
 
-        if (this.keyActionsRegister['w']) {
+        if (this.keyActionsRegister['w'] || this.keyActionsRegister[' ']) {
 
             if (!this.jumping && this.grounded) {
                 this.jumping = true;

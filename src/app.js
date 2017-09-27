@@ -17,7 +17,7 @@ function draw() {
     if (canvas.getContext) {
 
         let ctx = canvas.getContext('2d');
-        let player = new Player("Player1", 100, 100, 25, 25, new Material('assets/player.png'));
+        let player = new Player("Player1", 100, 100, 30, 30, new Material('assets/player.png'));
         let map = new Canvas(0, 0, canvas.width, canvas.height, new Material('assets/background.jpg'));
         let gameObjects = [];
         let game = new Game(map, player);
@@ -27,6 +27,7 @@ function draw() {
         let collisionHandler = new CollisionHandler();
         let blocks = [];
         let bl = 'block';
+        let se = 'secret'
         let no = null;
         let blocksList = [
             [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl],
@@ -35,7 +36,7 @@ function draw() {
             [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl],
             [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl],
             [bl, no, no, bl, no, no, no, no, no, no, no, no, no, no, bl],
-            [bl, no, bl, bl, bl, no, no, bl, no, no, no, no, no, bl, bl],
+            [bl, no, bl, bl, bl, no, no, bl, no, no, no, no, no, se, bl],
             [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]
         ];
 
@@ -53,7 +54,14 @@ function draw() {
             for (let j = 0; j < blocksList[i].length; j++) {
 
                 if (blocksList[i][j] === 'block') {
+
                     blocks.push(new Block(blockX, blockY, blockWidth, blockHeight, new Material('assets/stone-block.jpg')));
+
+                } else if (blocksList[i][j] === 'secret') {
+
+                    let blk = new Block(blockX, blockY, blockWidth, blockHeight, new Material('assets/stone-block.jpg'));
+                    blk.solid = false;
+                    blocks.push(blk);
                 }
                 blockX += blockWidth;
             }
