@@ -20,7 +20,7 @@ class CollisionHandler {
         }
     }
 
-    colCheck(player, object) {
+    checkCollision(player, object) {
 
         if(object instanceof Block && !object.solid){
 

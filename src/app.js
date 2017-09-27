@@ -1,16 +1,6 @@
 "use strict";
 
-/*let FPS = 60;
-setInterval(function () {
-    update();
-    draw();
-}, 1000 / FPS);*/
-
-function update() {
-
-}
-
-function draw() {
+function init() {
 
     let canvas = document.getElementById('game');
 
@@ -22,10 +12,8 @@ function draw() {
         let gameObjects = [];
         let game = new Game(map, player);
         let assetManager = new AssetManager();
-        let keyActions = new KeyActions(game);
-        let keyEventHandler = new KeyboardEventHandler(keyActions, window);
-        let collisionHandler = new CollisionHandler();
-        let blocks = [];
+        let keyEventHandler = new KeyboardEventHandler(window);
+
         let bl = 'block';
         let se = 'secret'
         let no = null;
@@ -34,55 +22,28 @@ function draw() {
             [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl],
             [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl],
             [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl],
-            [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl],
+            [bl, no, no, no, no, no, no, no, no, bl, bl, no, no, no, bl],
             [bl, no, no, bl, no, no, no, no, no, no, no, no, no, no, bl],
             [bl, no, bl, bl, bl, no, no, bl, no, no, no, no, no, se, bl],
             [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]
         ];
 
+        game.generateBlocks(blocksList);
+
         player.keyActionsRegister = keyEventHandler.getKeyActionsRegister();
         gameObjects.push(map);
         gameObjects.push(player);
-
-        let blockWidth = game.canvas.width / blocksList[0].length;
-        let blockHeight = game.canvas.height / blocksList.length;
-        let blockX = 0;
-        let blockY = 0;
-
-        for (let i = 0; i < blocksList.length; i++) {
-
-            for (let j = 0; j < blocksList[i].length; j++) {
-
-                if (blocksList[i][j] === 'block') {
-
-                    blocks.push(new Block(blockX, blockY, blockWidth, blockHeight, new Material('assets/stone-block.jpg')));
-
-                } else if (blocksList[i][j] === 'secret') {
-
-                    let blk = new Block(blockX, blockY, blockWidth, blockHeight, new Material('assets/stone-block.jpg'));
-                    blk.solid = false;
-                    blocks.push(blk);
-                }
-                blockX += blockWidth;
-            }
-            blockY += blockHeight;
-            blockX = 0;
-        }
-
-        console.log(blocks[0].height + ' : ' + blocks[0].width);
-
-        game.blocks = blocks;
-        gameObjects = gameObjects.concat(blocks);
+        gameObjects = gameObjects.concat(game.blocks);
 
         // Add all sprites to the download queue
         gameObjects.forEach(obj => assetManager.queueDownload(obj.material.getResource()));
 
         // Download all sprites
         assetManager.downLoadAll(() => {
-            // Assign the sprites to the correct materiala
+            // Assign the sprites to the correct material
             gameObjects.forEach(obj => obj.material.setSprite(assetManager.getAsset(obj.material.getResource())));
             // After the sprites are initialized start drawing
-            animate(ctx, game, gameObjects, collisionHandler);
+            animate(ctx, game);
         });
     }
 
@@ -96,48 +57,21 @@ function draw() {
  *
  * @param ctx
  * @param game
- * @param gameObjects
- * @param {CollisionHandler} collisionHandler
  */
-function animate(ctx, game, gameObjects, collisionHandler) {
+function animate(ctx, game) {
 
     // Clear canvas before drawing new animation
     ctx.clearRect(0, 0, game.canvas.width, game.canvas.height);
+
+    // Draw Background
+    game.canvas.render(ctx);
+
+    game.player.move(game.blocks);
+    game.player.render(ctx);
+    game.blocks.forEach(block => block.render(ctx));
+
     // Request new frame when ready
-    requestAnimationFrame(() => animate(ctx, game, gameObjects, collisionHandler));
-
-    //gameObjects[1].checkOutOfBounds(gameObjects[0]);
-    game.player.move(game.canvas);
-    game.blocks.forEach(block => {
-
-        const direction = collisionHandler.colCheck(game.player, block);
-
-        if (direction === "l" || direction === "r") {
-
-            game.player.velX = 0;
-            game.player.jumping = false;
-
-        } else if (direction === "b") {
-
-            game.player.grounded = true;
-            game.player.jumping = false;
-
-        } else if (direction === "t") {
-
-            game.player.velY *= -1;
-        }
-    });
-
-    if (game.player.grounded) {
-
-        game.player.velY = 0;
-    }
-
-    game.player.x += game.player.velX;
-    game.player.y += game.player.velY;
-
-    // Draw the sprites on the canvas
-    gameObjects.forEach(obj => ctx.drawImage(obj.material.getSprite(), obj.x, obj.y, obj.width, obj.height));
+    requestAnimationFrame(() => animate(ctx, game));
 }
 
-$(document).ready(() => draw());
+$(document).ready(() => init());

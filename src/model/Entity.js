@@ -53,4 +53,8 @@ class Entity {
     getCollisionBox() {
         return new CollisionBounds(this.x, this.y, this.width, this.height);
     }
+
+    render(ctx){
+        ctx.drawImage(this.material.getSprite(), this.x, this.y, this.width, this.height)
+    }
 }
