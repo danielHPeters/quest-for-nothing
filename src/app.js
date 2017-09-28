@@ -7,7 +7,7 @@ function init() {
     if (canvas.getContext) {
 
         let ctx = canvas.getContext('2d');
-        let player = new Player("Player1", 100, 100, 30, 30, new Material('assets/player.png'));
+        let player = new Player("Player1", 100, 100, 60, 60, new Material('assets/player.png'));
         let map = new Canvas(0, 0, canvas.width, canvas.height, new Material('assets/background.jpg'));
         let gameObjects = [];
         let game = new Game(map, player);
