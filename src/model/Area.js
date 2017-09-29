@@ -1,28 +1,13 @@
-/**
- * Created by Daniel on 2017-09-18.
- */
-"use strict";
-class Game {
+class Area {
 
-    /**
-     *
-     * @param {Canvas} canvas
-     * @param {Player} player
-     */
-    constructor(canvas, player) {
+    constructor(canvas, top = null, bottom = null, left = null, right = null){
+
         this.canvas = canvas;
-        this.player = player;
-        this.running = false;
-        this.areas = [];
+        this.top = top;
+        this.bottom = bottom;
+        this.left = left;
+        this.right = right;
         this.blocks = [];
-    }
-
-    run(){
-        this.running = true;
-    }
-
-    pause() {
-        this.running = false;
     }
 
     generateBlocks(blocksList){
@@ -52,5 +37,13 @@ class Game {
             blockX = 0;
         }
 
+    }
+
+    hasLeft(){
+        return this.left !== null;
+    }
+
+    hasLeft(){
+        return this.right !== null;
     }
 }

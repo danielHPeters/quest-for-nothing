@@ -24,8 +24,6 @@ class Player extends Entity {
         this.history = [];
         this.friction = 0.8;
         this.gravity = 0.2;
-        this.velX = 0;
-        this.velY = 0;
     }
 
     /**
@@ -34,31 +32,30 @@ class Player extends Entity {
      */
     move(blocks) {
 
-        //this.previous.push(new Vector(this.x, this.y));
+        //this.previous.push(this.position.clone());
 
         if (this.keyActionsRegister['w'] || this.keyActionsRegister[' ']) {
 
             if (!this.jumping && this.grounded) {
                 this.jumping = true;
                 this.grounded = false;
-                this.velY = -this.speed * 2;
+                this.velocity.y = -this.speed * 2;
             }
         }
 
         if (this.keyActionsRegister['a']) {
-            if (this.velX > -this.speed) {
-                this.velX--;
+            if (this.velocity.x > -this.speed) {
+                this.velocity.x--;
             }
         }
 
         if (this.keyActionsRegister['d']) {
-            if (this.velX < this.speed) {
-                this.velX++;
+            if (this.velocity.x < this.speed) {
+                this.velocity.x++;
             }
         }
-
-        this.velX *= this.friction;
-        this.velY += this.gravity;
+        this.velocity.x *= this.friction;
+        this.velocity.y += this.gravity;
 
         this.grounded = false;
 
@@ -68,7 +65,7 @@ class Player extends Entity {
 
             if (direction === "l" || direction === "r") {
 
-                this.velX = 0;
+                this.velocity.x = 0;
                 this.jumping = false;
 
             } else if (direction === "b") {
@@ -78,36 +75,23 @@ class Player extends Entity {
 
             } else if (direction === "t") {
 
-                this.velY *= -1;
+                this.velocity.y *= -1;
             }
         });
 
         if (this.grounded) {
 
-            this.velY = 0;
+            this.velocity.y = 0;
         }
 
-        this.x += this.velX;
-        this.y += this.velY;
+        this.position.add(this.velocity);
     }
 
     goBack() {
-        if (this.previous.length != 0) {
-            this.x = this.history[this.history.length - 1].x;
-            this.y = this.history[this.history.length - 1].y;
+
+        if (this.history.length != 0) {
+            this.position.set(this.history[this.history.length - 1]);
         }
-    }
-
-    getLives() {
-        return this.lives;
-    }
-
-    /**
-     *
-     * @param {number} lives
-     */
-    setLives(lives) {
-        this.lives = lives;
     }
 
     gainLife() {
@@ -130,8 +114,8 @@ class Player extends Entity {
         }
 
         // get the vectors to check against
-        let vX = (player.x + (player.width / 2)) - (object.x + (object.width / 2)),
-            vY = (player.y + (player.height / 2)) - (object.y + (object.height / 2)),
+        let vX = (player.position.x + (player.width / 2)) - (object.position.x + (object.width / 2)),
+            vY = (player.position.y + (player.height / 2)) - (object.position.y + (object.height / 2)),
             // add the half widths and half heights of the objects
             hWidths = (player.width / 2) + (object.width / 2),
             hHeights = (player.height / 2) + (object.height / 2),
@@ -147,11 +131,11 @@ class Player extends Entity {
                 if (vY > 0) {
 
                     colDir = "t";
-                    player.y += oY;
+                    player.position.y += oY;
                 } else {
 
                     colDir = "b";
-                    player.y -= oY;
+                    player.position.y -= oY;
                     player.jumping = false;
                 }
 
@@ -160,15 +144,31 @@ class Player extends Entity {
                 if (vX > 0) {
 
                     colDir = "l";
-                    player.x += oX;
+                    player.position.x += oX;
                 } else {
 
                     colDir = "r";
-                    player.x -= oX;
+                    player.position.x -= oX;
                 }
             }
         }
 
         return colDir;
     }
+
+    /**
+     *
+     * @param {Game} game
+     */
+    checkEdges(game) {
+
+        if (this.position.x > game.canvas.width) {
+            game.current = game.current.right;
+            this.position.x = 0;
+        }
+        else if (this.position.x < 0) {
+            game.current = game.current.left;
+            this.position.x = game.canvas.width;
+        }
+    };
 }
