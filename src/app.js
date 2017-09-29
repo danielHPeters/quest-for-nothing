@@ -7,13 +7,15 @@ function init() {
     if (canvas.getContext) {
 
         let ctx = canvas.getContext('2d');
-        let player = new Player("Player1", 100, 100, 60, 60, new Material('assets/player.png'));
-        let map = new Canvas(0, 0, canvas.width, canvas.height, new Material('assets/background.jpg'));
+        let player = new Player("Player1", 100, 100, 60, 60, new Material('player'));
+        let map = new Canvas(0, 0, canvas.width, canvas.height, new Material('background'));
         let areas = [];
         let area1 = new Area(map)
         let area2 = new Area(map);
+        let area3 = new Area(map);
         let gameObjects = [];
-        let game = new Game(map, player);
+        let audioManager = new AudioManager();
+        let game = new Game(map, player, audioManager);
         let assetManager = new AssetManager();
         let keyEventHandler = new KeyboardEventHandler(window);
 
@@ -27,7 +29,7 @@ function init() {
             [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl],
             [bl, no, no, no, no, no, no, no, no, bl, bl, no, no, no, bl],
             [bl, no, no, bl, no, no, no, no, no, no, no, no, no, no, bl],
-            [bl, no, bl, bl, bl, no, no, bl, no, no, no, no, no, se, se],
+            [bl, no, bl, bl, bl, no, no, bl, no, no, no, no, no, no, se],
             [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]
         ];
 
@@ -38,34 +40,56 @@ function init() {
             [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl],
             [bl, no, no, no, no, no, no, no, no, bl, bl, bl, bl, bl, bl],
             [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl],
-            [no, no, no, no, no, no, no, bl, no, no, no, no, no, no, bl],
+            [se, no, no, no, no, no, no, bl, no, no, no, no, no, no, bl],
+            [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, no, no, bl]
+        ];
+
+        let blocksList3 = [
+            [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, no, no, bl],
+            [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl],
+            [bl, no, no, no, no, bl, no, no, no, no, no, no, no, bl, bl],
+            [bl, no, no, no, no, bl, no, no, no, no, no, no, bl, bl, bl],
+            [bl, no, no, no, no, no, no, no, no, bl, bl, bl, bl, bl, bl],
+            [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl],
+            [bl, no, no, no, no, no, no, bl, no, no, no, no, no, no, bl],
             [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]
         ];
         area1.right = area2;
         area2.left = area1;
+        area2.bottom = area3;
+        area3.top = area2;
         area1.generateBlocks(blocksList);
         area2.generateBlocks(blocksList2);
+        area3.generateBlocks(blocksList3);
         areas.push(area1);
         areas.push(area2);
+        areas.push(area3);
         game.areas = areas;
         game.current = game.areas[0];
-        //game.generateBlocks(blocksList);
+        game.audioManager.load('ambient', 'assets/audio/ambient/ambient.mp3', () => game.audioManager.playSound('ambient', true));
+        game.audioManager.load('jump', 'assets/audio/effects/jump.wav', () => {
 
-        player.keyActionsRegister = keyEventHandler.getKeyActionsRegister();
-        gameObjects.push(map);
-        gameObjects.push(player);
-        gameObjects = gameObjects.concat(area1.blocks);
-        gameObjects = gameObjects.concat(area2.blocks);
+            player.keyActionsRegister = keyEventHandler.getKeyActionsRegister();
+            gameObjects.push(map);
+            gameObjects.push(player);
+            gameObjects = gameObjects.concat(area1.blocks);
+            gameObjects = gameObjects.concat(area2.blocks);
+            gameObjects = gameObjects.concat(area3.blocks);
 
-        // Add all sprites to the download queue
-        gameObjects.forEach(obj => assetManager.queueDownload(obj.material.getResource()));
+            // Add all sprites to the download queue
+            assetManager.queueDownload('background', 'assets/textures/background.jpg');
+            assetManager.queueDownload('player', 'assets/textures/player.png');
+            assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg');
+            // Start playing ambient music
 
-        // Download all sprites
-        assetManager.downLoadAll(() => {
-            // Assign the sprites to the correct material
-            gameObjects.forEach(obj => obj.material.setSprite(assetManager.getAsset(obj.material.getResource())));
-            // After the sprites are initialized start drawing
-            animate(ctx, game);
+            // Download all sprites
+            assetManager.downLoadAll(() => {
+                // Assign the sprites to the correct material
+                gameObjects.forEach(obj => obj.material.setSprite(assetManager.getAsset(obj.material.getName())));
+
+                // After the sprites are initialized start drawing
+                animate(ctx, game);
+            });
         });
     }
 
@@ -88,7 +112,7 @@ function animate(ctx, game) {
     // Draw Background
     game.canvas.render(ctx);
 
-    game.player.move(game.current.blocks);
+    game.player.move(game);
     game.player.checkEdges(game);
     game.player.render(ctx);
     game.current.blocks.forEach(block => block.render(ctx));

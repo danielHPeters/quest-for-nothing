@@ -23,11 +23,11 @@ class Area {
 
                 if (blocksList[i][j] === 'block') {
 
-                    this.blocks.push(new Block(blockX, blockY, blockWidth, blockHeight, new Material('assets/stone-block.jpg')));
+                    this.blocks.push(new Block(blockX, blockY, blockWidth, blockHeight, new Material('stone-block')));
 
                 } else if (blocksList[i][j] === 'secret') {
 
-                    let blk = new Block(blockX, blockY, blockWidth, blockHeight, new Material('assets/stone-block.jpg'));
+                    let blk = new Block(blockX, blockY, blockWidth, blockHeight, new Material('stone-block'));
                     blk.solid = false;
                     this.blocks.push(blk);
                 }

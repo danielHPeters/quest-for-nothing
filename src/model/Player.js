@@ -28,15 +28,16 @@ class Player extends Entity {
 
     /**
      *
-     * @param direction
+     * @param game
      */
-    move(blocks) {
+    move(game) {
 
         //this.previous.push(this.position.clone());
 
         if (this.keyActionsRegister['w'] || this.keyActionsRegister[' ']) {
 
             if (!this.jumping && this.grounded) {
+                game.audioManager.playSound('jump');
                 this.jumping = true;
                 this.grounded = false;
                 this.velocity.y = -this.speed * 2;
@@ -59,7 +60,7 @@ class Player extends Entity {
 
         this.grounded = false;
 
-        blocks.forEach(block => {
+        game.current.blocks.forEach(block => {
 
             const direction = this.checkCollision(this, block);
 
@@ -164,11 +165,19 @@ class Player extends Entity {
 
         if (this.position.x > game.canvas.width) {
             game.current = game.current.right;
-            this.position.x = 0;
+            this.position.x = game.current.blocks[0].width;
         }
         else if (this.position.x < 0) {
             game.current = game.current.left;
-            this.position.x = game.canvas.width;
+            this.position.x = game.canvas.width - game.current.blocks[0].width;
+        }
+        else if (this.position.y > game.canvas.height) {
+            game.current = game.current.bottom;
+            this.position.y = game.current.blocks[0].height;
+        }
+        else if (this.position.y < 0) {
+            game.current = game.current.top;
+            this.position.y = game.canvas.height - game.current.blocks[0].height;
         }
     };
 }
