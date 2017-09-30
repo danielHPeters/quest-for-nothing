@@ -1,3 +1,7 @@
+/**
+ * @author Daniel Peters
+ * @version 1.0
+ */
 class Vector {
 
     /**
@@ -10,12 +14,14 @@ class Vector {
         this.y = y;
     }
 
-    getX() {
-        return this.x;
+    set(x, y){
+        this.x = x;
+        this.y = y;
     }
 
-    getY() {
-        return this.y;
+    setVector(vector){
+        this.x = vector.x;
+        this.y = vector.y;
     }
 
     add(vector) {
@@ -23,7 +29,7 @@ class Vector {
         this.y += vector.y;
     }
 
-    static sAdd(v1, v2) {
+    static add(v1, v2) {
         return new Vector(v1.x + v2.x, v1.y + v2.y);
     }
 
@@ -32,7 +38,7 @@ class Vector {
         this.y -= vector.y;
     }
 
-    static sSub(v1, v2) {
+    static sub(v1, v2) {
         return new Vector(v1.x - v2.x, v1.y - v2.y)
     }
 
@@ -41,7 +47,7 @@ class Vector {
         this.y *= scalar;
     }
 
-    static sMult(vector, scalar) {
+    static mult(vector, scalar) {
         return new Vector(vector.x * scalar, vector.y * scalar);
     }
 
@@ -50,7 +56,7 @@ class Vector {
         this.y /= scalar;
     }
 
-    static sDiv(vector, scalar) {
+    static div(vector, scalar) {
         return new Vector(vector.x / scalar, vector.y / scalar);
     }
 
@@ -58,14 +64,14 @@ class Vector {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
-    setMag() {
-
+    negative(){
+        return new Vector(-this.x, -this.y);
     }
 
     normalize() {
         let magnitude = this.mag();
         if (magnitude != 0) {
-            div(m);
+            this.div(magnitude);
         }
     }
 
@@ -89,8 +95,8 @@ class Vector {
 
     }
 
-    dist() {
-
+    distanceTo(to) {
+        return Math.sqrt(Math.pow(to.x - this.x, 2) + Math.pow(to.y - this.y, 2))
     }
 
     angleBetween() {
@@ -111,5 +117,9 @@ class Vector {
 
     random3D() {
 
+    }
+
+    clone(){
+        return new Vector(this.x, this.y);
     }
 }

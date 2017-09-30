@@ -14,8 +14,10 @@ class Entity {
      * @param {Material} material
      */
     constructor(x, y, width, height, material) {
-        this.x = x;
-        this.y = y;
+
+        this.position = new Vector(x, y);
+        this.velocity = new Vector(0, 0);
+        this.acceleration = new Vector(0, 0);
         this.width = width;
         this.height = height;
         this.material = material;
@@ -51,10 +53,10 @@ class Entity {
     }
 
     getCollisionBox() {
-        return new CollisionBounds(this.x, this.y, this.width, this.height);
+        return new CollisionBounds(this.position.x, this.position.y, this.width, this.height);
     }
 
     render(ctx){
-        ctx.drawImage(this.material.getSprite(), this.x, this.y, this.width, this.height)
+        ctx.drawImage(this.material.getSprite(), this.position.x, this.position.y, this.width, this.height)
     }
 }

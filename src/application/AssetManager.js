@@ -9,10 +9,11 @@ class AssetManager {
 
     /**
      *
+     * @param {string} name
      * @param {string} path
      */
-    queueDownload(path) {
-        this.downloadQueue.push(path);
+    queueDownload(name, path) {
+        this.downloadQueue.push({name: name, path: path});
     }
 
     /**
@@ -26,7 +27,7 @@ class AssetManager {
         }
 
         let managerInstance = this;
-        this.downloadQueue.forEach(path => {
+        this.downloadQueue.forEach(item => {
 
             let img = new Image();
             img.addEventListener("load", function () {
@@ -45,17 +46,17 @@ class AssetManager {
                     callback();
                 }
             }, false);
-            img.src = path;
-            this.cache[path] = img;
+            img.src = item.path;
+            this.cache[item.name] = img;
         });
     }
 
     /**
      *
-     * @param {string} path
+     * @param {string} name
      */
-    getAsset(path){
-        return this.cache[path];
+    getAsset(name){
+        return this.cache[name];
     }
 
     /**

@@ -8,7 +8,7 @@ class Material {
      * @param {string} resource
      */
     constructor(resource) {
-        this.resource = resource;
+        this.name = resource;
         this.sprite = null;
     }
 
@@ -28,7 +28,7 @@ class Material {
         return this.sprite;
     }
 
-    getResource(){
-        return this.resource;
+    getName(){
+        return this.name;
     }
 }
