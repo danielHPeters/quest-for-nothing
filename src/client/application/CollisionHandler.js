@@ -1,4 +1,4 @@
-import Block from './../model/Block'
+import Block from '../model/Block'
 
 /**
  * Created by Daniel on 2017-09-18.

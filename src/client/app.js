@@ -77,7 +77,7 @@ function init () {
       [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl],
       [bl, no, no, no, no, no, no, no, no, no, no, no, no, bl, bl],
       [bl, no, no, no, no, no, no, no, no, no, no, no, bl, bl, bl],
-      [bl, bl, bl, bl, bl, bl, no, no, no, bl, bl, bl, bl, bl, bl],
+      [bl, bl, bl, bl, bl, no, no, no, no, bl, bl, bl, bl, bl, bl],
       [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl],
       [bl, no, no, no, no, no, bl, bl, no, no, no, no, no, no, bl],
       [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]
