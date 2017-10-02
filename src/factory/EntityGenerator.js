@@ -1,32 +1,27 @@
-class EntityGenerator {
+export default class EntityGenerator {
+  /**
+   *
+   * @param properties
+   * @param components
+   * @returns {{}}
+   */
+  createEntity (properties, components) {
+    let entity = {}
 
-    /**
-     * 
-     * @param properties
-     * @param components
-     * @returns {{}}
-     */
-    createEntity(properties, components) {
+    properties.forEach(prop => {
+      entity[prop] = properties[prop]
+    })
 
-        let prop;
-        let entity = {};
-
-        for (prop in properties) {
-            entity[prop] = properties[prop];
+    components.forEach(component => {
+      component.forEach((prop) => {
+        if (entity.hasOwnProperty(prop)) {
+          throw new Error('A property conflict occurred on generating an entity. Property: ' + prop)
+        } else {
+          entity[prop] = component[prop]
         }
+      })
+    })
 
-        components.forEach(component => {
-
-            for (prop in component) {
-
-                if (entity.hasOwnProperty(prop)) {
-
-                    throw "A property conflict occurred on generating an entity. Property: " + prop;
-                }
-                entity[prop] = component[prop];
-            }
-        });
-
-        return entity;
-    }
+    return entity
+  }
 }
