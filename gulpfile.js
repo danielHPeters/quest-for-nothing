@@ -6,7 +6,7 @@ let webpack = require('webpack-stream')
 gulp.task('css', function () {
   return gulp.src('./src/css/**/*.css')
     .pipe(minifycss())
-    .pipe(gulp.dest('./css'))
+    .pipe(gulp.dest('./public/css'))
 })
 
 gulp.task('js', function () {
