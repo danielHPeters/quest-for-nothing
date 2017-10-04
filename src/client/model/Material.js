@@ -13,10 +13,10 @@ export default class Material {
 
   /**
    *
-   * @param {Image} sprite
+   * @param {AssetManager} assetManager
    */
-  setSprite (sprite) {
-    this.sprite = sprite
+  setSprite (assetManager) {
+    this.sprite = assetManager.getAsset(this.name)
   }
 
   /**

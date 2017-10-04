@@ -332,6 +332,70 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Created by Daniel on 2017-09-18.
+ */
+var Material = function () {
+  /**
+   *
+   * @param {string} resource
+   */
+  function Material(resource) {
+    _classCallCheck(this, Material);
+
+    this.name = resource;
+    this.sprite = null;
+  }
+
+  /**
+   *
+   * @param {AssetManager} assetManager
+   */
+
+
+  _createClass(Material, [{
+    key: "setSprite",
+    value: function setSprite(assetManager) {
+      this.sprite = assetManager.getAsset(this.name);
+    }
+
+    /**
+     *
+     * @returns {Image | null}
+     */
+
+  }, {
+    key: "getSprite",
+    value: function getSprite() {
+      return this.sprite;
+    }
+  }, {
+    key: "getName",
+    value: function getName() {
+      return this.name;
+    }
+  }]);
+
+  return Material;
+}();
+
+exports.default = Material;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _Entity2 = __webpack_require__(0);
 
 var _Entity3 = _interopRequireDefault(_Entity2);
@@ -394,70 +458,6 @@ var Block = function (_Entity) {
 exports.default = Block;
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * Created by Daniel on 2017-09-18.
- */
-var Material = function () {
-  /**
-   *
-   * @param {string} resource
-   */
-  function Material(resource) {
-    _classCallCheck(this, Material);
-
-    this.name = resource;
-    this.sprite = null;
-  }
-
-  /**
-   *
-   * @param {Image} sprite
-   */
-
-
-  _createClass(Material, [{
-    key: "setSprite",
-    value: function setSprite(sprite) {
-      this.sprite = sprite;
-    }
-
-    /**
-     *
-     * @returns {Image | null}
-     */
-
-  }, {
-    key: "getSprite",
-    value: function getSprite() {
-      return this.sprite;
-    }
-  }, {
-    key: "getName",
-    value: function getName() {
-      return this.name;
-    }
-  }]);
-
-  return Material;
-}();
-
-exports.default = Material;
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -468,15 +468,11 @@ var _Game = __webpack_require__(5);
 
 var _Game2 = _interopRequireDefault(_Game);
 
-var _Player = __webpack_require__(6);
-
-var _Player2 = _interopRequireDefault(_Player);
-
-var _Canvas = __webpack_require__(8);
+var _Canvas = __webpack_require__(6);
 
 var _Canvas2 = _interopRequireDefault(_Canvas);
 
-var _Area = __webpack_require__(9);
+var _Area = __webpack_require__(8);
 
 var _Area2 = _interopRequireDefault(_Area);
 
@@ -492,7 +488,7 @@ var _KeyboardEventHandler = __webpack_require__(12);
 
 var _KeyboardEventHandler2 = _interopRequireDefault(_KeyboardEventHandler);
 
-var _Material = __webpack_require__(3);
+var _Material = __webpack_require__(2);
 
 var _Material2 = _interopRequireDefault(_Material);
 
@@ -503,19 +499,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param ctx
  * @param game
  */
-function animate(ctx, game) {
-  // Clear canvas before drawing new animation
-  ctx.clearRect(0, 0, game.canvas.width, game.canvas.height);
+function animate(game) {
+  // Clear game before drawing new animation
+  game.ctx.clearRect(0, 0, game.canvas.width, game.canvas.height);
 
   // Update game logic
   game.update();
 
   // Render objects
-  game.render(ctx);
+  game.render();
 
   // Request new frame when ready. Allows the game to play in a loop
   window.requestAnimationFrame(function () {
-    return animate(ctx, game);
+    return animate(game);
   });
 }
 
@@ -527,27 +523,26 @@ function init() {
 
   if (canvas.getContext) {
     var ctx = canvas.getContext('2d');
-    var player = new _Player2.default('Player1', 100, 100, 60, 60, new _Material2.default('player'));
+    // let player = new Player('Player1', 100, 100, 60, 60, new Material('player'))
     var map = new _Canvas2.default(0, 0, canvas.width, canvas.height, new _Material2.default('background'));
-    var areas = [];
-    var area1 = new _Area2.default(map);
-    var area2 = new _Area2.default(map);
-    var area3 = new _Area2.default(map);
-    var gameObjects = [];
     var audioManager = new _AudioManager2.default();
-    var game = new _Game2.default(map, player, audioManager);
+    var game = new _Game2.default(map, ctx, audioManager);
+    var area1 = new _Area2.default(game);
+    var area2 = new _Area2.default(game);
+    var area3 = new _Area2.default(game);
+    var gameObjects = [];
     var assetManager = new _AssetManager2.default();
     var keyEventHandler = new _KeyboardEventHandler2.default(canvas);
 
+    var pl = 'player';
     var bl = 'block';
     var se = 'secret';
     var no = null;
     var blocksList = [[bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, no, no, no, no, bl, bl, no, no, no, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl], [bl, bl, bl, bl, bl, bl, bl, bl, no, no, no, no, no, no, se], [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]];
 
-    var blocksList2 = [[bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, no, no, no, no, bl, bl, bl, bl, bl, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl], [se, no, no, no, no, no, bl, bl, no, no, no, no, no, no, bl], [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, no, no, bl]];
+    var blocksList2 = [[bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, pl, bl], [bl, no, no, no, no, no, no, no, no, bl, bl, bl, bl, bl, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl], [se, no, no, no, no, no, bl, bl, no, no, no, no, no, no, bl], [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, no, no, bl]];
 
     var blocksList3 = [[bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, no, no, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, bl, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, bl, bl, bl], [bl, bl, bl, bl, bl, no, no, no, no, bl, bl, bl, bl, bl, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, no, bl, bl, no, no, no, no, no, no, bl], [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]];
-    player.keyActionsRegister = keyEventHandler.getKeyActionsRegister();
     area1.right = area2;
     area2.left = area1;
     area2.bottom = area3;
@@ -555,11 +550,10 @@ function init() {
     area1.generateBlocks(blocksList);
     area2.generateBlocks(blocksList2);
     area3.generateBlocks(blocksList3);
-    areas.push(area1);
-    areas.push(area2);
-    areas.push(area3);
-    game.areas = areas;
-    game.current = game.areas[0];
+    game.areas.push(area1);
+    game.areas.push(area2);
+    game.areas.push(area3);
+    game.player.keyActionsRegister = keyEventHandler.getKeyActionsRegister();
     game.assetManager = assetManager;
     game.audioManager.load('ambient', 'assets/audio/ambient/ambient.mp3', function () {
       return game.audioManager.playSound('ambient', true);
@@ -567,7 +561,7 @@ function init() {
 
     game.audioManager.load('jump', 'assets/audio/effects/jump.wav', function () {
       gameObjects.push(map);
-      gameObjects.push(player);
+      gameObjects.push(game.player);
       gameObjects = gameObjects.concat(area1.blocks);
       gameObjects = gameObjects.concat(area2.blocks);
       gameObjects = gameObjects.concat(area3.blocks);
@@ -583,11 +577,11 @@ function init() {
       assetManager.downLoadAll(function () {
         // Assign the sprites to the correct material
         gameObjects.forEach(function (obj) {
-          return obj.material.setSprite(assetManager.getAsset(obj.material.getName()));
+          return obj.material.setSprite(assetManager);
         });
 
         // After the sprites are initialized start drawing
-        animate(ctx, game);
+        animate(game);
       });
     });
   } else {
@@ -621,18 +615,20 @@ var Game = function () {
   /**
    *
    * @param {Canvas} canvas
-   * @param {Player} player
+   * @param ctx
    * @param {AudioManager} audioManager
    */
-  function Game(canvas, player, audioManager) {
+  function Game(canvas, ctx, audioManager) {
     _classCallCheck(this, Game);
 
-    this.audioManager = audioManager;
     this.canvas = canvas;
-    this.player = player;
+    this.ctx = ctx;
+    this.audioManager = audioManager;
+    this.player = null;
     this.running = false;
     this.areas = [];
     this.blocks = [];
+    this.current = null;
   }
 
   _createClass(Game, [{
@@ -653,13 +649,15 @@ var Game = function () {
     }
   }, {
     key: "render",
-    value: function render(ctx) {
-      this.canvas.render(ctx);
-      this.player.render(ctx);
+    value: function render() {
+      var _this = this;
+
+      this.canvas.render(this.ctx);
+      this.player.render(this.ctx);
       this.current.blocks.forEach(function (block) {
-        return block.render(ctx);
+        return block.render(_this.ctx);
       });
-      this.player.drawHearts(this, ctx);
+      this.player.drawHearts(this);
     }
   }]);
 
@@ -679,13 +677,189 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _Entity2 = __webpack_require__(0);
+
+var _Entity3 = _interopRequireDefault(_Entity2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * Created by Daniel on 2017-09-18.
+ */
+var Canvas = function (_Entity) {
+  _inherits(Canvas, _Entity);
+
+  /**
+   *
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @param {Material} material
+   */
+  function Canvas(x, y, width, height, material) {
+    _classCallCheck(this, Canvas);
+
+    var _this = _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this, x, y, width, height, material));
+
+    _this.name = 'default';
+    return _this;
+  }
+
+  return Canvas;
+}(_Entity3.default);
+
+exports.default = Canvas;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Created by Daniel on 2017-09-18.
+ */
+
+var CollisionBounds =
+/**
+ *
+ * @param x
+ * @param y
+ * @param width
+ * @param height
+ */
+function CollisionBounds(x, y, width, height) {
+  _classCallCheck(this, CollisionBounds);
+
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
+};
+
+exports.default = CollisionBounds;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Material = __webpack_require__(2);
+
+var _Material2 = _interopRequireDefault(_Material);
+
+var _Block = __webpack_require__(3);
+
+var _Block2 = _interopRequireDefault(_Block);
+
+var _Player = __webpack_require__(9);
+
+var _Player2 = _interopRequireDefault(_Player);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Area = function () {
+  function Area(game) {
+    var top = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var bottom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    var left = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+    var right = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
+
+    _classCallCheck(this, Area);
+
+    this.game = game;
+    this.top = top;
+    this.bottom = bottom;
+    this.left = left;
+    this.right = right;
+    this.blocks = [];
+  }
+
+  _createClass(Area, [{
+    key: 'generateBlocks',
+    value: function generateBlocks(blocksList) {
+      var objWidth = this.game.canvas.width / blocksList[0].length;
+      var objHeight = this.game.canvas.height / blocksList.length;
+      var objX = 0;
+      var objY = 0;
+
+      for (var i = 0; i < blocksList.length; i++) {
+        for (var j = 0; j < blocksList[i].length; j++) {
+          if (blocksList[i][j] === 'block') {
+            this.blocks.push(new _Block2.default(objX, objY, objWidth, objHeight, new _Material2.default('stone-block')));
+          } else if (blocksList[i][j] === 'secret') {
+            var blk = new _Block2.default(objX, objY, objWidth, objHeight, new _Material2.default('stone-block'));
+            blk.solid = false;
+            this.blocks.push(blk);
+          } else if (blocksList[i][j] === 'player' && this.game.player === null) {
+            this.game.player = new _Player2.default(objX, objY, objWidth, objHeight, new _Material2.default('player'));
+            this.game.current = this;
+          }
+          objX += objWidth;
+        }
+        objY += objHeight;
+        objX = 0;
+      }
+    }
+  }, {
+    key: 'hasLeft',
+    value: function hasLeft() {
+      return this.left !== null;
+    }
+  }, {
+    key: 'hasRight',
+    value: function hasRight() {
+      return this.right !== null;
+    }
+  }]);
+
+  return Area;
+}();
+
+exports.default = Area;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _Entity2 = __webpack_require__(0);
 
 var _Entity3 = _interopRequireDefault(_Entity2);
 
-var _Block = __webpack_require__(2);
+var _Block = __webpack_require__(3);
 
 var _Block2 = _interopRequireDefault(_Block);
 
@@ -709,7 +883,6 @@ var Player = function (_Entity) {
 
   /**
    *
-   * @param {string} name
    * @param {number} x
    * @param {number} y
    * @param {number} width
@@ -717,12 +890,11 @@ var Player = function (_Entity) {
    * @param {CollisionBounds} collisionBox
    * @param {Material} material
    */
-  function Player(name, x, y, width, height, material) {
+  function Player(x, y, width, height, material) {
     _classCallCheck(this, Player);
 
     var _this = _possibleConstructorReturn(this, (Player.__proto__ || Object.getPrototypeOf(Player)).call(this, x, y, width, height, material));
 
-    _this.name = name;
     _this.lives = 3;
     _this.speed = 3.6;
     _this.running = false;
@@ -879,10 +1051,10 @@ var Player = function (_Entity) {
     }
   }, {
     key: 'drawHearts',
-    value: function drawHearts(game, ctx) {
+    value: function drawHearts(game) {
       var pos = new _Vector2.default(game.canvas.width - 35, 5);
       for (var i = 0; i < game.player.lives; i++) {
-        ctx.drawImage(game.assetManager.cache['heart'], pos.x, pos.y, 30, 30);
+        game.ctx.drawImage(game.assetManager.cache['heart'], pos.x, pos.y, 30, 30);
         pos.x -= 30;
       }
     }
@@ -892,175 +1064,6 @@ var Player = function (_Entity) {
 }(_Entity3.default);
 
 exports.default = Player;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * Created by Daniel on 2017-09-18.
- */
-
-var CollisionBounds =
-/**
- *
- * @param x
- * @param y
- * @param width
- * @param height
- */
-function CollisionBounds(x, y, width, height) {
-  _classCallCheck(this, CollisionBounds);
-
-  this.x = x;
-  this.y = y;
-  this.width = width;
-  this.height = height;
-};
-
-exports.default = CollisionBounds;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Entity2 = __webpack_require__(0);
-
-var _Entity3 = _interopRequireDefault(_Entity2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * Created by Daniel on 2017-09-18.
- */
-var Canvas = function (_Entity) {
-  _inherits(Canvas, _Entity);
-
-  /**
-   *
-   * @param x
-   * @param y
-   * @param width
-   * @param height
-   * @param {Material} material
-   */
-  function Canvas(x, y, width, height, material) {
-    _classCallCheck(this, Canvas);
-
-    var _this = _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this, x, y, width, height, material));
-
-    _this.name = 'default';
-    return _this;
-  }
-
-  return Canvas;
-}(_Entity3.default);
-
-exports.default = Canvas;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _Material = __webpack_require__(3);
-
-var _Material2 = _interopRequireDefault(_Material);
-
-var _Block = __webpack_require__(2);
-
-var _Block2 = _interopRequireDefault(_Block);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Area = function () {
-  function Area(canvas) {
-    var top = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    var bottom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-    var left = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-    var right = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
-
-    _classCallCheck(this, Area);
-
-    this.canvas = canvas;
-    this.top = top;
-    this.bottom = bottom;
-    this.left = left;
-    this.right = right;
-    this.blocks = [];
-  }
-
-  _createClass(Area, [{
-    key: 'generateBlocks',
-    value: function generateBlocks(blocksList) {
-      var blockWidth = this.canvas.width / blocksList[0].length;
-      var blockHeight = this.canvas.height / blocksList.length;
-      var blockX = 0;
-      var blockY = 0;
-
-      for (var i = 0; i < blocksList.length; i++) {
-        for (var j = 0; j < blocksList[i].length; j++) {
-          if (blocksList[i][j] === 'block') {
-            this.blocks.push(new _Block2.default(blockX, blockY, blockWidth, blockHeight, new _Material2.default('stone-block')));
-          } else if (blocksList[i][j] === 'secret') {
-            var blk = new _Block2.default(blockX, blockY, blockWidth, blockHeight, new _Material2.default('stone-block'));
-            blk.solid = false;
-            this.blocks.push(blk);
-          }
-          blockX += blockWidth;
-        }
-        blockY += blockHeight;
-        blockX = 0;
-      }
-    }
-  }, {
-    key: 'hasLeft',
-    value: function hasLeft() {
-      return this.left !== null;
-    }
-  }, {
-    key: 'hasRight',
-    value: function hasRight() {
-      return this.right !== null;
-    }
-  }]);
-
-  return Area;
-}();
-
-exports.default = Area;
 
 /***/ }),
 /* 10 */
@@ -1261,7 +1264,7 @@ var KeyboardEventHandler = function () {
   function KeyboardEventHandler(canvas) {
     _classCallCheck(this, KeyboardEventHandler);
 
-    this.canvas = canvas;
+    this.game = canvas;
     this.initializeKeyHandler();
     this.keyActionsRegister = [];
   }
@@ -1271,10 +1274,10 @@ var KeyboardEventHandler = function () {
     value: function initializeKeyHandler() {
       var _this = this;
 
-      this.canvas.addEventListener('keydown', function (event) {
+      this.game.addEventListener('keydown', function (event) {
         _this.keyActionsRegister[event.key] = true;
       });
-      this.canvas.addEventListener('keyup', function (event) {
+      this.game.addEventListener('keyup', function (event) {
         _this.keyActionsRegister[event.key] = false;
       });
     }

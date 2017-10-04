@@ -1,9 +1,10 @@
 import Material from './Material'
 import Block from './Block'
+import Player from './Player'
 
 export default class Area {
-  constructor (canvas, top = null, bottom = null, left = null, right = null) {
-    this.canvas = canvas
+  constructor (game, top = null, bottom = null, left = null, right = null) {
+    this.game = game
     this.top = top
     this.bottom = bottom
     this.left = left
@@ -12,24 +13,27 @@ export default class Area {
   }
 
   generateBlocks (blocksList) {
-    let blockWidth = this.canvas.width / blocksList[0].length
-    let blockHeight = this.canvas.height / blocksList.length
-    let blockX = 0
-    let blockY = 0
+    let objWidth = this.game.canvas.width / blocksList[0].length
+    let objHeight = this.game.canvas.height / blocksList.length
+    let objX = 0
+    let objY = 0
 
     for (let i = 0; i < blocksList.length; i++) {
       for (let j = 0; j < blocksList[i].length; j++) {
         if (blocksList[i][j] === 'block') {
-          this.blocks.push(new Block(blockX, blockY, blockWidth, blockHeight, new Material('stone-block')))
+          this.blocks.push(new Block(objX, objY, objWidth, objHeight, new Material('stone-block')))
         } else if (blocksList[i][j] === 'secret') {
-          let blk = new Block(blockX, blockY, blockWidth, blockHeight, new Material('stone-block'))
+          let blk = new Block(objX, objY, objWidth, objHeight, new Material('stone-block'))
           blk.solid = false
           this.blocks.push(blk)
+        } else if (blocksList[i][j] === 'player' && this.game.player === null) {
+          this.game.player = new Player(objX, objY, objWidth, objHeight, new Material('player'))
+          this.game.current = this
         }
-        blockX += blockWidth
+        objX += objWidth
       }
-      blockY += blockHeight
-      blockX = 0
+      objY += objHeight
+      objX = 0
     }
   }
 

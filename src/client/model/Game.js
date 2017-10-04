@@ -5,16 +5,18 @@ export default class Game {
   /**
    *
    * @param {Canvas} canvas
-   * @param {Player} player
+   * @param ctx
    * @param {AudioManager} audioManager
    */
-  constructor (canvas, player, audioManager) {
-    this.audioManager = audioManager
+  constructor (canvas, ctx, audioManager) {
     this.canvas = canvas
-    this.player = player
+    this.ctx = ctx
+    this.audioManager = audioManager
+    this.player = null
     this.running = false
     this.areas = []
     this.blocks = []
+    this.current = null
   }
 
   run () {
@@ -30,10 +32,10 @@ export default class Game {
     this.player.checkEdges(this)
   }
 
-  render (ctx) {
-    this.canvas.render(ctx)
-    this.player.render(ctx)
-    this.current.blocks.forEach(block => block.render(ctx))
-    this.player.drawHearts(this, ctx)
+  render () {
+    this.canvas.render(this.ctx)
+    this.player.render(this.ctx)
+    this.current.blocks.forEach(block => block.render(this.ctx))
+    this.player.drawHearts(this)
   }
 }

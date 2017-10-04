@@ -8,7 +8,6 @@ import Vector from './Vector'
 export default class Player extends Entity {
   /**
    *
-   * @param {string} name
    * @param {number} x
    * @param {number} y
    * @param {number} width
@@ -16,9 +15,8 @@ export default class Player extends Entity {
    * @param {CollisionBounds} collisionBox
    * @param {Material} material
    */
-  constructor (name, x, y, width, height, material) {
+  constructor (x, y, width, height, material) {
     super(x, y, width, height, material)
-    this.name = name
     this.lives = 3
     this.speed = 3.6
     this.running = false
@@ -159,10 +157,10 @@ export default class Player extends Entity {
     }
   }
 
-  drawHearts (game, ctx) {
+  drawHearts (game) {
     let pos = new Vector(game.canvas.width - 35, 5)
     for (let i = 0; i < game.player.lives; i++) {
-      ctx.drawImage(game.assetManager.cache['heart'], pos.x, pos.y, 30, 30)
+      game.ctx.drawImage(game.assetManager.cache['heart'], pos.x, pos.y, 30, 30)
       pos.x -= 30
     }
   }

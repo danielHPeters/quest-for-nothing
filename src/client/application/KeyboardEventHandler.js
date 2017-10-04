@@ -7,14 +7,14 @@ export default class KeyboardEventHandler {
    * @param canvas
    */
   constructor (canvas) {
-    this.canvas = canvas
+    this.game = canvas
     this.initializeKeyHandler()
     this.keyActionsRegister = []
   }
 
   initializeKeyHandler () {
-    this.canvas.addEventListener('keydown', event => { this.keyActionsRegister[event.key] = true })
-    this.canvas.addEventListener('keyup', event => { this.keyActionsRegister[event.key] = false })
+    this.game.addEventListener('keydown', event => { this.keyActionsRegister[event.key] = true })
+    this.game.addEventListener('keyup', event => { this.keyActionsRegister[event.key] = false })
   }
 
   getKeyActionsRegister () {
