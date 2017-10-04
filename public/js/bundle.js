@@ -523,7 +523,6 @@ function init() {
 
   if (canvas.getContext) {
     var ctx = canvas.getContext('2d');
-    // let player = new Player('Player1', 100, 100, 60, 60, new Material('player'))
     var map = new _Canvas2.default(0, 0, canvas.width, canvas.height, new _Material2.default('background'));
     var audioManager = new _AudioManager2.default();
     var game = new _Game2.default(map, ctx, audioManager);

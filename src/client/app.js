@@ -34,7 +34,6 @@ function init () {
 
   if (canvas.getContext) {
     let ctx = canvas.getContext('2d')
-    // let player = new Player('Player1', 100, 100, 60, 60, new Material('player'))
     let map = new Canvas(0, 0, canvas.width, canvas.height, new Material('background'))
     let audioManager = new AudioManager()
     let game = new Game(map, ctx, audioManager)
