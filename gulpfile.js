@@ -1,16 +1,24 @@
+'use strict'
 let gulp = require('gulp')
 let filter = require('gulp-filter')
 let gulpUglify = require('gulp-uglify')
 let minifycss = require('gulp-csso')
-let htmlmin = require('gulp-htmlmin')
 let webpack = require('webpack-stream')
 let sourceMaps = require('gulp-sourcemaps')
 let rename = require('gulp-rename')
+let pug = require('gulp-pug2')
 
 gulp.task('css', () => {
   return gulp.src('./src/css/**/*.css')
     .pipe(minifycss())
     .pipe(gulp.dest('./public/css'))
+})
+
+gulp.task('pug', () => {
+  return gulp.src('./src/views/*.pug')
+    .pipe(filter('error.pug'))
+    .pipe(pug())
+    .pipe(gulp.dest('public'))
 })
 
 gulp.task('js', () => {
@@ -26,10 +34,4 @@ gulp.task('js', () => {
     .pipe(gulp.dest('./'))
 })
 
-gulp.task('html', () => {
-  return gulp.src('src/view/*.html')
-    .pipe(htmlmin({collapseWhitespace: true, removeComments: true}))
-    .pipe(gulp.dest('public'))
-})
-
-gulp.task('default', ['css', 'js', 'html'])
+gulp.task('default', ['css', 'js', 'pug'])
