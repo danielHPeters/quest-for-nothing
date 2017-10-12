@@ -9,7 +9,6 @@ import Material from './model/Material'
 
 /**
  *
- * @param ctx
  * @param game
  */
 function animate (game) {
@@ -92,9 +91,10 @@ function init () {
     game.areas.push(area3)
     game.player.keyActionsRegister = keyEventHandler.getKeyActionsRegister()
     game.assetManager = assetManager
-    game.audioManager.load('ambient', 'assets/audio/ambient/ambient.mp3', () => game.audioManager.playSound('ambient', true))
-
-    game.audioManager.load('jump', 'assets/audio/effects/jump.wav', () => {
+    game.audioManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3')
+    game.audioManager.queueDownload('jump', 'assets/audio/effects/jump.wav')
+    game.audioManager.loadAll(() => {
+      game.audioManager.playSound('ambient', true)
       gameObjects.push(map)
       gameObjects.push(game.player)
       gameObjects = gameObjects.concat(area1.blocks)

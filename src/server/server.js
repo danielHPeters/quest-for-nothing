@@ -19,20 +19,20 @@ app.get('/', function (req, res) {
   res.redirect('/home')
 })
 
-app.get('/home', function (req, res) {
+app.get('/home', function (req, res, next) {
   res.render('index', {title: 'Home'})
 })
 
-app.get('/game', function (req, res) {
+app.get('/game', function (req, res, next) {
   res.render('game', {title: 'Game'})
 })
 
-app.get('/controls', function (req, res) {
-  res.send('')
+app.get('/controls', function (req, res, next) {
+  res.render('controls', {title: 'Controls'})
 })
 
-app.get('/about', function (req, res) {
-
+app.get('/about', function (req, res, next) {
+  res.render('about', {title: 'About'})
 })
 
 // catch 404 and forward to error handler

@@ -496,7 +496,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  *
- * @param ctx
  * @param game
  */
 function animate(game) {
@@ -554,11 +553,10 @@ function init() {
     game.areas.push(area3);
     game.player.keyActionsRegister = keyEventHandler.getKeyActionsRegister();
     game.assetManager = assetManager;
-    game.audioManager.load('ambient', 'assets/audio/ambient/ambient.mp3', function () {
-      return game.audioManager.playSound('ambient', true);
-    });
-
-    game.audioManager.load('jump', 'assets/audio/effects/jump.wav', function () {
+    game.audioManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3');
+    game.audioManager.queueDownload('jump', 'assets/audio/effects/jump.wav');
+    game.audioManager.loadAll(function () {
+      game.audioManager.playSound('ambient', true);
       gameObjects.push(map);
       gameObjects.push(game.player);
       gameObjects = gameObjects.concat(area1.blocks);
@@ -1084,6 +1082,10 @@ var AudioManager = function () {
     _classCallCheck(this, AudioManager);
 
     this.bufferCache = [];
+    this.downloadQueue = [];
+    this.succesCount = 0;
+    this.errorCount = 0;
+
     try {
       // Fix up for prefixing
       window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -1093,7 +1095,30 @@ var AudioManager = function () {
     }
   }
 
+  /**
+   *
+   * @param {string} name
+   * @param {string} path
+   */
+
+
   _createClass(AudioManager, [{
+    key: 'queueDownload',
+    value: function queueDownload(name, path) {
+      this.downloadQueue.push({ name: name, path: path });
+    }
+  }, {
+    key: 'loadAll',
+    value: function loadAll(callback) {
+      if (this.downloadQueue.length === 0) {
+        callback();
+      }
+      var managerInstance = this;
+      this.downloadQueue.forEach(function (item) {
+        managerInstance.load(item.name, item.path, callback);
+      });
+    }
+  }, {
     key: 'load',
     value: function load(name, url, callback) {
       var instance = this;
@@ -1106,10 +1131,20 @@ var AudioManager = function () {
       request.onload = function () {
         instance.context.decodeAudioData(request.response, function (buffer) {
           instance.bufferCache[name] = buffer;
-          callback();
-        }, function (e) {
-          return console.log('Failed to load file', e);
+          instance.succesCount += 1;
+
+          if (instance.done()) {
+            callback();
+          }
         });
+      };
+
+      request.onerror = function () {
+        instance.errorCount += 1;
+
+        if (instance.done()) {
+          callback();
+        }
       };
       request.send();
     }
@@ -1127,6 +1162,17 @@ var AudioManager = function () {
         sound.loopEnd = Math.floor(sound.buffer.duration);
       }
       sound.start(0);
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+
+  }, {
+    key: 'done',
+    value: function done() {
+      return this.downloadQueue.length === this.succesCount + this.errorCount;
     }
   }]);
 
