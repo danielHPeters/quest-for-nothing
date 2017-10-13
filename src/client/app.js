@@ -115,7 +115,7 @@ function init () {
 
         // After the sprites are initialized start drawing
         animate(game)
-      })
+      })gi
     })
   } else {
     document.getElementById('unsupported').textContent = 'Please update your browser or download another one which supports HTML5'
