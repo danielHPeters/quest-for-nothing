@@ -586,9 +586,7 @@ function init() {
   }
 }
 
-$(document).ready(function () {
-  return init();
-});
+document.addEventListener('DOMContentLoaded', init());
 
 /***/ }),
 /* 5 */
