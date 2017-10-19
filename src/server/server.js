@@ -3,9 +3,16 @@
 let express = require('express')
 let app = express()
 let path = require('path')
+let http = require('http')
 let bodyParser = require('body-parser')
 let favicon = require('serve-favicon')
 let logger = require('./utils/logger')
+let server = http.createServer(app)
+
+let routes = require('./routes/index')
+
+let io = require('socket.io')(server)
+require('./sockets')(io)
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
@@ -15,25 +22,7 @@ app.set('views', path.join(__dirname, '../views'))
 app.set('view engine', 'pug')
 app.use(require('morgan')('dev', {'stream': logger.stream}))
 
-app.get('/', function (req, res) {
-  res.redirect('/home')
-})
-
-app.get('/home', function (req, res, next) {
-  res.render('index', {title: 'Home'})
-})
-
-app.get('/game', function (req, res, next) {
-  res.render('game', {title: 'Game'})
-})
-
-app.get('/controls', function (req, res, next) {
-  res.render('controls', {title: 'Controls'})
-})
-
-app.get('/about', function (req, res, next) {
-  res.render('about', {title: 'About'})
-})
+app.use('/', routes)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -64,6 +53,6 @@ app.use(function (err, req, res, next) {
 
 app.set('port', process.env.PORT || 3000)
 
-let server = app.listen(app.get('port'), function () {
+server.listen(app.get('port'), function () {
   logger.log('info', 'Express server listening on port ' + server.address().port)
 })

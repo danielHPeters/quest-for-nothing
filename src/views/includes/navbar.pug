@@ -1,9 +1,10 @@
-nav.navbar.navbar-inverse
-  .container-fluid
-    .navbar-header
-      a(class='navbar-brand' href='#') Jump and Run
-    ul.nav.navbar-nav
+nav.navbar.navbar-dark.navbar-expand-md.bg-dark
+  a.navbar-brand( href='#') Jump and Run
+  button.navbar-toggler(type='button', data-toggle='collapse', data-target='navigationBar', aria-controls='navigationBar', aria-expanded='false', aria-label='Toggle Navigation')
+    span.navbar-toggler-icon
+  #navigationBar.collapse.navbar-collapse
+    ul#nav-list.navbar-nav.mr-auto
       - var pages = ['Home', 'Game', 'Controls', 'About']
       each page in pages
-        li
-          a(href= page.toLowerCase())= page
+        li.nav-item
+          a.nav-link(href= page.toLowerCase())= page
