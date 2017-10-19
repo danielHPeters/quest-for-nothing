@@ -1,13 +1,34 @@
 'use strict'
+
+/**
+ *
+ * @type {module.Game}
+ */
 let Game = require('./model/Game')
+
+/**
+ *
+ * @type {module.Area}
+ */
 let Area = require('./model/Area')
+
+/**
+ *
+ * @type {module.Settings}
+ */
 let Settings = require('./model/Settings')
+
+/**
+ *
+ * @type {module.BlockFactory}
+ */
+let BlockFactory = require('./factory/BlockFactory')
 
 let gameSettings = new Settings()
 let game = new Game(gameSettings)
-let area1 = new Area(game)
-let area2 = new Area(game)
-let area3 = new Area(game)
+let area1 = new Area()
+let area2 = new Area()
+let area3 = new Area()
 
 let pl = 'spawn'
 let bl = 'block'
@@ -46,13 +67,13 @@ let blocksList3 = [
   [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]
 ]
 
-area1.right = area2
+/*area1.right = area2
 area2.left = area1
 area2.bottom = area3
-area3.top = area2
-area1.generateBlocks(blocksList)
-area2.generateBlocks(blocksList2)
-area3.generateBlocks(blocksList3)
+area3.top = area2*/
+area1.blocks = BlockFactory.generateBlocks(game, area1, blocksList)
+area2.blocks = BlockFactory.generateBlocks(game, area2, blocksList2)
+area3.blocks = BlockFactory.generateBlocks(game, area3, blocksList3)
 game.areas.push(area1)
 game.areas.push(area2)
 game.areas.push(area3)
