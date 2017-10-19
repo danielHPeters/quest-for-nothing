@@ -1,12 +1,9 @@
 /**
- * Created by Daniel on 2017-09-18.
+ * Keyboard actions definition.
+ *
+ * @author Daniel Peters
  */
-class KeyActions {
-
-  /**
-   *
-   * @param {Game} game
-   */
+export default class KeyActions {
   constructor (game) {
     this.game = game
   }
@@ -30,5 +27,4 @@ class KeyActions {
       this.game.run()
     }
   }
-
 }

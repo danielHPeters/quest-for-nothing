@@ -10,5 +10,8 @@
     "ecmaFeatures": {
       "jsx": true
     }
+  },
+  "globals": {
+    "io": true
   }
 }

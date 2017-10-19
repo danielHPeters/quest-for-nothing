@@ -7,12 +7,12 @@ let http = require('http')
 let bodyParser = require('body-parser')
 let favicon = require('serve-favicon')
 let logger = require('./utils/logger')
-let server = http.createServer(app)
+let server = http.Server(app)
 
 let routes = require('./routes/index')
 
 let io = require('socket.io')(server)
-require('./sockets')(io)
+require('./game/gameLoop')(io)
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))

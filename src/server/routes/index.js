@@ -3,24 +3,16 @@
 const express = require('express')
 const router = express.Router()
 
+const pages = ['Home', 'Game', 'Controls', 'About', 'Levels']
+
 router.get('/', function (req, res, next) {
-  res.redirect('/home')
+  res.redirect(pages[0].toLowerCase())
 })
 
-router.get('/home', function (req, res, next) {
-  res.render('index', {title: 'Home'})
-})
-
-router.get('/game', function (req, res, next) {
-  res.render('game', {title: 'Game'})
-})
-
-router.get('/controls', function (req, res, next) {
-  res.render('controls', {title: 'Controls'})
-})
-
-router.get('/about', function (req, res, next) {
-  res.render('about', {title: 'About'})
+pages.forEach(function (page) {
+  router.get('/' + page.toLowerCase(), function (req, res, next) {
+    res.render(page.toLowerCase(), {title: page, pages: pages})
+  })
 })
 
 module.exports = router

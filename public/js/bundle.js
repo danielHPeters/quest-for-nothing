@@ -494,6 +494,8 @@ var _Material2 = _interopRequireDefault(_Material);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var socket = io();
+
 /**
  *
  * @param game
@@ -504,6 +506,8 @@ function animate(game) {
 
   // Update game logic
   game.update();
+
+  socket.emit('movement', game.player.keyActionsRegister);
 
   // Render objects
   game.render();
@@ -541,6 +545,7 @@ function init() {
     var blocksList2 = [[bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, bl, no, no, no, no, no, no, no, pl, bl], [bl, no, no, no, no, no, no, no, no, bl, bl, bl, bl, bl, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl], [se, no, no, no, no, no, bl, bl, no, no, no, no, no, no, bl], [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, no, no, bl]];
 
     var blocksList3 = [[bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, no, no, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, bl, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, bl, bl, bl], [bl, bl, bl, bl, bl, no, no, no, no, bl, bl, bl, bl, bl, bl], [bl, no, no, no, no, no, no, no, no, no, no, no, no, no, bl], [bl, no, no, no, no, no, bl, bl, no, no, no, no, no, no, bl], [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]];
+
     area1.right = area2;
     area2.left = area1;
     area2.bottom = area3;
@@ -576,7 +581,7 @@ function init() {
         gameObjects.forEach(function (obj) {
           return obj.material.setSprite(assetManager);
         });
-
+        socket.emit('new player');
         // After the sprites are initialized start drawing
         animate(game);
       });
@@ -587,6 +592,10 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init());
+
+socket.on('message', function (data) {
+  console.log(data);
+});
 
 /***/ }),
 /* 5 */
@@ -895,7 +904,8 @@ var Player = function (_Entity) {
     _this.running = false;
     _this.jumping = false;
     _this.grounded = false;
-    _this.history = [];
+    _this.history = {};
+    _this.keyActionsRegister = [];
     _this.friction = 0.8;
     _this.gravity = 0.2;
     return _this;
@@ -1309,7 +1319,7 @@ var KeyboardEventHandler = function () {
 
     this.game = canvas;
     this.initializeKeyHandler();
-    this.keyActionsRegister = [];
+    this.keyActionsRegister = {};
   }
 
   _createClass(KeyboardEventHandler, [{

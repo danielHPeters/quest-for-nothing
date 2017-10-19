@@ -7,6 +7,8 @@ import AssetManager from './application/AssetManager'
 import KeyboardEventHandler from './application/KeyboardEventHandler'
 import Material from './model/Material'
 
+let socket = io()
+
 /**
  *
  * @param game
@@ -17,6 +19,8 @@ function animate (game) {
 
   // Update game logic
   game.update()
+
+  socket.emit('movement', game.player.keyActionsRegister)
 
   // Render objects
   game.render()
@@ -79,6 +83,7 @@ function init () {
       [bl, no, no, no, no, no, bl, bl, no, no, no, no, no, no, bl],
       [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]
     ]
+
     area1.right = area2
     area2.left = area1
     area2.bottom = area3
@@ -112,7 +117,7 @@ function init () {
       assetManager.downLoadAll(() => {
         // Assign the sprites to the correct material
         gameObjects.forEach((obj) => obj.material.setSprite(assetManager))
-
+        socket.emit('new player')
         // After the sprites are initialized start drawing
         animate(game)
       })
@@ -123,3 +128,7 @@ function init () {
 }
 
 document.addEventListener('DOMContentLoaded', init())
+
+socket.on('message', function (data) {
+  console.log(data)
+})

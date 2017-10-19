@@ -4,7 +4,6 @@ nav.navbar.navbar-dark.navbar-expand-md.bg-dark
     span.navbar-toggler-icon
   #navigationBar.collapse.navbar-collapse
     ul#nav-list.navbar-nav.mr-auto
-      - var pages = ['Home', 'Game', 'Controls', 'About']
       each page in pages
         li.nav-item
           a.nav-link(href= page.toLowerCase())= page

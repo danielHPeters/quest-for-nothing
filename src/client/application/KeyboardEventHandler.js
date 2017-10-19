@@ -9,7 +9,7 @@ export default class KeyboardEventHandler {
   constructor (canvas) {
     this.game = canvas
     this.initializeKeyHandler()
-    this.keyActionsRegister = []
+    this.keyActionsRegister = {}
   }
 
   initializeKeyHandler () {
