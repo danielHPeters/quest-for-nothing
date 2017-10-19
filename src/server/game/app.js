@@ -9,7 +9,7 @@ let area1 = new Area(game)
 let area2 = new Area(game)
 let area3 = new Area(game)
 
-let pl = 'player'
+let pl = 'spawn'
 let bl = 'block'
 let se = 'secret'
 let no = null
