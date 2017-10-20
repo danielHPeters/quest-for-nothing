@@ -82,10 +82,6 @@ var _KeyboardEventHandler = __webpack_require__(3);
 
 var _KeyboardEventHandler2 = _interopRequireDefault(_KeyboardEventHandler);
 
-var _Vector = __webpack_require__(4);
-
-var _Vector2 = _interopRequireDefault(_Vector);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var socket = io.connect();
@@ -117,10 +113,14 @@ socket.on('state', function (players) {
     players[playerId].viewport.blocks.forEach(function (block) {
       ctx.drawImage(assetManager.getAsset(block.material.name), block.position.x, block.position.y, block.width, block.height);
     });
-    var pos = new _Vector2.default(canvas.width - 35, 5);
+    var x = canvas.width - 35;
+    var y = 5;
     for (var i = 0; i < players[playerId].lives; i++) {
-      ctx.drawImage(assetManager.cache['heart'], pos.x, pos.y, 30, 30);
-      pos.x -= 30;
+      ctx.drawImage(assetManager.getAsset('heart'), x, y, 30, 30);
+      x -= 30;
+    }
+    if (players[playerId].jumping) {
+      // audioManager.playSound('jump') TODO Make it only fire once while jumping
     }
   }
 });
@@ -147,6 +147,7 @@ function init() {
       // Download all sprites
       assetManager.downLoadAll(function () {
         animate();
+        // Draw Background only once to improve performance
         document.getElementById('background').getContext('2d').drawImage(assetManager.getAsset('background'), 0, 0, canvas.width, canvas.height);
         spritesLoaded = true;
       });
@@ -164,7 +165,8 @@ socket.on('connect', function () {
 document.addEventListener('DOMContentLoaded', init());
 
 /**
- *
+ * Shim for animation loop.
+ * Selects one that's available or uses fallback with setTimeout.
  */
 window.requestAnimFrame = function () {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function ( /* function */callback, /* DOMElement */element) {
@@ -442,161 +444,6 @@ var KeyboardEventHandler = function () {
 }();
 
 exports.default = KeyboardEventHandler;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @author Daniel Peters
- * @version 1.0
- */
-var Vector = function () {
-  /**
-   *
-   * @param {number} x
-   * @param {number} y
-   */
-  function Vector(x, y) {
-    _classCallCheck(this, Vector);
-
-    this.x = x;
-    this.y = y;
-  }
-
-  _createClass(Vector, [{
-    key: "set",
-    value: function set(x, y) {
-      this.x = x;
-      this.y = y;
-    }
-  }, {
-    key: "setVector",
-    value: function setVector(vector) {
-      this.x = vector.x;
-      this.y = vector.y;
-    }
-  }, {
-    key: "add",
-    value: function add(vector) {
-      this.x += vector.x;
-      this.y += vector.y;
-    }
-  }, {
-    key: "sub",
-    value: function sub(vector) {
-      this.x -= vector.x;
-      this.y -= vector.y;
-    }
-  }, {
-    key: "mult",
-    value: function mult(scalar) {
-      this.x *= scalar;
-      this.y *= scalar;
-    }
-  }, {
-    key: "div",
-    value: function div(scalar) {
-      this.x /= scalar;
-      this.y /= scalar;
-    }
-  }, {
-    key: "mag",
-    value: function mag() {
-      return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
-  }, {
-    key: "negative",
-    value: function negative() {
-      return new Vector(-this.x, -this.y);
-    }
-  }, {
-    key: "normalize",
-    value: function normalize() {
-      var magnitude = this.mag();
-      if (magnitude !== 0) {
-        this.div(magnitude);
-      }
-    }
-  }, {
-    key: "limit",
-    value: function limit(max) {
-      if (this.mag() > max) {
-        this.normalize();
-        this.mult(max);
-      }
-    }
-  }, {
-    key: "heading",
-    value: function heading() {}
-  }, {
-    key: "rotate",
-    value: function rotate() {}
-  }, {
-    key: "lerp",
-    value: function lerp() {}
-  }, {
-    key: "distanceTo",
-    value: function distanceTo(to) {
-      return Math.sqrt(Math.pow(to.x - this.x, 2) + Math.pow(to.y - this.y, 2));
-    }
-  }, {
-    key: "angleBetween",
-    value: function angleBetween() {}
-  }, {
-    key: "dot",
-    value: function dot() {}
-  }, {
-    key: "cross",
-    value: function cross() {}
-  }, {
-    key: "random2D",
-    value: function random2D() {}
-  }, {
-    key: "random3D",
-    value: function random3D() {}
-  }, {
-    key: "clone",
-    value: function clone() {
-      return new Vector(this.x, this.y);
-    }
-  }], [{
-    key: "add",
-    value: function add(v1, v2) {
-      return new Vector(v1.x + v2.x, v1.y + v2.y);
-    }
-  }, {
-    key: "sub",
-    value: function sub(v1, v2) {
-      return new Vector(v1.x - v2.x, v1.y - v2.y);
-    }
-  }, {
-    key: "mult",
-    value: function mult(vector, scalar) {
-      return new Vector(vector.x * scalar, vector.y * scalar);
-    }
-  }, {
-    key: "div",
-    value: function div(vector, scalar) {
-      return new Vector(vector.x / scalar, vector.y / scalar);
-    }
-  }]);
-
-  return Vector;
-}();
-
-exports.default = Vector;
 
 /***/ })
 /******/ ]);

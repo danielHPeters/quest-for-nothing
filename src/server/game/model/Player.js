@@ -6,12 +6,6 @@ let Entity = require('./Entity')
 
 /**
  *
- * @type {module.Block}
- */
-let Block = require('./Block')
-
-/**
- *
  * @type {module.Player}
  */
 module.exports = class Player extends Entity {
@@ -31,6 +25,7 @@ module.exports = class Player extends Entity {
     this.running = false
     this.jumping = false
     this.grounded = false
+    this.solid = true
     this.history = {}
     this.keyActionsRegister = []
     this.friction = 0.8
@@ -116,7 +111,7 @@ module.exports = class Player extends Entity {
   }
 
   checkCollision (object) {
-    if (object instanceof Block && !object.solid) {
+    if (!(object instanceof Entity) || !object.solid) {
       return
     }
 

@@ -3,7 +3,6 @@
 import AudioManager from './application/AudioManager'
 import AssetManager from './application/AssetManager'
 import KeyboardEventHandler from './application/KeyboardEventHandler'
-import Vector from './model/Vector'
 
 let socket = io.connect()
 let canvas = document.getElementById('game')
@@ -32,10 +31,14 @@ socket.on('state', players => {
     players[playerId].viewport.blocks.forEach(block => {
       ctx.drawImage(assetManager.getAsset(block.material.name), block.position.x, block.position.y, block.width, block.height)
     })
-    let pos = new Vector(canvas.width - 35, 5)
+    let x = canvas.width - 35
+    let y = 5
     for (let i = 0; i < players[playerId].lives; i++) {
-      ctx.drawImage(assetManager.cache['heart'], pos.x, pos.y, 30, 30)
-      pos.x -= 30
+      ctx.drawImage(assetManager.getAsset('heart'), x, y, 30, 30)
+      x -= 30
+    }
+    if (players[playerId].jumping) {
+      // audioManager.playSound('jump') TODO Make it only fire once while jumping
     }
   }
 })
@@ -62,6 +65,7 @@ function init () {
       // Download all sprites
       assetManager.downLoadAll(() => {
         animate()
+        // Draw Background only once to improve performance
         document.getElementById('background').getContext('2d').drawImage(assetManager.getAsset('background'), 0, 0, canvas.width, canvas.height)
         spritesLoaded = true
       })
@@ -79,7 +83,8 @@ socket.on('connect', function () {
 document.addEventListener('DOMContentLoaded', init())
 
 /**
- *
+ * Shim for animation loop.
+ * Selects one that's available or uses fallback with setTimeout.
  */
 window.requestAnimFrame = (function () {
   return window.requestAnimationFrame ||
