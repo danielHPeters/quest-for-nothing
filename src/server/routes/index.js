@@ -6,7 +6,7 @@ const router = express.Router()
 const pages = ['Home', 'Game', 'Controls', 'About', 'Levels']
 
 router.get('/', function (req, res, next) {
-  res.redirect(pages[0].toLowerCase())
+  res.redirect('/' + pages[0].toLowerCase())
 })
 
 pages.forEach(function (page) {
