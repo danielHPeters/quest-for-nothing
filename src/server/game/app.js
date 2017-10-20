@@ -24,9 +24,17 @@ let Settings = require('./model/Settings')
  */
 let BlockFactory = require('./factory/BlockFactory')
 
+/**
+ *
+ * @type {module.LevelLoader}
+ */
+let LevelLoader = require('./factory/LevelLoader')
+
 let gameSettings = new Settings()
 let game = new Game(gameSettings)
-let area1 = new Area('area1')
+let levelLoader = new LevelLoader('./../../../levels/')
+levelLoader.loadLevel(game)
+/*let area1 = new Area('area1')
 let area2 = new Area('area2')
 let area3 = new Area('area3')
 
@@ -76,7 +84,7 @@ area2.blocks = BlockFactory.generateBlocks(game, area2, blocksList2)
 area3.blocks = BlockFactory.generateBlocks(game, area3, blocksList3)
 game.areas.push(area1)
 game.areas.push(area2)
-game.areas.push(area3)
+game.areas.push(area3)*/
 
 /**
  *

@@ -1,8 +1,8 @@
 {
-  "name": "main",
+  "id": "default",
   "areas": [
     {
-      "name": "area1",
+      "id": "area1",
       "exits": {
         "left": null,
         "right": "area2",
@@ -311,7 +311,7 @@
       ]
     },
     {
-      "name": "area2",
+      "id": "area2",
       "exits": {
         "left": "area1",
         "right": null,
@@ -454,8 +454,8 @@
           null,
           null,
           {
-            "type": "player",
-            "solid": "true"
+            "type": "spawn",
+            "solid": "false"
           },
           {
             "type": "stone",
@@ -611,7 +611,7 @@
       ]
     },
     {
-      "name": "area3",
+      "id": "area3",
       "exits": {
         "left": null,
         "right": null,
