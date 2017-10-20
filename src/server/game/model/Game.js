@@ -30,5 +30,6 @@ module.exports = class Game {
    */
   update (timeDifference) {
     Object.keys(this.players).forEach(key => this.players[key].move(this, timeDifference))
+    this.areas.forEach(area => area.checkPlayers())
   }
 }

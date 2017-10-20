@@ -3,6 +3,7 @@
 import AudioManager from './application/AudioManager'
 import AssetManager from './application/AssetManager'
 import KeyboardEventHandler from './application/KeyboardEventHandler'
+import Vector from './model/Vector'
 
 let socket = io.connect()
 let canvas = document.getElementById('game')
@@ -20,21 +21,24 @@ function animate () {
 }
 
 socket.on('state', players => {
-  if(playerId && players[playerId] && spritesLoaded) {
+  if (playerId && players[playerId] && spritesLoaded) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     Object.keys(players).forEach(key => {
-      console.log('hello')
       const player = players[key]
-      if (player.currentArea === players[playerId].currentArea) {
+      if (player.viewport.areaId === players[playerId].viewport.areaId) {
         ctx.drawImage(assetManager.getAsset(player.material.name), player.position.x, player.position.y, player.width, player.height)
       }
     })
-    players[playerId].currentArea.blocks.forEach(block => {
+    players[playerId].viewport.blocks.forEach(block => {
       ctx.drawImage(assetManager.getAsset(block.material.name), block.position.x, block.position.y, block.width, block.height)
     })
+    let pos = new Vector(canvas.width - 35, 5)
+    for (let i = 0; i < players[playerId].lives; i++) {
+      ctx.drawImage(assetManager.cache['heart'], pos.x, pos.y, 30, 30)
+      pos.x -= 30
+    }
   }
 })
-
 
 /**
  * Initializes all game Objects
@@ -46,10 +50,10 @@ function init () {
     audioManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3')
     audioManager.queueDownload('jump', 'assets/audio/effects/jump.wav')
     audioManager.loadAll(() => {
-      //audioManager.playSound('ambient', true)
+      audioManager.playSound('ambient', true)
 
       // Add all sprites to the download queue
-      assetManager.queueDownload('background', 'assets/textures/background.jpg')
+      assetManager.queueDownload('background', 'assets/textures/background.png')
       assetManager.queueDownload('player', 'assets/textures/player.png')
       assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg')
       assetManager.queueDownload('heart', 'assets/textures/heart.png')
@@ -58,6 +62,7 @@ function init () {
       // Download all sprites
       assetManager.downLoadAll(() => {
         animate()
+        document.getElementById('background').getContext('2d').drawImage(assetManager.getAsset('background'), 0, 0, canvas.width, canvas.height)
         spritesLoaded = true
       })
     })
@@ -72,3 +77,17 @@ socket.on('connect', function () {
 })
 
 document.addEventListener('DOMContentLoaded', init())
+
+/**
+ *
+ */
+window.requestAnimFrame = (function () {
+  return window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function (/* function */ callback, /* DOMElement */ element) {
+      window.setTimeout(callback, 1000 / 60)
+    }
+})()

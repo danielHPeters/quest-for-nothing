@@ -22,9 +22,9 @@ module.exports = class Player extends Entity {
    * @param {number} width
    * @param {number} height
    * @param {Material} material
-   * @param {Area} currentArea
+   * @param {Area} initialArea
    */
-  constructor (x, y, width, height, material, currentArea) {
+  constructor (x, y, width, height, material, initialArea) {
     super(x, y, width, height, material)
     this.lives = 3
     this.speed = 3.6
@@ -35,7 +35,13 @@ module.exports = class Player extends Entity {
     this.keyActionsRegister = []
     this.friction = 0.8
     this.gravity = 0.2
-    this.currentArea = currentArea
+    this.viewport = {blocks: initialArea.blocks, areaId: initialArea.id}
+    this.edges = {
+      left: false,
+      right: false,
+      top: false,
+      bottom: false
+    }
   }
 
   /**
@@ -68,7 +74,7 @@ module.exports = class Player extends Entity {
 
     this.grounded = false
 
-    this.currentArea.blocks.forEach(block => {
+    this.viewport.blocks.forEach(block => {
       const direction = this.checkCollision(block)
 
       if (direction === 'l' || direction === 'r') {
@@ -155,18 +161,18 @@ module.exports = class Player extends Entity {
    * @param {module.Game} game
    */
   checkEdges (game) {
-    if (this.position.x > game.settings.canvasWidth && this.currentArea.hasRight()) {
-      this.currentArea = this.currentArea.right
-      this.position.x = this.currentArea.blocks[0].width
-    } else if (this.position.x < 0 && this.currentArea.hasLeft()) {
-      this.currentArea = this.currentArea.left
-      this.position.x = game.settings.canvasWidth - this.currentArea.blocks[0].width
+    if (this.position.x > game.settings.canvasWidth) {
+      this.edges.right = true
+      this.position.x = this.viewport.blocks[0].width
+    } else if (this.position.x < 0) {
+      this.edges.left = true
+      this.position.x = game.settings.canvasWidth - this.viewport.blocks[0].width
     } else if (this.position.y > game.settings.canvasHeight) {
-      this.currentArea = this.currentArea.bottom
-      this.position.y = this.currentArea.blocks[0].height
+      this.edges.bottom = true
+      this.position.y = this.viewport.blocks[0].height
     } else if (this.position.y < 0) {
-      this.currentArea = this.currentArea.top
-      this.position.y = game.settings.canvasHeight - this.currentArea.blocks[0].height
+      this.edges.top = true
+      this.position.y = game.settings.canvasHeight - this.viewport.blocks[0].height
     }
   }
 }

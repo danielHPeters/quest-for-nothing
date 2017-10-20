@@ -5,9 +5,9 @@
 let Vector = require('./Vector')
 /**
  *
- * @type {module.CollisionBounds}
+ * @type {module.Bounds}
  */
-let CollisionBounds = require('./CollisionBounds')
+let Bounds = require('../collision/Bounds')
 
 /**
  *
@@ -61,6 +61,6 @@ module.exports = class Entity {
   }
 
   getCollisionBox () {
-    return new CollisionBounds(this.position.x, this.position.y, this.width, this.height)
+    return new Bounds(this.position.x, this.position.y, this.width, this.height)
   }
 }

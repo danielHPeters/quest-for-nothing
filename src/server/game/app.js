@@ -26,9 +26,9 @@ let BlockFactory = require('./factory/BlockFactory')
 
 let gameSettings = new Settings()
 let game = new Game(gameSettings)
-let area1 = new Area()
-let area2 = new Area()
-let area3 = new Area()
+let area1 = new Area('area1')
+let area2 = new Area('area2')
+let area3 = new Area('area3')
 
 let pl = 'spawn'
 let bl = 'block'
@@ -67,10 +67,10 @@ let blocksList3 = [
   [bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl, bl]
 ]
 
-/*area1.right = area2
+area1.right = area2
 area2.left = area1
 area2.bottom = area3
-area3.top = area2*/
+area3.top = area2
 area1.blocks = BlockFactory.generateBlocks(game, area1, blocksList)
 area2.blocks = BlockFactory.generateBlocks(game, area2, blocksList2)
 area3.blocks = BlockFactory.generateBlocks(game, area3, blocksList3)

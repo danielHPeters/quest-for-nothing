@@ -22,10 +22,11 @@ module.exports = function (io) {
         game.spawnPoint.width,
         game.spawnPoint.height,
         new Material('player'),
-        game.spawnPoint.area
+        game.spawnPoint.area.blocks
       )
       player.name = 'Player'
       game.players[socket.id] = player
+      game.spawnPoint.area.add(player)
 
       console.log('Player connected')
       socket.emit('registered player', socket.id)

@@ -1,8 +1,8 @@
 /**
  *
- * @type {module.CollisionBounds}
+ * @type {module.Bounds}
  */
-module.exports = class CollisionBounds {
+module.exports = class Bounds {
   /**
    *
    * @param {number} x
@@ -10,7 +10,7 @@ module.exports = class CollisionBounds {
    * @param {number} width
    * @param {number} height
    */
-  constructor (x, y, width, height) {
+  constructor (x = 0, y = 0, width = 0, height = 0) {
     this.x = x
     this.y = y
     this.width = width
