@@ -1,7 +1,7 @@
 # jump-and-run
 A simple jump and run game
 
-#Instructions
+## Instructions
 This should run in any browser with html5 support.
 Just download the repository and open index.html with a browser.
 

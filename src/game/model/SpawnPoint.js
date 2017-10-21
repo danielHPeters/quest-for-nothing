@@ -1,8 +1,8 @@
 /**
  *
- * @type {module.Vector}
+ * @type {module.Vector2}
  */
-let Vector = require('./Vector')
+let Vector2 = require('./Vector2')
 
 /**
  *
@@ -18,7 +18,7 @@ module.exports = class SpawnPoint {
    * @param {module.Area} area
    */
   constructor (x, y, width, height, area) {
-    this.position = new Vector(x, y)
+    this.position = new Vector2(x, y)
     this.width = width
     this.height = height
     this.area = area

@@ -1,8 +1,8 @@
 /**
  *
- * @type {module.Vector}
+ * @type {module.Vector2}
  */
-module.exports = class Vector {
+module.exports = class Vector2 {
   /**
    *
    * @param {number} x
@@ -29,7 +29,7 @@ module.exports = class Vector {
   }
 
   static add (v1, v2) {
-    return new Vector(v1.x + v2.x, v1.y + v2.y)
+    return new Vector2(v1.x + v2.x, v1.y + v2.y)
   }
 
   sub (vector) {
@@ -38,7 +38,7 @@ module.exports = class Vector {
   }
 
   static sub (v1, v2) {
-    return new Vector(v1.x - v2.x, v1.y - v2.y)
+    return new Vector2(v1.x - v2.x, v1.y - v2.y)
   }
 
   mult (scalar) {
@@ -47,7 +47,7 @@ module.exports = class Vector {
   }
 
   static mult (vector, scalar) {
-    return new Vector(vector.x * scalar, vector.y * scalar)
+    return new Vector2(vector.x * scalar, vector.y * scalar)
   }
 
   div (scalar) {
@@ -56,7 +56,7 @@ module.exports = class Vector {
   }
 
   static div (vector, scalar) {
-    return new Vector(vector.x / scalar, vector.y / scalar)
+    return new Vector2(vector.x / scalar, vector.y / scalar)
   }
 
   mag () {
@@ -64,7 +64,7 @@ module.exports = class Vector {
   }
 
   negative () {
-    return new Vector(-this.x, -this.y)
+    return new Vector2(-this.x, -this.y)
   }
 
   normalize () {
@@ -85,7 +85,12 @@ module.exports = class Vector {
 
   }
 
-  rotate () {
+  /**
+   *
+   * @param {number} angle
+   * @param {Vector2}vector
+   */
+  rotate (angle, vector) {
 
   }
 
@@ -101,8 +106,13 @@ module.exports = class Vector {
 
   }
 
-  dot () {
-
+  /**
+   *
+   * @param {Vector2} vector
+   * @returns {number}
+   */
+  dot (vector) {
+    return this.x * vector.x + this.y * vector.y
   }
 
   cross () {
@@ -118,6 +128,6 @@ module.exports = class Vector {
   }
 
   clone () {
-    return new Vector(this.x, this.y)
+    return new Vector2(this.x, this.y)
   }
 }

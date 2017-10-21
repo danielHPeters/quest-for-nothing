@@ -1,8 +1,8 @@
 /**
  *
- * @type {module.Vector}
+ * @type {module.Vector2}
  */
-let Vector = require('./Vector')
+let Vector2 = require('./Vector2')
 /**
  *
  * @type {module.Bounds}
@@ -23,9 +23,9 @@ module.exports = class Entity {
    * @param {module.Material} material
    */
   constructor (x, y, width, height, material) {
-    this.position = new Vector(x, y)
-    this.velocity = new Vector(0, 0)
-    this.acceleration = new Vector(0, 0)
+    this.position = new Vector2(x, y)
+    this.velocity = new Vector2(0, 0)
+    this.acceleration = new Vector2(0, 0)
     this.width = width
     this.height = height
     this.material = material

@@ -12,7 +12,7 @@ let server = http.Server(app)
 let routes = require('./routes/index')
 
 let io = require('socket.io')(server)
-require('./game/gameLoop')(io)
+require('./../game/gameLoop')(io)
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
