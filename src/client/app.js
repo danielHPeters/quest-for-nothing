@@ -4,10 +4,10 @@ import AudioManager from './application/AudioManager'
 import AssetManager from './application/AssetManager'
 import KeyboardEventHandler from './application/KeyboardEventHandler'
 
-let socket = io.connect()
+let socket = io()
 let canvas = document.getElementById('game')
 let keyEventHandler = new KeyboardEventHandler(canvas)
-let audioManager = new AudioManager()
+let audioManager = new AudioManager() // TODO Combine audio manager with asset manager to avoid duplicate code
 let assetManager = new AssetManager()
 let playerId
 let ctx

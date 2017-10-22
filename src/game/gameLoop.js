@@ -13,8 +13,8 @@ let game = require('./app')
 let Player = require('./model/Player')
 let Material = require('./model/Material')
 
-module.exports = function (io) {
-  io.on('connection', function (socket) {
+module.exports = io => {
+  io.on('connection', socket => {
     socket.on('new player', () => {
       let player = new Player(
         game.spawnPoint.position.x,
@@ -45,7 +45,7 @@ module.exports = function (io) {
   })
 
   let lastUpdateTime = (new Date()).getTime()
-  setInterval(function () {
+  setInterval(() => {
     let currentTime = (new Date()).getTime()
     let timeDifference = currentTime - lastUpdateTime
     game.update(timeDifference)

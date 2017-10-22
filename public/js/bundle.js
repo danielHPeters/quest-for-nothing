@@ -84,10 +84,10 @@ var _KeyboardEventHandler2 = _interopRequireDefault(_KeyboardEventHandler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var socket = io.connect();
+var socket = io();
 var canvas = document.getElementById('game');
 var keyEventHandler = new _KeyboardEventHandler2.default(canvas);
-var audioManager = new _AudioManager2.default();
+var audioManager = new _AudioManager2.default(); // TODO Combine audio manager with asset manager to avoid duplicate code
 var assetManager = new _AssetManager2.default();
 var playerId = void 0;
 var ctx = void 0;
@@ -411,15 +411,29 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * Created by Daniel on 2017-09-18.
+ * Input manager.
+ *
+ * @author Daniel Peters
+ * @version 2.0
  */
 var KeyboardEventHandler = function () {
   function KeyboardEventHandler() {
     _classCallCheck(this, KeyboardEventHandler);
 
     this.initializeKeyHandler();
+    this.initializeTouchHandler();
+
+    // All keystrokes and touch swipes are registered here
+    // This object is then sent to the server to process player movement
     this.keyActionsRegister = {};
   }
+
+  /**
+   * Handle keyboard key presses.
+   * Only booleans are set to express the movement direction intention
+   * This allows the separation of keystrokes from actual movement.
+   */
+
 
   _createClass(KeyboardEventHandler, [{
     key: 'initializeKeyHandler',
@@ -428,10 +442,75 @@ var KeyboardEventHandler = function () {
 
       window.addEventListener('keydown', function (event) {
         _this.keyActionsRegister[event.key] = true;
-      });
+      }, false);
       window.addEventListener('keyup', function (event) {
         _this.keyActionsRegister[event.key] = false;
-      });
+      }, false);
+    }
+
+    /**
+     * Maps swipe directions to key press booleans.
+     * Allows touch controls on mobile.
+     */
+
+  }, {
+    key: 'initializeTouchHandler',
+    value: function initializeTouchHandler() {
+      window.addEventListener('touchstart', handleTouchStart, false);
+      window.addEventListener('touchmove', handleTouchMove, false);
+      window.addEventListener('touchend', handleTouchEnd, false);
+
+      var xDown = null;
+      var yDown = null;
+      var handlerInstance = this;
+
+      function handleTouchStart(evt) {
+        // Prevent div scrolling
+        evt.preventDefault();
+        xDown = evt.touches[0].clientX;
+        yDown = evt.touches[0].clientY;
+      }
+
+      function handleTouchMove(evt) {
+        // Prevent div scrolling
+        evt.preventDefault();
+        // do nothing if no touch direction is registered
+        if (!xDown || !yDown) {
+          return;
+        }
+
+        var xUp = evt.touches[0].clientX;
+        var yUp = evt.touches[0].clientY;
+
+        // Subtract start currently touched location from start location
+        var xDiff = xDown - xUp;
+        var yDiff = yDown - yUp;
+
+        // Positive values equals left. Negative values equals right
+        if (xDiff > 0) {
+          handlerInstance.keyActionsRegister['a'] = true;
+        } else {
+          handlerInstance.keyActionsRegister['d'] = true;
+        }
+
+        // Positive = up. Negative = down
+        if (yDiff > 0) {
+          handlerInstance.keyActionsRegister['w'] = true;
+        } else {}
+        /* down swipe */
+
+        /* reset values */
+        xDown = null;
+        yDown = null;
+      }
+
+      function handleTouchEnd(evt) {
+        // Prevent div scrolling
+        evt.preventDefault();
+        Object.keys(handlerInstance.keyActionsRegister).forEach(function (key) {
+          handlerInstance.keyActionsRegister[key] = false;
+        });
+      }
     }
   }, {
     key: 'getKeyActionsRegister',
