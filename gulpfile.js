@@ -30,7 +30,7 @@ const configuration = {
  * CSS minifying task.
  * Will be extended later with sass or less compiling.
  */
-gulp.task('css', function () {
+gulp.task('css', () => {
   return gulp.src(configuration.css.source)
     .pipe(minifycss())
     .pipe(gulp.dest(configuration.css.destination))
@@ -43,7 +43,7 @@ gulp.task('css', function () {
  * After that, the js wil be minified.
  * Source maps are generated to allow source debugging in the consoles of most browsers.
  */
-gulp.task('js', function () {
+gulp.task('js', () => {
   return gulp.src(configuration.js.bundledSource)
     .pipe(webpack(require(configuration.webpack.config)))
     .pipe(sourceMaps.init({loadMaps: true}))
@@ -61,7 +61,7 @@ gulp.task('js', function () {
  * The standard used is standard.js as defined in the '.eslintrc' file
  * with the addition of socket.io globals
  */
-gulp.task('lint', function () {
+gulp.task('lint', () => {
   return gulp.src([configuration.js.source, '!node_modules/**'])
     .pipe(esLint({
       configFile: configuration.esLint.config
@@ -73,14 +73,14 @@ gulp.task('lint', function () {
 /**
  * Watch changes in css files.
  */
-gulp.task('watch-css', function () {
+gulp.task('watch-css', () => {
   gulp.watch(configuration.css.source, ['css'])
 })
 
 /**
  * Watch changes in js files.
  */
-gulp.task('watch-js', function () {
+gulp.task('watch-js', () => {
   gulp.watch(configuration.js.source, ['js'])
 })
 
