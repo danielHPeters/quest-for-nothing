@@ -16,7 +16,7 @@ let Area = require('./../model/Area')
  */
 module.exports = class LevelLoader {
   /**
-   *
+   * Default constructor. Sets the path to level definition files
    * @param {string} levelsPath
    */
   constructor (levelsPath) {
@@ -24,7 +24,7 @@ module.exports = class LevelLoader {
   }
 
   /**
-   *
+   * Loads level file.
    * @param {string} level
    */
   loadLevel (game, level = 'default') {
@@ -32,19 +32,24 @@ module.exports = class LevelLoader {
 
     let areasDone = 0
 
-    levelDefinition.areas.forEach(function (areaDefinition) {
+    levelDefinition.areas.forEach(areaDefinition => {
       let area = new Area(areaDefinition.id)
       areasDone++
       area.blocks = BlockFactory.generateBlocks(game, area, areaDefinition.blocks)
       game.areas.push(area)
       if (areasDone === levelDefinition.areas.length) {
-        LevelLoader.setExits(game, levelDefinition)
+        this.setExits(game, levelDefinition)
       }
     })
   }
 
-  static setExits (game, levelDefinition) {
-    levelDefinition.areas.forEach(function (areaDefinition) {
+  /**
+   * After loading level. The areas need to be set to allow travelling between them.
+   * @param {module.Game} game
+   * @param {{}} levelDefinition
+   */
+  setExits (game, levelDefinition) {
+    levelDefinition.areas.forEach(areaDefinition => {
       let area = game.areas.filter(area => area.id === areaDefinition.id)[0]
       Object.keys(areaDefinition.exits).forEach(function (key) {
         if (areaDefinition.exits[key] !== null) {

@@ -11,10 +11,15 @@ let game = require('./app')
  * @type {module.Player}
  */
 let Player = require('./model/Player')
+/**
+ *
+ * @type {module.Material}
+ */
 let Material = require('./model/Material')
 
 module.exports = io => {
   io.on('connection', socket => {
+    // Add new connected player and set player location to predefined spawn point
     socket.on('new player', () => {
       let player = new Player(
         game.spawnPoint.position.x,
@@ -24,19 +29,21 @@ module.exports = io => {
         new Material('player'),
         game.spawnPoint.area.blocks
       )
+      // Currently player is identified via socket id. TODO set a unique player name to identify player
       player.name = 'Player'
       game.players[socket.id] = player
       game.spawnPoint.area.add(player)
 
       console.log('Player connected')
-      socket.emit('registered player', socket.id)
     })
 
+    // Get user input
     socket.on('movement', pressedKeys => {
       let player = game.players[socket.id]
       player.keyActionsRegister = pressedKeys
     })
 
+    // Delete player on disconnect
     socket.on('disconnect', () => {
       let playerName = game.players[socket.id] ? game.players[socket.id].name : ''
       delete game.players[socket.id]
@@ -44,6 +51,7 @@ module.exports = io => {
     })
   })
 
+  // Send objects state 60 times per second to all connected players
   let lastUpdateTime = (new Date()).getTime()
   setInterval(() => {
     let currentTime = (new Date()).getTime()

@@ -60,6 +60,10 @@ module.exports = class Entity {
     this.width = width
   }
 
+  /**
+   * Get collision bounds in form of a surrounding rectangle
+   * @returns {module.Bounds}
+   */
   getCollisionBox () {
     return new Bounds(this.position.x, this.position.y, this.width, this.height)
   }

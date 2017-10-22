@@ -5,7 +5,8 @@
 let Vector2 = require('./Vector2')
 
 /**
- *
+ * Defines position and area of spawn location.
+ * Specify spawn location in json level files by adding object type: spawn
  * @type {module.SpawnPoint}
  */
 module.exports = class SpawnPoint {

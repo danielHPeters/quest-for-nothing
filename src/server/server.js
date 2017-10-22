@@ -6,13 +6,13 @@ let path = require('path')
 let http = require('http')
 let bodyParser = require('body-parser')
 let favicon = require('serve-favicon')
-let logger = require('./utils/logger')
+let logger = require('./utils/logger') // use customized winston logger
 let server = http.Server(app)
 
-let routes = require('./routes/index')
+let routes = require('./routes/index') // get routes
 
-let io = require('socket.io')(server)
-require('./../game/gameLoop')(io)
+let io = require('socket.io')(server) // integrate socket.io
+require('./../game/gameLoop')(io) // pass socket io to the game loop to allow sending and receiving game status events
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
@@ -20,7 +20,7 @@ app.use(favicon(path.join(__dirname, '../../public/favicon/favicon.ico')))
 app.use(express.static(path.join(__dirname, '../../public')))
 app.set('views', path.join(__dirname, '../views'))
 app.set('view engine', 'pug')
-app.use(require('morgan')('dev', {'stream': logger.stream}))
+app.use(require('morgan')('dev', {'stream': logger.stream})) // pass custom logger to default express logger
 
 app.use('/', routes)
 

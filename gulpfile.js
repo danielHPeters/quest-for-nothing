@@ -66,7 +66,8 @@ gulp.task('lint', () => {
     .pipe(esLint({
       configFile: configuration.esLint.config
     }))
-    .pipe(esLint.formatEach('compact', process.stderr))
+    .pipe(esLint.format())
+    .pipe(esLint.failAfterError())
 })
 
 /**

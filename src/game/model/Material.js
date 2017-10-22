@@ -1,5 +1,5 @@
 /**
- *
+ * Material class containing texture information. May need some refactoring when sprite sheets are implemented.
  * @type {module.Material}
  */
 module.exports = class Material {

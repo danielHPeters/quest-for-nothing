@@ -4,7 +4,7 @@ const LEFT = 3
 const RIGHT = 4
 
 /**
- *
+ * Enum to test for directions
  * @type {module.DirectionsEnum}
  */
 module.exports = class DirectionsEnum {

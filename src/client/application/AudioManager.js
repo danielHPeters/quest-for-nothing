@@ -6,7 +6,7 @@ export default class AudioManager {
     this.errorCount = 0
 
     try {
-      // Fix up for prefixing
+      // Fix for browsers using prefixes
       window.AudioContext = window.AudioContext || window.webkitAudioContext
       this.context = new AudioContext()
     } catch (e) {
@@ -15,7 +15,7 @@ export default class AudioManager {
   }
 
   /**
-   *
+   * Queue an audio file for download
    * @param {string} name
    * @param {string} path
    */
@@ -64,6 +64,13 @@ export default class AudioManager {
     request.send()
   }
 
+  /**
+   * Create an audio buffer source node from cached buffer.
+   * Send it to the destination of the audio context and play it.
+   *
+   * @param name filename
+   * @param loop set to true for looped sounds like ambient music
+   */
   playSound (name, loop = false) {
     let sound = this.context.createBufferSource()
 
@@ -77,7 +84,7 @@ export default class AudioManager {
   }
 
   /**
-   *
+   * Check if downloading is finished.
    * @returns {boolean}
    */
   done () {

@@ -10,13 +10,13 @@ let Entity = require('./Entity')
  */
 module.exports = class Player extends Entity {
   /**
-   *
+   * Constructor. Initializes position and surroundings information.
    * @param {number} x
    * @param {number} y
    * @param {number} width
    * @param {number} height
-   * @param {Material} material
-   * @param {Area} initialArea
+   * @param {module.Material} material
+   * @param {module.Area} initialArea
    */
   constructor (x, y, width, height, material, initialArea) {
     super(x, y, width, height, material)
@@ -30,7 +30,9 @@ module.exports = class Player extends Entity {
     this.keyActionsRegister = []
     this.friction = 0.8
     this.gravity = 0.2
+    // Information about players current surroundings
     this.viewport = {blocks: initialArea.blocks, areaId: initialArea.id}
+    // boolean flags to check if player wants to leave from one exit
     this.edges = {
       left: false,
       right: false,
@@ -40,12 +42,15 @@ module.exports = class Player extends Entity {
   }
 
   /**
+   * Players object update method
    *
    * @param {module.Game} game
    * @param {number} timeDifference
    */
   move (game, timeDifference) {
+    // Jump on 'w' or space keys pressed
     if (this.keyActionsRegister['w'] || this.keyActionsRegister[' ']) {
+      // Check if players is not already jumping
       if (!this.jumping && this.grounded) {
         this.jumping = true
         this.grounded = false
@@ -53,22 +58,27 @@ module.exports = class Player extends Entity {
       }
     }
 
+    // Move left on key 'a' pressed
     if (this.keyActionsRegister['a']) {
       if (this.velocity.x > -this.speed) {
         this.velocity.x--
       }
     }
 
+    // Move right on key 'd' pressed
     if (this.keyActionsRegister['d']) {
       if (this.velocity.x < this.speed) {
         this.velocity.x++
       }
     }
+
+    // Apply friction and gravity to movement
     this.velocity.x *= this.friction
     this.velocity.y += this.gravity
 
     this.grounded = false
 
+    // Check collision with blocks
     this.viewport.blocks.forEach(block => {
       const direction = this.checkCollision(block)
 
@@ -83,15 +93,21 @@ module.exports = class Player extends Entity {
       }
     })
 
+    // Set y velocity to 0 when on ground
     if (this.grounded) {
       this.velocity.y = 0
     }
 
+    // add velocity vector to position vector
     this.position.add(this.velocity)
 
+    // Check if player wants to leave current area
     this.checkEdges(game)
   }
 
+  /**
+   * TODO Implement resource saving move tracking to allow resetting to previous states
+   */
   goBack () {
     if (this.history.length !== 0) {
       this.position.set(this.history[this.history.length - 1])
@@ -110,6 +126,11 @@ module.exports = class Player extends Entity {
     this.running = !this.running
   }
 
+  /**
+   * Check collision with other game objects
+   * @param object
+   * @returns {*}
+   */
   checkCollision (object) {
     if (!(object instanceof Entity) || !object.solid) {
       return
@@ -152,7 +173,9 @@ module.exports = class Player extends Entity {
   }
 
   /**
-   *
+   * Check if players is at the edge of an area.
+   * If yes the player object expresses intent to switch to next area.
+   * The switching is handled by Area objects.
    * @param {module.Game} game
    */
   checkEdges (game) {

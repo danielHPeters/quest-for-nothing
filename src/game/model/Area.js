@@ -20,6 +20,10 @@ module.exports = class Area {
     this.players = []
   }
 
+  /**
+   * Check if player wants to leave area. If yes then remove him/her from this area and put it in the
+   * desired area.
+   */
   checkPlayers () {
     this.players.forEach(player => {
       if (player.edges.left && this.hasLeft()) {
@@ -30,11 +34,11 @@ module.exports = class Area {
         player.edges.right = false
         this.right.add(player)
         this.remove(player)
-      } else if (player.edges.bottom) {
+      } else if (player.edges.bottom && this.hasBottom()) {
         player.edges.bottom = false
         this.bottom.add(player)
         this.remove(player)
-      } else if (player.edges.top) {
+      } else if (player.edges.top && this.hasTop()) {
         player.edges.top = false
         this.top.add(player)
         this.remove(player)
@@ -43,7 +47,9 @@ module.exports = class Area {
   }
 
   /**
-   *
+   * Register player int this area.
+   * Sets the players viewport to render blocks in this area
+   * The area id is set to hide players who are not in the same room from each other
    * @param {module.Player} player
    */
   add (player) {
@@ -52,6 +58,10 @@ module.exports = class Area {
     player.viewport.areaId = this.id
   }
 
+  /**
+   * Remove player from this area when he/she enters another area
+   * @param player
+   */
   remove (player) {
     // let index = this.players.indexOf(player)
     this.players = this.players.filter(item => item !== player)
@@ -63,5 +73,13 @@ module.exports = class Area {
 
   hasRight () {
     return this.right !== null
+  }
+
+  hasTop () {
+    return this.top !== null
+  }
+
+  hasBottom () {
+    return this.bottom !== null
   }
 }

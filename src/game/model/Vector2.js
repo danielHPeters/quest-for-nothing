@@ -1,10 +1,11 @@
 /**
- *
+ * Simple 2D vector implementation used for position, movement etc.
+ * TODO implement unfinished or missing methods.
  * @type {module.Vector2}
  */
 module.exports = class Vector2 {
   /**
-   *
+   * Default constructor. Sets x and y values.
    * @param {number} x
    * @param {number} y
    */

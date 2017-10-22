@@ -89,30 +89,40 @@ var canvas = document.getElementById('game');
 var keyEventHandler = new _KeyboardEventHandler2.default(canvas);
 var audioManager = new _AudioManager2.default(); // TODO Combine audio manager with asset manager to avoid duplicate code
 var assetManager = new _AssetManager2.default();
-var playerId = void 0;
-var ctx = void 0;
-var spritesLoaded = false;
+var playerId = void 0; // player id is registered here on socket connection
+var ctx = void 0; // graphics context
+var spritesLoaded = false; // set to true when asset manager finishes to start drawing
 
-function animate() {
+/**
+ * Sends user input to the server
+ */
+function update() {
   socket.emit('movement', keyEventHandler.keyActionsRegister);
-  // Request new frame when ready. Allows the game to play in a loop
+  // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
   window.requestAnimationFrame(function () {
-    return animate();
+    return update();
   });
 }
 
+/**
+ * Listen to server sending objects to draw.
+ * Contains the drawing loop
+ */
 socket.on('state', function (players) {
   if (playerId && players[playerId] && spritesLoaded) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     Object.keys(players).forEach(function (key) {
       var player = players[key];
+      // Make sure to only draw players in the same area
       if (player.viewport.areaId === players[playerId].viewport.areaId) {
         ctx.drawImage(assetManager.getAsset(player.material.name), player.position.x, player.position.y, player.width, player.height);
       }
     });
+    // Draw all blocks
     players[playerId].viewport.blocks.forEach(function (block) {
       ctx.drawImage(assetManager.getAsset(block.material.name), block.position.x, block.position.y, block.width, block.height);
     });
+    // Display health
     var x = canvas.width - 35;
     var y = 5;
     for (var i = 0; i < players[playerId].lives; i++) {
@@ -120,7 +130,7 @@ socket.on('state', function (players) {
       x -= 30;
     }
     if (players[playerId].jumping) {
-      // audioManager.playSound('jump') TODO Make it only fire once while jumping
+      // audioManager.playSound('jump') TODO Currently fires multiple times. Find a way to only play when the last jump sound ended
     }
   }
 });
@@ -129,26 +139,25 @@ socket.on('state', function (players) {
  * Initializes all game Objects
  */
 function init() {
+  // check if canvas is supported by browser
   if (canvas.getContext) {
     socket.emit('new player');
     ctx = canvas.getContext('2d');
+    // Add all sprites and music files to the download queue
     audioManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3');
     audioManager.queueDownload('jump', 'assets/audio/effects/jump.wav');
+    assetManager.queueDownload('background', 'assets/textures/background.png');
+    assetManager.queueDownload('player', 'assets/textures/player.png');
+    assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg');
+    assetManager.queueDownload('heart', 'assets/textures/heart.png');
     audioManager.loadAll(function () {
       audioManager.playSound('ambient', true);
-
-      // Add all sprites to the download queue
-      assetManager.queueDownload('background', 'assets/textures/background.png');
-      assetManager.queueDownload('player', 'assets/textures/player.png');
-      assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg');
-      assetManager.queueDownload('heart', 'assets/textures/heart.png');
-      // Start playing ambient music
-
       // Download all sprites
       assetManager.downLoadAll(function () {
-        animate();
+        update();
         // Draw Background only once to improve performance
         document.getElementById('background').getContext('2d').drawImage(assetManager.getAsset('background'), 0, 0, canvas.width, canvas.height);
+        // tells socket.on(state) that all sprites needed for drawing are downloaded
         spritesLoaded = true;
       });
     });
@@ -158,10 +167,15 @@ function init() {
 }
 
 socket.on('connect', function () {
+  // Tell server to add this player
   socket.emit('new player');
+  // remember socket id to identify current player when drawing
   playerId = socket.io.engine.id;
 });
 
+/**
+ * modern browser equivalent of jQuery $(document).ready()
+ */
 document.addEventListener('DOMContentLoaded', init());
 
 /**
@@ -169,7 +183,7 @@ document.addEventListener('DOMContentLoaded', init());
  * Selects one that's available or uses fallback with setTimeout.
  */
 window.requestAnimFrame = function () {
-  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function ( /* function */callback, /* DOMElement */element) {
+  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) {
     window.setTimeout(callback, 1000 / 60);
   };
 }();
@@ -199,7 +213,7 @@ var AudioManager = function () {
     this.errorCount = 0;
 
     try {
-      // Fix up for prefixing
+      // Fix for browsers using prefixes
       window.AudioContext = window.AudioContext || window.webkitAudioContext;
       this.context = new AudioContext();
     } catch (e) {
@@ -208,7 +222,7 @@ var AudioManager = function () {
   }
 
   /**
-   *
+   * Queue an audio file for download
    * @param {string} name
    * @param {string} path
    */
@@ -260,6 +274,15 @@ var AudioManager = function () {
       };
       request.send();
     }
+
+    /**
+     * Create an audio buffer source node from cached buffer.
+     * Send it to the destination of the audio context and play it.
+     *
+     * @param name filename
+     * @param loop set to true for looped sounds like ambient music
+     */
+
   }, {
     key: 'playSound',
     value: function playSound(name) {
@@ -277,7 +300,7 @@ var AudioManager = function () {
     }
 
     /**
-     *
+     * Check if downloading is finished.
      * @returns {boolean}
      */
 

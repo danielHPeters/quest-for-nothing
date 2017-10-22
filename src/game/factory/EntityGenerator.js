@@ -1,6 +1,13 @@
-export default class EntityGenerator {
+/**
+ * Experimental entity generator. Currently not usable.
+ *
+ * @author Daniel Peters
+ * @version 0.1
+ * @type {module.EntityGenerator}
+ */
+module.exports = class EntityGenerator {
   /**
-   *
+   * Default constructor. Requires object properties and components.
    * @param properties
    * @param components
    * @returns {{}}

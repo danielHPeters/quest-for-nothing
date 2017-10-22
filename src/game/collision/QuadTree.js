@@ -5,7 +5,8 @@
 let Bounds = require('./Bounds')
 
 /**
- *
+ * Experimental QuadTree implementation to improve collision detection.
+ * TODO: Finish implementation
  * @type {module.QuadTree}
  */
 module.exports = class QuadTree {

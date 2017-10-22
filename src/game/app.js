@@ -1,6 +1,10 @@
 'use strict'
 
 /**
+ * This module loads game state and level data and passes it on to the calling script.
+ */
+
+/**
  *
  * @type {module.Game}
  */

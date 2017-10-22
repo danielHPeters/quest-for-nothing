@@ -1,10 +1,13 @@
 /**
+ * Game class containing objects and player state.
  *
+ * @author Daniel Peters
+ * @version 1.2
  * @type {module.Game}
  */
 module.exports = class Game {
   /**
-   *
+   * Constructor. Requires default settings to calculate size of objects etc.
    * @param {module.Settings} settings
    */
   constructor (settings) {
@@ -25,7 +28,7 @@ module.exports = class Game {
   }
 
   /**
-   *
+   * Update all game objects
    * @param {number} timeDifference
    */
   update (timeDifference) {

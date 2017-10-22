@@ -1,10 +1,10 @@
 /**
- *
+ * Collision bounding box.
  * @type {module.Bounds}
  */
 module.exports = class Bounds {
   /**
-   *
+   * Initializes position and dimension.
    * @param {number} x
    * @param {number} y
    * @param {number} width

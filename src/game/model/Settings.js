@@ -1,4 +1,5 @@
 /**
+ * Register default game settings here.
  *
  * @type {module.Settings}
  */

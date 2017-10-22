@@ -3,14 +3,14 @@ let SpawnPoint = require('./../model/SpawnPoint')
 let Material = require('./../model/Material')
 
 /**
- *
+ * Generate blocks and other game objects from json level files
  * @type {module.BlockFactory}
  */
 module.exports = class BlockFactory {
   /**
-   *
-   * @param game
-   * @param blocksList
+   * Static factory method to generate game objects and spawn points for players.
+   * @param {module.Game} game
+   * @param {Array} blocksList
    * @returns {Array}
    */
   static generateBlocks (game, area, blocksList) {
@@ -30,6 +30,7 @@ module.exports = class BlockFactory {
               block.setSolid(false)
             }
             blocks.push(block)
+            // Currently only one spawn point is allowed. May change later
           } else if (blocksList[i][j].type === 'spawn' && game.spawnPoint === null) {
             game.spawnPoint = new SpawnPoint(objX, objY, objWidth, objHeight, area)
           }

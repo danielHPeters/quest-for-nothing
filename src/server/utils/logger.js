@@ -1,6 +1,7 @@
 let winston = require('winston')
 winston.emitErrs = true
-
+// logger configuration here all files will be added to logs folder.
+// Warning: server may fail if /logs folder not present
 let logger = new winston.Logger({
   transports: [
     new winston.transports.File({
