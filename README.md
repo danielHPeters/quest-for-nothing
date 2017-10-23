@@ -1,5 +1,7 @@
 # jump-and-run
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/danielHPeters/jump-and-run.svg?columns=all)](http://waffle.io/danielHPeters/jump-and-run)  
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/danielHPeters/jump-and-run.svg?columns=all)]
+(http://waffle.io/danielHPeters/jump-and-run)  
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)  
 A simple jump and run game.  
 This should run in any recent browser with html5 support.
 
