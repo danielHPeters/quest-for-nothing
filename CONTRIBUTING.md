@@ -9,6 +9,9 @@ The auto formatter in Intellij should then do a lot of code style fixes for you.
 
 ## Styleguides
 
+### Documentation
+- Use Markdown files
+
 ### Commit Messages
 
 - Use the present tense ("Add feature" not "Added feature")
