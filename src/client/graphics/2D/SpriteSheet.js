@@ -1,4 +1,14 @@
+/**
+ * Sprite sheet definition.
+ * TODO: Finish implementation
+ */
 export default class SpriteSheet {
+  /**
+   * Constructor. Sets frame dimensions and calculates number of frames.
+   * @param sourcePath
+   * @param frameWidth
+   * @param frameHeight
+   */
   constructor (sourcePath, frameWidth, frameHeight) {
     this.image = new Image()
     this.frameWidth = frameWidth

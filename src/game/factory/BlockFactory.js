@@ -4,11 +4,13 @@ let Material = require('./../model/Material')
 
 /**
  * Generate blocks and other game objects from json level files
+ *
  * @type {module.BlockFactory}
  */
 module.exports = class BlockFactory {
   /**
    * Static factory method to generate game objects and spawn points for players.
+   *
    * @param {module.Game} game
    * @param {Array} blocksList
    * @returns {Array}

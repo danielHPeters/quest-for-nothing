@@ -29,6 +29,7 @@ export default class KeyboardEventHandler {
    * Allows touch controls on mobile.
    */
   initializeTouchHandler () {
+    // Register the event listeners
     window.addEventListener('touchstart', handleTouchStart, false)
     window.addEventListener('touchmove', handleTouchMove, false)
     window.addEventListener('touchend', handleTouchEnd, false)
@@ -84,6 +85,10 @@ export default class KeyboardEventHandler {
     }
   }
 
+  /**
+   * Get registered keyboard input and touch swipes
+   * @returns {*}
+   */
   getKeyActionsRegister () {
     return this.keyActionsRegister
   }

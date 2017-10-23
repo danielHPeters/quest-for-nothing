@@ -8,6 +8,7 @@
 module.exports = class EntityGenerator {
   /**
    * Default constructor. Requires object properties and components.
+   *
    * @param properties
    * @param components
    * @returns {{}}

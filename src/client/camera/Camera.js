@@ -1,3 +1,6 @@
+/**
+ * Camera for player control or scene rendering.
+ */
 export default class Camera {
   constructor (x, y, width, height) {
     this.x = x

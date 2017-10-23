@@ -14,7 +14,7 @@ let ctx // graphics context
 let spritesLoaded = false // set to true when asset manager finishes to start drawing
 
 /**
- * Sends user input to the server
+ * Sends user input to the server.
  */
 function update () {
   socket.emit('movement', keyEventHandler.keyActionsRegister)
@@ -54,7 +54,7 @@ socket.on('state', players => {
 })
 
 /**
- * Initializes all game Objects
+ * Initializes all game Objects.
  */
 function init () {
   // check if canvas is supported by browser

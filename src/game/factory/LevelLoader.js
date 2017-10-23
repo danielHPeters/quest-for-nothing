@@ -16,8 +16,9 @@ let Area = require('./../model/Area')
  */
 module.exports = class LevelLoader {
   /**
-   * Default constructor. Sets the path to level definition files
-   * @param {string} levelsPath
+   * Default constructor. Sets the path to level definition files.
+   *
+   * @param {string} levelsPath path to level files
    */
   constructor (levelsPath) {
     this.levelsPath = levelsPath
@@ -25,7 +26,8 @@ module.exports = class LevelLoader {
 
   /**
    * Loads level file.
-   * @param {string} level
+   *
+   * @param {string} level level name
    */
   loadLevel (game, level = 'default') {
     let levelDefinition = require(this.levelsPath + level)
@@ -45,8 +47,9 @@ module.exports = class LevelLoader {
 
   /**
    * After loading level. The areas need to be set to allow travelling between them.
-   * @param {module.Game} game
-   * @param {{}} levelDefinition
+   *
+   * @param {module.Game} game initialized game instance
+   * @param {{}} levelDefinition level definition data loaded from file
    */
   setExits (game, levelDefinition) {
     levelDefinition.areas.forEach(areaDefinition => {

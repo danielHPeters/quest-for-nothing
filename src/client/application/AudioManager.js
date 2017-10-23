@@ -1,3 +1,10 @@
+/**
+ * Audio asset manager.
+ * TODO: Merge with AssetManager to eliminate duplicate code.
+ *
+ * @author Daniel Peters
+ * @version 1.1
+ */
 export default class AudioManager {
   constructor () {
     this.bufferCache = []
@@ -15,14 +22,20 @@ export default class AudioManager {
   }
 
   /**
-   * Queue an audio file for download
-   * @param {string} name
-   * @param {string} path
+   * Queue an audio file for download.
+   *
+   * @param {string} name name of the audio file
+   * @param {string} path location of the audio file
    */
   queueDownload (name, path) {
     this.downloadQueue.push({name: name, path: path})
   }
 
+  /**
+   * Download all files and execute callback function when done.
+   *
+   * @param callback function to be executed when downloading is done
+   */
   loadAll (callback) {
     if (this.downloadQueue.length === 0) {
       callback()
@@ -33,11 +46,18 @@ export default class AudioManager {
     })
   }
 
-  load (name, url, callback) {
+  /**
+   * Build an AJAX Request to load audio file into the buffer cache.
+   *
+   * @param name file name
+   * @param path location of the file
+   * @param callback function to execute on done
+   */
+  load (name, path, callback) {
     let instance = this
     let request = new XMLHttpRequest()
 
-    request.open('GET', url, true)
+    request.open('GET', path, true)
     request.responseType = 'arraybuffer'
 
     // Decode asynchronously
@@ -54,6 +74,7 @@ export default class AudioManager {
       )
     }
 
+    // Register error
     request.onerror = function () {
       instance.errorCount += 1
 

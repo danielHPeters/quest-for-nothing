@@ -1,3 +1,10 @@
+/**
+ * Texture asset manager.
+ * TODO: Merge with AudioManager to eliminate duplicate code.
+ *
+ * @author Daniel Peters
+ * @version 1.1
+ */
 export default class AssetManager {
   constructor () {
     this.downloadQueue = []
@@ -7,17 +14,19 @@ export default class AssetManager {
   }
 
   /**
+   * Queue an image to download.
    *
-   * @param {string} name
-   * @param {string} path
+   * @param {string} name name of file
+   * @param {string} path location of file
    */
   queueDownload (name, path) {
     this.downloadQueue.push({name: name, path: path})
   }
 
   /**
+   * Download all queued items and execute the callback function ond finish.
    *
-   * @param callback
+   * @param callback function go be executed on download end
    */
   downLoadAll (callback) {
     if (this.downloadQueue.length === 0) {
@@ -47,16 +56,18 @@ export default class AssetManager {
   }
 
   /**
+   * Get asset by name.
    *
-   * @param {string} name
+   * @param {string} name asset name
    */
   getAsset (name) {
     return this.cache[name]
   }
 
   /**
+   * Check if downloading is done.
    *
-   * @returns {boolean}
+   * @returns {boolean} true when downloading done
    */
   done () {
     return this.downloadQueue.length === this.succesCount + this.errorCount

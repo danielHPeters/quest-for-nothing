@@ -5,20 +5,24 @@
 let Entity = require('./Entity')
 
 /**
+ * Player class containing player information and objects currently visible to him/her.
  *
+ * @author Daniel Peters
+ * @version 1.0
  * @type {module.Player}
  */
 module.exports = class Player extends Entity {
   /**
    * Constructor. Initializes position and surroundings information.
-   * @param {number} x
-   * @param {number} y
-   * @param {number} width
-   * @param {number} height
-   * @param {module.Material} material
-   * @param {module.Area} initialArea
+   *
+   * @param {number} x initial x
+   * @param {number} y initial y
+   * @param {number} width initial width
+   * @param {number} height initial height
+   * @param {module.Material} material texture and sprite data
+   * @param {module.Area} area initial area
    */
-  constructor (x, y, width, height, material, initialArea) {
+  constructor (x, y, width, height, material, area) {
     super(x, y, width, height, material)
     this.lives = 3
     this.speed = 3.6
@@ -31,7 +35,7 @@ module.exports = class Player extends Entity {
     this.friction = 0.8
     this.gravity = 0.2
     // Information about players current surroundings
-    this.viewport = {blocks: initialArea.blocks, areaId: initialArea.id}
+    this.viewport = {blocks: area.blocks, areaId: area.id}
     // boolean flags to check if player wants to leave from one exit
     this.edges = {
       left: false,
@@ -106,7 +110,7 @@ module.exports = class Player extends Entity {
   }
 
   /**
-   * TODO Implement resource saving move tracking to allow resetting to previous states
+   * TODO: Implement resource saving move tracking to allow resetting to previous states.
    */
   goBack () {
     if (this.history.length !== 0) {
@@ -127,9 +131,10 @@ module.exports = class Player extends Entity {
   }
 
   /**
-   * Check collision with other game objects
-   * @param object
-   * @returns {*}
+   * Check collision with other game objects.
+   *
+   * @param object other object
+   * @returns {string} string indicating collision direction
    */
   checkCollision (object) {
     if (!(object instanceof Entity) || !object.solid) {
@@ -176,7 +181,8 @@ module.exports = class Player extends Entity {
    * Check if players is at the edge of an area.
    * If yes the player object expresses intent to switch to next area.
    * The switching is handled by Area objects.
-   * @param {module.Game} game
+   *
+   * @param {module.Game} game instance of the game
    */
   checkEdges (game) {
     if (this.position.x > game.settings.canvasWidth) {

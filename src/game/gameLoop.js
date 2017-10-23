@@ -17,6 +17,11 @@ let Player = require('./model/Player')
  */
 let Material = require('./model/Material')
 
+/**
+ * Listen to socket.io events.
+ *
+ * @param io socket.io instance
+ */
 module.exports = io => {
   io.on('connection', socket => {
     // Add new connected player and set player location to predefined spawn point
