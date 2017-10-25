@@ -128,6 +128,9 @@ module.exports = class Vector2 {
    * @param scalar scalar to multiply the vector
    */
   multiply (scalar) {
+    if (typeof scalar !== 'number') {
+      throw new Error('"scalar" must be a number.')
+    }
     this.x *= scalar
     this.y *= scalar
   }

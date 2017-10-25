@@ -154,6 +154,26 @@ describe('Vector2', () => {
     })
   })
 
+  describe('multiply', () => {
+    let vector
+    beforeEach(() => {
+      vector = new Vector2(20, 10)
+    })
+
+    it('only accepts numbers as parameter', () => {
+      let func = () => {
+        vector.multiply('foo')
+      }
+      func.should.throw(Error)
+    })
+
+    it('multiplies the vector x and y values by scalar', () => {
+      vector.multiply(2)
+      vector.x.should.equal(40)
+      vector.y.should.equal(20)
+    })
+  })
+
   describe('#clone', () => {
     let vector
     beforeEach(() => {
