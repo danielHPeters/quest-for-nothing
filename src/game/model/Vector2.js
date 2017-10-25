@@ -35,7 +35,7 @@ module.exports = class Vector2 {
    */
   set x (x) {
     if (typeof x !== 'number') {
-      throw new Error('"height" must be a number.')
+      throw new Error('"x" must be a number.')
     }
     this._x = x
   }
@@ -47,7 +47,7 @@ module.exports = class Vector2 {
    */
   set y (y) {
     if (typeof y !== 'number') {
-      throw new Error('"height" must be a number.')
+      throw new Error('"y" must be a number.')
     }
     this._y = y
   }

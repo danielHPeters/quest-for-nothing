@@ -148,7 +148,7 @@ module.exports = class Player extends Entity {
    */
   checkCollision (object) {
     if (!(object instanceof Entity) || !object.solid) {
-      return
+      return ''
     }
 
     // get the vectors to check against
@@ -157,7 +157,7 @@ module.exports = class Player extends Entity {
     // add the half widths and half heights of the objects
     let hWidths = (this.width / 2) + (object.width / 2)
     let hHeights = (this.height / 2) + (object.height / 2)
-    let colDir = null
+    let colDir = ''
 
     // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
     // figures out on which side we are colliding (top, bottom, left, or right)
