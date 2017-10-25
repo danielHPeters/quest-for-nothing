@@ -5,4 +5,4 @@ before_script:
   - npm i -g npm@4
   - npm install -g gulp-cli
 script: gulp
-after_success: npm run coverage
+after_success: npm test & run coverage
