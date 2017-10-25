@@ -91,8 +91,8 @@ module.exports = class Vector2 {
   /**
    * Static add method to combine two vectors into a new one.
    *
-   * @param v1 first vector
-   * @param v2 second vector
+   * @param {module.Vector2} v1 first vector
+   * @param {module.Vector2} v2 second vector
    * @returns {module.Vector2} combined vector
    */
   static add (v1, v2) {
@@ -104,7 +104,7 @@ module.exports = class Vector2 {
    *
    * @param vector other vector
    */
-  sub (vector) {
+  subtract (vector) {
     this.x -= vector.x
     this.y -= vector.y
   }
@@ -112,8 +112,8 @@ module.exports = class Vector2 {
   /**
    * Subtract two vector from each other and put the result into a new vector.
    *
-   * @param v1 first vector
-   * @param v2 second vector
+   * @param {module.Vector2} v1 first vector
+   * @param {module.Vector2} v2 second vector
    * @returns {module.Vector2} resulting vector
    */
   static subtract (v1, v2) {
