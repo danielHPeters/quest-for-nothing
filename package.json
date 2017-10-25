@@ -1,6 +1,6 @@
 {
   "name": "jump-and-run",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A Browser based jump and run game",
   "main": "src/sever/server.js",
   "directories": {
@@ -44,7 +44,7 @@
     "webpack-stream": "^4.0.0"
   },
   "scripts": {
-    "test": "test",
+    "test": "./node_modules/.bin/mocha test/**/*.js",
     "start": "node src/server/server.js"
   },
   "repository": {
@@ -54,7 +54,7 @@
   "keywords": [
     "game",
     "js",
-    "html5"
+    "html5-canvas"
   ],
   "author": "Daniel Peters",
   "license": "SEE LICENSE IN LICENSE",
