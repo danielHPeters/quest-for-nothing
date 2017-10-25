@@ -7,6 +7,7 @@ const webpack = require('webpack-stream')
 const sourceMaps = require('gulp-sourcemaps')
 const rename = require('gulp-rename')
 const esLint = require('gulp-eslint')
+const mocha = require('gulp-mocha')
 // Define sources, destination and config file locations here
 const configuration = {
   css: {
@@ -70,6 +71,13 @@ gulp.task('lint', () => {
     .pipe(esLint.failAfterError())
 })
 
+gulp.task('run-tests', () => {
+  return gulp.src(['test/**/*.js'], {read: false})
+    .pipe(mocha({
+      reporter: 'spec'
+    }))
+})
+
 /**
  * Watch changes in css files.
  */
@@ -92,4 +100,4 @@ gulp.task('watch-all', ['watch-js', 'watch-css'])
 /**
  * Default task to perform all previously defined tasks
  */
-gulp.task('default', ['css', 'js', 'lint'])
+gulp.task('default', ['lint', 'run-tests', 'css', 'js'])

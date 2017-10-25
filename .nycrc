@@ -4,6 +4,6 @@
   "include": [
     "src/**/*.js"
   ],
-  "cache": true,
+  "cache": false,
   "all": true
 }
