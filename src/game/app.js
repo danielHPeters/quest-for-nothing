@@ -25,7 +25,7 @@ let LevelLoader = require('./factory/LevelLoader')
 let gameSettings = new Settings()
 let game = new Game(gameSettings)
 let levelLoader = new LevelLoader('./../../levels/')
-levelLoader.loadLevel(game)
+levelLoader.loadLevel(game, 'default')
 
 /**
  *

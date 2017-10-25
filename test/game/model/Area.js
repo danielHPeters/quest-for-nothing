@@ -21,6 +21,11 @@ describe('Area', () => {
       area.add(player)
     })
 
+    it('should do nothing when player does not want to move', () => {
+      area.checkPlayers()
+      area.players[0].should.equal(player)
+    })
+
     it('should move player to left area if player wants to go left', () => {
       area.players[0].edges.left = true
       area.checkPlayers()

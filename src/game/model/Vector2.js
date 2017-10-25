@@ -81,7 +81,7 @@ module.exports = class Vector2 {
   /**
    * Add vector to this vector.
    *
-   * @param vector other vector
+   * @param {module.Vector2} vector other vector
    */
   add (vector) {
     if (vector instanceof Vector2 === false) {
@@ -99,6 +99,9 @@ module.exports = class Vector2 {
    * @returns {module.Vector2} combined vector
    */
   static add (v1, v2) {
+    if (v1 instanceof Vector2 === false || v2 instanceof Vector2 === false) {
+      throw new Error('parameters must be of type Vector2')
+    }
     return new Vector2(v1.x + v2.x, v1.y + v2.y)
   }
 
@@ -138,20 +141,31 @@ module.exports = class Vector2 {
   /**
    * Multiplies a vector with a scalar and returns the resulting vector.
    *
-   * @param vector initial vector
-   * @param scalar scalar to scale the vector
+   * @param {module.Vector2} vector initial vector
+   * @param {number} scalar scalar to scale the vector
    * @returns {module.Vector2} the resulting vector
    */
   static multiply (vector, scalar) {
+    if (vector instanceof Vector2 !== true) {
+      throw new Error('"vector" must be an instance of Vector2.')
+    }
+    if (typeof scalar !== 'number') {
+      throw new Error('"scalar" must be a number.')
+    }
     return new Vector2(vector.x * scalar, vector.y * scalar)
   }
 
   /**
    * Divides this vector by a scalar.
    *
-   * @param scalar scalar used to divide this vector
+   * @param {number} scalar scalar used to divide this vector
    */
   divide (scalar) {
+    if (typeof scalar !== 'number') {
+      throw new Error('"scalar" must be a number.')
+    } else if (scalar === 0) {
+      throw new Error('cannot divide vector by scalar with value "0"')
+    }
     this.x /= scalar
     this.y /= scalar
   }
@@ -164,6 +178,14 @@ module.exports = class Vector2 {
    * @returns {module.Vector2} resulting vector
    */
   static divide (vector, scalar) {
+    if (vector instanceof Vector2 !== true) {
+      throw new Error('"vector" must be an instance of Vector2.')
+    }
+    if (typeof scalar !== 'number') {
+      throw new Error('"scalar" must be a number.')
+    } else if (scalar === 0) {
+      throw new Error('cannot divide vector by scalar with value "0"')
+    }
     return new Vector2(vector.x / scalar, vector.y / scalar)
   }
 
@@ -198,7 +220,7 @@ module.exports = class Vector2 {
   /**
    * Limit the vector to a maximum length.
    *
-   * @param max maximum lenght
+   * @param max maximum length
    */
   limit (max) {
     if (this.mag() > max) {
@@ -214,6 +236,9 @@ module.exports = class Vector2 {
    * @returns {number} calculated distance
    */
   distanceTo (vector) {
+    if (vector instanceof Vector2 !== true) {
+      throw new Error('"vector" must be an instance of Vector2.')
+    }
     return Math.sqrt(Math.pow(vector.x - this.x, 2) + Math.pow(vector.y - this.y, 2))
   }
 
@@ -223,6 +248,9 @@ module.exports = class Vector2 {
    * @returns {number}
    */
   dot (vector) {
+    if (vector instanceof Vector2 !== true) {
+      throw new Error('"vector" must be an instance of Vector2.')
+    }
     return this.x * vector.x + this.y * vector.y
   }
 

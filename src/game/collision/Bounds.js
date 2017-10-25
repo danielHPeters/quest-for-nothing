@@ -10,7 +10,7 @@ module.exports = class Bounds {
    * @param {number} width dimension width
    * @param {number} height dimension height
    */
-  constructor (x = 0, y = 0, width = 0, height = 0) {
+  constructor (x, y, width, height) {
     this.x = x
     this.y = y
     this.width = width

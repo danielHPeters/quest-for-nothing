@@ -33,7 +33,7 @@ module.exports = class BlockFactory {
             }
             blocks.push(block)
             // Currently only one spawn point is allowed. May change later
-          } else if (blocksList[i][j].type === 'spawn' && game.spawnPoint === null) {
+          } else if (blocksList[i][j].type === 'spawn') {
             game.spawnPoint = new SpawnPoint(objX, objY, objWidth, objHeight, area)
           }
         }

@@ -29,7 +29,7 @@ module.exports = class LevelLoader {
    *
    * @param {string} level level name
    */
-  loadLevel (game, level = 'default') {
+  loadLevel (game, level) {
     let levelDefinition = require(this.levelsPath + level)
 
     let areasDone = 0
