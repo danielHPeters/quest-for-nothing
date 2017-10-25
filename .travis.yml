@@ -7,4 +7,4 @@ before_script:
 script: gulp
 after_success:
   - npm test
-  - npm run coverage
+  - npm run coveralls
