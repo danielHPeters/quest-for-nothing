@@ -39,14 +39,14 @@ export default class KeyboardEventHandler {
     let handlerInstance = this
 
     function handleTouchStart (evt) {
-      // Prevent div scrolling
+      // Prevent divide scrolling
       evt.preventDefault()
       xDown = evt.touches[0].clientX
       yDown = evt.touches[0].clientY
     }
 
     function handleTouchMove (evt) {
-      // Prevent div scrolling
+      // Prevent divide scrolling
       evt.preventDefault()
       // do nothing if no touch direction is registered
       if (!xDown || !yDown) {
@@ -79,7 +79,7 @@ export default class KeyboardEventHandler {
     }
 
     function handleTouchEnd (evt) {
-      // Prevent div scrolling
+      // Prevent divide scrolling
       evt.preventDefault()
       Object.keys(handlerInstance.keyActionsRegister).forEach(key => { handlerInstance.keyActionsRegister[key] = false })
     }

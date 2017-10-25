@@ -67,18 +67,38 @@ module.exports = class Area {
     this.players = this.players.filter(item => item !== player)
   }
 
+  /**
+   * Check if the area has a left exit.
+   *
+   * @returns {boolean} true if exit not null
+   */
   hasLeft () {
     return this.left !== null
   }
 
+  /**
+   * Check if the area has a right exit.
+   *
+   * @returns {boolean} true if exit not null
+   */
   hasRight () {
     return this.right !== null
   }
 
+  /**
+   * Check if the area has a top exit.
+   *
+   * @returns {boolean} true if exit not null
+   */
   hasTop () {
     return this.top !== null
   }
 
+  /**
+   * Check if the area has a bottom exit.
+   *
+   * @returns {boolean} true if exit not null
+   */
   hasBottom () {
     return this.bottom !== null
   }

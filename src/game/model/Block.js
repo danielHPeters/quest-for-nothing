@@ -23,8 +23,9 @@ module.exports = class Block extends Entity {
   }
 
   /**
-   * check if this block is solid. Players can travel through non solid ones.
-   * @returns {boolean}
+   * Check if this block is solid. Players can travel through non solid ones.
+   *
+   * @returns {boolean} boolean flag telling if the block is solid
    */
   isSolid () {
     return this.solid

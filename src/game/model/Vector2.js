@@ -29,6 +29,46 @@ module.exports = class Vector2 {
   }
 
   /**
+   * Set x value of this vector.
+   * Throws error if parameter is not a number.
+   * @param {number} x new x value
+   */
+  set x (x) {
+    if (typeof x !== 'number') {
+      throw new Error('"height" must be a number.')
+    }
+    this._x = x
+  }
+
+  /**
+   * Set y value of this vector.
+   * Throws error if parameter is not a number.
+   * @param {number} y new y value
+   */
+  set y (y) {
+    if (typeof y !== 'number') {
+      throw new Error('"height" must be a number.')
+    }
+    this._y = y
+  }
+
+  /**
+   * Getter for x value
+   * @returns {number} x value
+   */
+  get x () {
+    return this._x
+  }
+
+  /**
+   * Getter for y value
+   * @returns {number} y value
+   */
+  get y () {
+    return this._y
+  }
+
+  /**
    * Set vector location to another vector.
    *
    * @param vector other vector
@@ -76,96 +116,115 @@ module.exports = class Vector2 {
    * @param v2 second vector
    * @returns {module.Vector2} resulting vector
    */
-  static sub (v1, v2) {
+  static subtract (v1, v2) {
     return new Vector2(v1.x - v2.x, v1.y - v2.y)
   }
 
-  mult (scalar) {
+  /**
+   * Multiply this vector by scalar.
+   * @param scalar scalar to multiply the vector
+   */
+  multiply (scalar) {
     this.x *= scalar
     this.y *= scalar
   }
 
-  static mult (vector, scalar) {
+  /**
+   * Multiplies a vector with a scalar and returns the resulting vector.
+   *
+   * @param vector initial vector
+   * @param scalar scalar to scale the vector
+   * @returns {module.Vector2} the resulting vector
+   */
+  static multiply (vector, scalar) {
     return new Vector2(vector.x * scalar, vector.y * scalar)
   }
 
-  div (scalar) {
+  /**
+   * Divides this vector by a scalar.
+   *
+   * @param scalar scalar used to divide this vector
+   */
+  divide (scalar) {
     this.x /= scalar
     this.y /= scalar
   }
 
-  static div (vector, scalar) {
+  /**
+   * Divides a vector by a scalar and returns the result in a new vector.
+   *
+   * @param vector vector to divide
+   * @param scalar scalar used to divide vector
+   * @returns {module.Vector2} resulting vector
+   */
+  static divide (vector, scalar) {
     return new Vector2(vector.x / scalar, vector.y / scalar)
   }
 
+  /**
+   * Get the magnitude / length of this vector.
+   *
+   * @returns {number} magnitude / length of this vector
+   */
   mag () {
     return Math.sqrt(this.x * this.x + this.y * this.y)
   }
 
+  /**
+   * Negate the x and y values of this vector.
+   *
+   * @returns {module.Vector2}
+   */
   negative () {
     return new Vector2(-this.x, -this.y)
   }
 
+  /**
+   * Normalize the vector.
+   */
   normalize () {
     let magnitude = this.mag()
     if (magnitude !== 0) {
-      this.div(magnitude)
+      this.divide(magnitude)
     }
   }
 
+  /**
+   * Limit the vector to a maximum length.
+   *
+   * @param max maximum lenght
+   */
   limit (max) {
     if (this.mag() > max) {
       this.normalize()
-      this.mult(max)
+      this.multiply(max)
     }
   }
 
-  heading () {
-
-  }
-
   /**
+   * Get the distance of this vector to another vector.
    *
-   * @param {number} angle
-   * @param {Vector2}vector
+   * @param {module.Vector2} vector other vector
+   * @returns {number} calculated distance
    */
-  rotate (angle, vector) {
-
-  }
-
-  lerp () {
-
-  }
-
-  distanceTo (to) {
-    return Math.sqrt(Math.pow(to.x - this.x, 2) + Math.pow(to.y - this.y, 2))
-  }
-
-  angleBetween () {
-
+  distanceTo (vector) {
+    return Math.sqrt(Math.pow(vector.x - this.x, 2) + Math.pow(vector.y - this.y, 2))
   }
 
   /**
    *
-   * @param {Vector2} vector
+   * @param {module.Vector2} vector
    * @returns {number}
    */
   dot (vector) {
     return this.x * vector.x + this.y * vector.y
   }
 
-  cross () {
-
-  }
-
-  random2D () {
-
-  }
-
-  random3D () {
-
-  }
-
+  /**
+   * Create a clone of this vector.
+   *
+   * @returns {module.Vector2} cloned vector
+   */
   clone () {
     return new Vector2(this.x, this.y)
   }

@@ -11,6 +11,9 @@
     }
   },
   "globals": {
-    "io": true
+    "io": true,
+    "describe": true,
+    "it": true,
+    "beforeEach": true
   }
 }

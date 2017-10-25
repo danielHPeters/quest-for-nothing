@@ -110,6 +110,7 @@ module.exports = class Player extends Entity {
   }
 
   /**
+   * Experimental move history logging.
    * TODO: Implement resource saving move tracking to allow resetting to previous states.
    */
   goBack () {
@@ -118,14 +119,23 @@ module.exports = class Player extends Entity {
     }
   }
 
+  /**
+   * Player gain 1 heart.
+   */
   gainLife () {
     this.lives += 1
   }
 
+  /**
+   * Player loses one heart.
+   */
   loseLife () {
     this.lives -= 1
   }
 
+  /**
+   * Toggle this players running state.
+   */
   toggleRun () {
     this.running = !this.running
   }

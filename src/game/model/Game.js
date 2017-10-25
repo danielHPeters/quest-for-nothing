@@ -19,14 +19,6 @@ module.exports = class Game {
     this.blocks = []
   }
 
-  run () {
-    this.running = true
-  }
-
-  pause () {
-    this.running = false
-  }
-
   /**
    * Update all game objects
    * @param {number} timeDifference

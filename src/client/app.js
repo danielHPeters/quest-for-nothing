@@ -28,17 +28,18 @@ function update () {
  */
 socket.on('state', players => {
   if (playerId && players[playerId] && spritesLoaded) {
+    console.log(players[playerId])
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     Object.keys(players).forEach(key => {
       const player = players[key]
       // Make sure to only draw players in the same area
       if (player.viewport.areaId === players[playerId].viewport.areaId) {
-        ctx.drawImage(assetManager.getAsset(player.material.name), player.position.x, player.position.y, player.width, player.height)
+        ctx.drawImage(assetManager.getAsset(player.material.name), player.position._x, player.position._y, player.width, player.height)
       }
     })
     // Draw all blocks
     players[playerId].viewport.blocks.forEach(block => {
-      ctx.drawImage(assetManager.getAsset(block.material.name), block.position.x, block.position.y, block.width, block.height)
+      ctx.drawImage(assetManager.getAsset(block.material.name), block.position._x, block.position._y, block.width, block.height)
     })
     // Display health
     let x = canvas.width - 35

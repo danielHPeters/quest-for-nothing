@@ -94,7 +94,7 @@ var ctx = void 0; // graphics context
 var spritesLoaded = false; // set to true when asset manager finishes to start drawing
 
 /**
- * Sends user input to the server
+ * Sends user input to the server.
  */
 function update() {
   socket.emit('movement', keyEventHandler.keyActionsRegister);
@@ -110,17 +110,18 @@ function update() {
  */
 socket.on('state', function (players) {
   if (playerId && players[playerId] && spritesLoaded) {
+    console.log(players[playerId]);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     Object.keys(players).forEach(function (key) {
       var player = players[key];
       // Make sure to only draw players in the same area
       if (player.viewport.areaId === players[playerId].viewport.areaId) {
-        ctx.drawImage(assetManager.getAsset(player.material.name), player.position.x, player.position.y, player.width, player.height);
+        ctx.drawImage(assetManager.getAsset(player.material.name), player.position._x, player.position._y, player.width, player.height);
       }
     });
     // Draw all blocks
     players[playerId].viewport.blocks.forEach(function (block) {
-      ctx.drawImage(assetManager.getAsset(block.material.name), block.position.x, block.position.y, block.width, block.height);
+      ctx.drawImage(assetManager.getAsset(block.material.name), block.position._x, block.position._y, block.width, block.height);
     });
     // Display health
     var x = canvas.width - 35;
@@ -136,7 +137,7 @@ socket.on('state', function (players) {
 });
 
 /**
- * Initializes all game Objects
+ * Initializes all game Objects.
  */
 function init() {
   // check if canvas is supported by browser
@@ -203,6 +204,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Audio asset manager.
+ * TODO: Merge with AssetManager to eliminate duplicate code.
+ *
+ * @author Daniel Peters
+ * @version 1.1
+ */
 var AudioManager = function () {
   function AudioManager() {
     _classCallCheck(this, AudioManager);
@@ -222,9 +230,10 @@ var AudioManager = function () {
   }
 
   /**
-   * Queue an audio file for download
-   * @param {string} name
-   * @param {string} path
+   * Queue an audio file for download.
+   *
+   * @param {string} name name of the audio file
+   * @param {string} path location of the audio file
    */
 
 
@@ -233,6 +242,13 @@ var AudioManager = function () {
     value: function queueDownload(name, path) {
       this.downloadQueue.push({ name: name, path: path });
     }
+
+    /**
+     * Download all files and execute callback function when done.
+     *
+     * @param callback function to be executed when downloading is done
+     */
+
   }, {
     key: 'loadAll',
     value: function loadAll(callback) {
@@ -244,13 +260,22 @@ var AudioManager = function () {
         managerInstance.load(item.name, item.path, callback);
       });
     }
+
+    /**
+     * Build an AJAX Request to load audio file into the buffer cache.
+     *
+     * @param name file name
+     * @param path location of the file
+     * @param callback function to execute on done
+     */
+
   }, {
     key: 'load',
-    value: function load(name, url, callback) {
+    value: function load(name, path, callback) {
       var instance = this;
       var request = new XMLHttpRequest();
 
-      request.open('GET', url, true);
+      request.open('GET', path, true);
       request.responseType = 'arraybuffer';
 
       // Decode asynchronously
@@ -265,6 +290,7 @@ var AudioManager = function () {
         });
       };
 
+      // Register error
       request.onerror = function () {
         instance.errorCount += 1;
 
@@ -331,6 +357,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Texture asset manager.
+ * TODO: Merge with AudioManager to eliminate duplicate code.
+ *
+ * @author Daniel Peters
+ * @version 1.1
+ */
 var AssetManager = function () {
   function AssetManager() {
     _classCallCheck(this, AssetManager);
@@ -342,9 +375,10 @@ var AssetManager = function () {
   }
 
   /**
+   * Queue an image to download.
    *
-   * @param {string} name
-   * @param {string} path
+   * @param {string} name name of file
+   * @param {string} path location of file
    */
 
 
@@ -355,8 +389,9 @@ var AssetManager = function () {
     }
 
     /**
+     * Download all queued items and execute the callback function ond finish.
      *
-     * @param callback
+     * @param callback function go be executed on download end
      */
 
   }, {
@@ -391,8 +426,9 @@ var AssetManager = function () {
     }
 
     /**
+     * Get asset by name.
      *
-     * @param {string} name
+     * @param {string} name asset name
      */
 
   }, {
@@ -402,8 +438,9 @@ var AssetManager = function () {
     }
 
     /**
+     * Check if downloading is done.
      *
-     * @returns {boolean}
+     * @returns {boolean} true when downloading done
      */
 
   }, {
@@ -479,6 +516,7 @@ var KeyboardEventHandler = function () {
   }, {
     key: 'initializeTouchHandler',
     value: function initializeTouchHandler() {
+      // Register the event listeners
       window.addEventListener('touchstart', handleTouchStart, false);
       window.addEventListener('touchmove', handleTouchMove, false);
       window.addEventListener('touchend', handleTouchEnd, false);
@@ -488,14 +526,14 @@ var KeyboardEventHandler = function () {
       var handlerInstance = this;
 
       function handleTouchStart(evt) {
-        // Prevent div scrolling
+        // Prevent divide scrolling
         evt.preventDefault();
         xDown = evt.touches[0].clientX;
         yDown = evt.touches[0].clientY;
       }
 
       function handleTouchMove(evt) {
-        // Prevent div scrolling
+        // Prevent divide scrolling
         evt.preventDefault();
         // do nothing if no touch direction is registered
         if (!xDown || !yDown) {
@@ -528,13 +566,19 @@ var KeyboardEventHandler = function () {
       }
 
       function handleTouchEnd(evt) {
-        // Prevent div scrolling
+        // Prevent divide scrolling
         evt.preventDefault();
         Object.keys(handlerInstance.keyActionsRegister).forEach(function (key) {
           handlerInstance.keyActionsRegister[key] = false;
         });
       }
     }
+
+    /**
+     * Get registered keyboard input and touch swipes
+     * @returns {*}
+     */
+
   }, {
     key: 'getKeyActionsRegister',
     value: function getKeyActionsRegister() {
