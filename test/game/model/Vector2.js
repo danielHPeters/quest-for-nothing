@@ -5,8 +5,27 @@ const Vector2 = require('./../../../src/game/model/Vector2')
 chai.should()
 
 describe('Vector2', () => {
-  describe('x', () => {
+  describe('#x', () => {
+    let vector
+    beforeEach(() => {
+      vector = new Vector2(20, 10)
+    })
 
+    it('returns the x value', () => {
+      vector.x.should.equal(20)
+    })
+
+    it('can be changed', () => {
+      vector.x = 30
+      vector.x.should.equal(30)
+    })
+
+    it('only accepts numerical values', () => {
+      let func = () => {
+        vector.x = 'foo'
+      }
+      func.should.throw(Error)
+    })
   })
 
   describe('#y', () => {
@@ -32,24 +51,34 @@ describe('Vector2', () => {
     })
   })
 
-  describe('#x', () => {
+  describe('#set', () => {
     let vector
     beforeEach(() => {
       vector = new Vector2(20, 10)
     })
 
-    it('returns the x value', () => {
-      vector.x.should.equal(20)
+    it('changes x and y values', () => {
+      vector.set(4, 9)
+      vector.x.should.equal(4)
+      vector.y.should.equal(9)
+    })
+  })
+
+  describe('#setVector', () => {
+    let vector
+    beforeEach(() => {
+      vector = new Vector2(20, 10)
     })
 
-    it('can be changed', () => {
-      vector.x = 30
-      vector.x.should.equal(30)
+    it('changes x and y values', () => {
+      vector.setVector(new Vector2(4, 9))
+      vector.x.should.equal(4)
+      vector.y.should.equal(9)
     })
 
-    it('only accepts numerical values', () => {
+    it('only accepts Vector2 instances', () => {
       let func = () => {
-        vector.x = 'foo'
+        vector.setVector('foo')
       }
       func.should.throw(Error)
     })

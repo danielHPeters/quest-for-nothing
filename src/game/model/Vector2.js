@@ -18,17 +18,6 @@ module.exports = class Vector2 {
   }
 
   /**
-   * Set vector with both x and y values.
-   *
-   * @param x new x value
-   * @param y new y value
-   */
-  set (x, y) {
-    this.x = x
-    this.y = y
-  }
-
-  /**
    * Set x value of this vector.
    * Throws error if parameter is not a number.
    * @param {number} x new x value
@@ -69,6 +58,17 @@ module.exports = class Vector2 {
   }
 
   /**
+   * Set vector with both x and y values.
+   *
+   * @param x new x value
+   * @param y new y value
+   */
+  set (x, y) {
+    this.x = x
+    this.y = y
+  }
+
+  /**
    * Set vector location to another vector.
    *
    * @param vector other vector
@@ -84,6 +84,9 @@ module.exports = class Vector2 {
    * @param vector other vector
    */
   add (vector) {
+    if (vector instanceof Vector2 === false) {
+      throw new Error('Parameter vector must be of type Vector2')
+    }
     this.x += vector.x
     this.y += vector.y
   }
