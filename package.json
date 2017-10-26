@@ -49,7 +49,7 @@
     "webpack-stream": "^4.0.0"
   },
   "scripts": {
-    "test": "nyc mocha test/**/*.js",
+    "test": "nyc mocha --recursive",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "start": "node src/server/server.js"
   },
