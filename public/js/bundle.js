@@ -101,7 +101,9 @@ var playerId = void 0; // player id is registered here on socket connection
 var ctx = void 0; // graphics context
 var spritesLoaded = false; // set to true when asset manager finishes to start drawing
 var spriteSheet = void 0;
-var animation = void 0;
+var animationRight = void 0;
+var animationLeft = void 0;
+var currentAnimation = void 0;
 
 /**
  * Shim for animation loop.
@@ -128,8 +130,10 @@ function init() {
     assetManager.queueDownload('player', 'assets/textures/player.png');
     assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg');
     assetManager.queueDownload('heart', 'assets/textures/heart.png');
-    spriteSheet = new _SpriteSheet2.default('assets/textures/characters.png', 32, 32);
-    animation = new _Animation2.default(spriteSheet, 3, 0, 4);
+    spriteSheet = new _SpriteSheet2.default('assets/textures/character.png', 108, 140);
+    animationRight = new _Animation2.default(spriteSheet, 3, 0, 7);
+    animationLeft = new _Animation2.default(spriteSheet, 3, 8, 14);
+    currentAnimation = animationLeft;
     audioManager.loadAll(function () {
       // Download all sprites
       assetManager.loadAll(function () {
@@ -160,13 +164,19 @@ function update() {
 
 function draw(players) {
   if (playerId && players[playerId] && spritesLoaded) {
-    animation.update();
+    currentAnimation.update();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     Object.keys(players).forEach(function (key) {
       var player = players[key];
       // Make sure to only draw players in the same area
       if (player.viewport.areaId === players[playerId].viewport.areaId) {
-        animation.draw(ctx, player.position._x, player.position._y, player.width, player.height);
+        if (player.keyActionsRegister['a']) {
+          currentAnimation = animationLeft;
+        }
+        if (player.keyActionsRegister['d']) {
+          currentAnimation = animationRight;
+        }
+        currentAnimation.draw(ctx, player.position._x, player.position._y, player.width, player.height);
       }
     });
     // Draw all blocks

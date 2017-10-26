@@ -15,7 +15,9 @@ let playerId // player id is registered here on socket connection
 let ctx // graphics context
 let spritesLoaded = false // set to true when asset manager finishes to start drawing
 let spriteSheet
-let animation
+let animationRight
+let animationLeft
+let currentAnimation
 
 /**
  * Shim for animation loop.
@@ -47,8 +49,10 @@ function init () {
     assetManager.queueDownload('player', 'assets/textures/player.png')
     assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg')
     assetManager.queueDownload('heart', 'assets/textures/heart.png')
-    spriteSheet = new SpriteSheet('assets/textures/characters.png', 32, 32)
-    animation = new Animation(spriteSheet, 3, 0, 4)
+    spriteSheet = new SpriteSheet('assets/textures/character.png', 108, 140)
+    animationRight = new Animation(spriteSheet, 3, 0, 7)
+    animationLeft = new Animation(spriteSheet, 3, 8, 14)
+    currentAnimation = animationLeft
     audioManager.loadAll(() => {
       // Download all sprites
       assetManager.loadAll(() => {
@@ -77,13 +81,19 @@ function update () {
 
 function draw (players) {
   if (playerId && players[playerId] && spritesLoaded) {
-    animation.update()
+    currentAnimation.update()
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     Object.keys(players).forEach(key => {
       const player = players[key]
       // Make sure to only draw players in the same area
       if (player.viewport.areaId === players[playerId].viewport.areaId) {
-        animation.draw(ctx, player.position._x, player.position._y, player.width, player.height)
+        if (player.keyActionsRegister['a']) {
+          currentAnimation = animationLeft
+        }
+        if (player.keyActionsRegister['d']) {
+          currentAnimation = animationRight
+        }
+        currentAnimation.draw(ctx, player.position._x, player.position._y, player.width, player.height)
       }
     })
     // Draw all blocks

@@ -25,7 +25,8 @@ module.exports = class Player extends Entity {
   constructor (x, y, width, height, material, area) {
     super(x, y, width, height, material)
     this.lives = 3
-    this.speed = 3.6
+    this.jumpHeight = 3.6
+    this.speed = 12
     this.running = false
     this.jumping = false
     this.grounded = false
@@ -57,7 +58,7 @@ module.exports = class Player extends Entity {
       if (!this.jumping && this.grounded) {
         this.jumping = true
         this.grounded = false
-        this.velocity.y = -this.speed * 2
+        this.velocity.y = -this.jumpHeight * 2
       }
     }
 
