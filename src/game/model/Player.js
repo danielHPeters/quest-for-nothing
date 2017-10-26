@@ -29,8 +29,7 @@ module.exports = class Player extends Entity {
     this.running = false
     this.jumping = false
     this.grounded = false
-    this.solid = true
-    this.history = {}
+    this.solid = false
     this.keyActionsRegister = []
     this.friction = 0.8
     this.gravity = 0.2
@@ -107,16 +106,6 @@ module.exports = class Player extends Entity {
 
     // Check if player wants to leave current area
     this.checkEdges(game)
-  }
-
-  /**
-   * Experimental move history logging.
-   * TODO: Implement resource saving move tracking to allow resetting to previous states.
-   */
-  goBack () {
-    if (this.history.length !== 0) {
-      this.position.set(this.history[this.history.length - 1])
-    }
   }
 
   /**

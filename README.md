@@ -1,7 +1,9 @@
 # jump-and-run
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/danielHPeters/jump-and-run.svg?columns=all)](http://waffle.io/danielHPeters/jump-and-run)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-[![Build Status](https://travis-ci.org/danielHPeters/jump-and-run.svg?branch=v2.0)](https://travis-ci.org/danielHPeters/jump-and-run) [![Coverage Status](https://coveralls.io/repos/github/danielHPeters/jump-and-run/badge.svg?branch=master)](https://coveralls.io/github/danielHPeters/jump-and-run?branch=master)  
+[![Build Status](https://travis-ci.org/danielHPeters/jump-and-run.svg?branch=v2.0)](https://travis-ci.org/danielHPeters/jump-and-run)
+[![Coverage Status](https://coveralls.io/repos/github/danielHPeters/jump-and-run/badge.svg?branch=master)](https://coveralls.io/github/danielHPeters/jump-and-run?branch=master)
+[![Dependencies Status](https://david-dm.org/danielHpeters/jump-and-run.svg)](https://david-dm.org/danielHpeters/jump-and-run.svg)  
 A simple jump and run game.  
 This should run in any recent browser with html5 support.
 

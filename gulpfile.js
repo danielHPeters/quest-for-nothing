@@ -1,4 +1,5 @@
 'use strict'
+const spawn = require('child_process').spawn
 const gulp = require('gulp')
 const filter = require('gulp-filter')
 const gulpUglify = require('gulp-uglify')
@@ -7,7 +8,7 @@ const webpack = require('webpack-stream')
 const sourceMaps = require('gulp-sourcemaps')
 const rename = require('gulp-rename')
 const esLint = require('gulp-eslint')
-const mocha = require('gulp-mocha')
+
 // Define sources, destination and config file locations here
 const configuration = {
   css: {
@@ -16,6 +17,8 @@ const configuration = {
   },
   js: {
     source: 'src/**/*.js',
+    testSource: 'test/**/*.js',
+    coverage: 'coverage',
     bundledSource: 'src/entry.js',
     destination: ''
   },
@@ -71,12 +74,36 @@ gulp.task('lint', () => {
     .pipe(esLint.failAfterError())
 })
 
-gulp.task('run-tests', () => {
-  return gulp.src(['test/**/*.js'], {read: false})
-    .pipe(mocha({
-      reporter: 'spec'
-    }))
+/**
+ * Run npm test task which runs mocha with nyc coverage reporter.
+ */
+gulp.task('test', (cb) => {
+  const npm = spawn('npm', ['test'], {stdio: 'inherit'})
+  npm.on('close', code => {
+    console.log('test exited with code ' + code)
+    cb(code)
+  })
 })
+
+/**
+ * Send coverage information to coveralls.io.
+ */
+gulp.task('coveralls', (cb) => {
+  const npm = spawn('npm', ['run', 'coveralls'], {stdio: 'inherit'})
+  npm.on('close', function (code) {
+    console.log('coveralls exited with code ' + code)
+    cb(code)
+  })
+})
+
+/**
+ * Send coverage info to coveralls.io
+ */
+/* gulp.task('coveralls', ['coverage-test'], () => {
+  // lcov.info is the file which has the coverage information we wan't to upload
+  return gulp.src(configuration.js.coverage + '/lcov.info')
+    .pipe(coveralls())
+}) */
 
 /**
  * Watch changes in css files.
@@ -100,4 +127,4 @@ gulp.task('watch-all', ['watch-js', 'watch-css'])
 /**
  * Default task to perform all previously defined tasks
  */
-gulp.task('default', ['lint', 'run-tests', 'css', 'js'])
+gulp.task('default', ['lint', 'test', 'css', 'js'])
