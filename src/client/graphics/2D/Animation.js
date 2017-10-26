@@ -48,7 +48,7 @@ export default class Animation {
     let row = Math.floor(this.sequence[this.currentFrame] / this.spriteSheet.framesPerRow)
     let col = Math.floor(this.sequence[this.currentFrame] % this.spriteSheet.framesPerRow)
     ctx.drawImage(
-      this.spriteSheet.image(),
+      this.spriteSheet.image,
       col * this.spriteSheet.frameWidth,
       row * this.spriteSheet.frameHeight,
       this.spriteSheet.frameWidth,

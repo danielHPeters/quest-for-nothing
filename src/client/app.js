@@ -3,6 +3,8 @@
 import AudioManager from './application/AudioManager'
 import AssetManager from './application/AssetManager'
 import KeyboardEventHandler from './application/KeyboardEventHandler'
+import SpriteSheet from './graphics/2D/SpriteSheet'
+import Animation from './graphics/2D/Animation'
 
 let socket = io()
 let canvas = document.getElementById('game')
@@ -12,6 +14,57 @@ let assetManager = new AssetManager()
 let playerId // player id is registered here on socket connection
 let ctx // graphics context
 let spritesLoaded = false // set to true when asset manager finishes to start drawing
+let spriteSheet
+let animation
+
+/**
+ * Shim for animation loop.
+ * Selects one that's available or uses fallback with setTimeout.
+ */
+window.requestAnimFrame = (() => {
+  return window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function (callback, element) {
+      window.setTimeout(callback, 1000 / 60)
+    }
+})()
+
+/**
+ * Download all game assets.
+ */
+function init () {
+  // check if canvas is supported by browser
+  if (canvas.getContext) {
+    socket.emit('new player')
+    ctx = canvas.getContext('2d')
+    // Add all sprites and music files to the download queue
+    audioManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3')
+    audioManager.queueDownload('jump', 'assets/audio/effects/jump.wav')
+    assetManager.queueDownload('background', 'assets/textures/background.png')
+    assetManager.queueDownload('player', 'assets/textures/player.png')
+    assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg')
+    assetManager.queueDownload('heart', 'assets/textures/heart.png')
+    spriteSheet = new SpriteSheet('assets/textures/characters.png', 32, 32)
+    animation = new Animation(spriteSheet, 3, 0, 4)
+    audioManager.loadAll(() => {
+      // Download all sprites
+      assetManager.loadAll(() => {
+        // Play ambient sound
+        audioManager.playSound('ambient', true)
+        update()
+        // Draw Background only once to improve performance
+        document.getElementById('background').getContext('2d').drawImage(assetManager.getAsset('background'), 0, 0, canvas.width, canvas.height)
+        // tells socket.on(state) that all sprites needed for drawing are downloaded
+        spritesLoaded = true
+      })
+    })
+  } else {
+    document.getElementById('unsupported').textContent = 'Please update your browser or download another one which supports HTML5'
+  }
+}
 
 /**
  * Sends user input to the server.
@@ -22,19 +75,15 @@ function update () {
   window.requestAnimationFrame(() => update())
 }
 
-/**
- * Listen to server sending objects to draw.
- * Contains the drawing loop
- */
-socket.on('state', players => {
+function draw (players) {
   if (playerId && players[playerId] && spritesLoaded) {
-    console.log(players[playerId])
+    animation.update()
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     Object.keys(players).forEach(key => {
       const player = players[key]
       // Make sure to only draw players in the same area
       if (player.viewport.areaId === players[playerId].viewport.areaId) {
-        ctx.drawImage(assetManager.getAsset(player.material.name), player.position._x, player.position._y, player.width, player.height)
+        animation.draw(ctx, player.position._x, player.position._y, player.width, player.height)
       }
     })
     // Draw all blocks
@@ -51,46 +100,10 @@ socket.on('state', players => {
     if (players[playerId].jumping) {
       // audioManager.playSound('jump') TODO Currently fires multiple times. Find a way to only play when the last jump sound ended
     }
-  }
-})
 
-/**
- * Initializes all game Objects.
- */
-function init () {
-  // check if canvas is supported by browser
-  if (canvas.getContext) {
-    socket.emit('new player')
-    ctx = canvas.getContext('2d')
-    // Add all sprites and music files to the download queue
-    audioManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3')
-    audioManager.queueDownload('jump', 'assets/audio/effects/jump.wav')
-    assetManager.queueDownload('background', 'assets/textures/background.png')
-    assetManager.queueDownload('player', 'assets/textures/player.png')
-    assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg')
-    assetManager.queueDownload('heart', 'assets/textures/heart.png')
-    audioManager.loadAll(() => {
-      audioManager.playSound('ambient', true)
-      // Download all sprites
-      assetManager.downLoadAll(() => {
-        update()
-        // Draw Background only once to improve performance
-        document.getElementById('background').getContext('2d').drawImage(assetManager.getAsset('background'), 0, 0, canvas.width, canvas.height)
-        // tells socket.on(state) that all sprites needed for drawing are downloaded
-        spritesLoaded = true
-      })
-    })
-  } else {
-    document.getElementById('unsupported').textContent = 'Please update your browser or download another one which supports HTML5'
+    // animation.draw(ctx, 12.5, 12.5, 50, 50)
   }
 }
-
-socket.on('connect', function () {
-  // Tell server to add this player
-  socket.emit('new player')
-  // remember socket id to identify current player when drawing
-  playerId = socket.io.engine.id
-})
 
 /**
  * modern browser equivalent of jQuery $(document).ready()
@@ -98,16 +111,19 @@ socket.on('connect', function () {
 document.addEventListener('DOMContentLoaded', init())
 
 /**
- * Shim for animation loop.
- * Selects one that's available or uses fallback with setTimeout.
+ * Initialize player id on socket connection
  */
-window.requestAnimFrame = (function () {
-  return window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    function (callback, element) {
-      window.setTimeout(callback, 1000 / 60)
-    }
-})()
+socket.on('connect', () => {
+  // Tell server to add this player
+  socket.emit('new player')
+  // remember socket id to identify current player when drawing
+  playerId = socket.io.engine.id
+})
+
+/**
+ * Listen to server sending objects to draw.
+ * Contains the drawing loop
+ */
+socket.on('state', players => {
+  draw(players)
+})

@@ -28,7 +28,7 @@ export default class AssetManager {
    *
    * @param callback function go be executed on download end
    */
-  downLoadAll (callback) {
+  loadAll (callback) {
     if (this.downloadQueue.length === 0) {
       callback()
     }

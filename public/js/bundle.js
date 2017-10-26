@@ -82,6 +82,14 @@ var _KeyboardEventHandler = __webpack_require__(3);
 
 var _KeyboardEventHandler2 = _interopRequireDefault(_KeyboardEventHandler);
 
+var _SpriteSheet = __webpack_require__(4);
+
+var _SpriteSheet2 = _interopRequireDefault(_SpriteSheet);
+
+var _Animation = __webpack_require__(5);
+
+var _Animation2 = _interopRequireDefault(_Animation);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var socket = io();
@@ -92,52 +100,21 @@ var assetManager = new _AssetManager2.default();
 var playerId = void 0; // player id is registered here on socket connection
 var ctx = void 0; // graphics context
 var spritesLoaded = false; // set to true when asset manager finishes to start drawing
+var spriteSheet = void 0;
+var animation = void 0;
 
 /**
- * Sends user input to the server.
+ * Shim for animation loop.
+ * Selects one that's available or uses fallback with setTimeout.
  */
-function update() {
-  socket.emit('movement', keyEventHandler.keyActionsRegister);
-  // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
-  window.requestAnimationFrame(function () {
-    return update();
-  });
-}
+window.requestAnimFrame = function () {
+  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) {
+    window.setTimeout(callback, 1000 / 60);
+  };
+}();
 
 /**
- * Listen to server sending objects to draw.
- * Contains the drawing loop
- */
-socket.on('state', function (players) {
-  if (playerId && players[playerId] && spritesLoaded) {
-    console.log(players[playerId]);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    Object.keys(players).forEach(function (key) {
-      var player = players[key];
-      // Make sure to only draw players in the same area
-      if (player.viewport.areaId === players[playerId].viewport.areaId) {
-        ctx.drawImage(assetManager.getAsset(player.material.name), player.position._x, player.position._y, player.width, player.height);
-      }
-    });
-    // Draw all blocks
-    players[playerId].viewport.blocks.forEach(function (block) {
-      ctx.drawImage(assetManager.getAsset(block.material.name), block.position._x, block.position._y, block.width, block.height);
-    });
-    // Display health
-    var x = canvas.width - 35;
-    var y = 5;
-    for (var i = 0; i < players[playerId].lives; i++) {
-      ctx.drawImage(assetManager.getAsset('heart'), x, y, 30, 30);
-      x -= 30;
-    }
-    if (players[playerId].jumping) {
-      // audioManager.playSound('jump') TODO Currently fires multiple times. Find a way to only play when the last jump sound ended
-    }
-  }
-});
-
-/**
- * Initializes all game Objects.
+ * Download all game assets.
  */
 function init() {
   // check if canvas is supported by browser
@@ -151,10 +128,13 @@ function init() {
     assetManager.queueDownload('player', 'assets/textures/player.png');
     assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg');
     assetManager.queueDownload('heart', 'assets/textures/heart.png');
+    spriteSheet = new _SpriteSheet2.default('assets/textures/characters.png', 32, 32);
+    animation = new _Animation2.default(spriteSheet, 3, 0, 4);
     audioManager.loadAll(function () {
-      audioManager.playSound('ambient', true);
       // Download all sprites
-      assetManager.downLoadAll(function () {
+      assetManager.loadAll(function () {
+        // Play ambient sound
+        audioManager.playSound('ambient', true);
         update();
         // Draw Background only once to improve performance
         document.getElementById('background').getContext('2d').drawImage(assetManager.getAsset('background'), 0, 0, canvas.width, canvas.height);
@@ -167,6 +147,55 @@ function init() {
   }
 }
 
+/**
+ * Sends user input to the server.
+ */
+function update() {
+  socket.emit('movement', keyEventHandler.keyActionsRegister);
+  // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
+  window.requestAnimationFrame(function () {
+    return update();
+  });
+}
+
+function draw(players) {
+  if (playerId && players[playerId] && spritesLoaded) {
+    animation.update();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    Object.keys(players).forEach(function (key) {
+      var player = players[key];
+      // Make sure to only draw players in the same area
+      if (player.viewport.areaId === players[playerId].viewport.areaId) {
+        animation.draw(ctx, player.position._x, player.position._y, player.width, player.height);
+      }
+    });
+    // Draw all blocks
+    players[playerId].viewport.blocks.forEach(function (block) {
+      ctx.drawImage(assetManager.getAsset(block.material.name), block.position._x, block.position._y, block.width, block.height);
+    });
+    // Display health
+    var x = canvas.width - 35;
+    var y = 5;
+    for (var i = 0; i < players[playerId].lives; i++) {
+      ctx.drawImage(assetManager.getAsset('heart'), x, y, 30, 30);
+      x -= 30;
+    }
+    if (players[playerId].jumping) {}
+    // audioManager.playSound('jump') TODO Currently fires multiple times. Find a way to only play when the last jump sound ended
+
+
+    // animation.draw(ctx, 12.5, 12.5, 50, 50)
+  }
+}
+
+/**
+ * modern browser equivalent of jQuery $(document).ready()
+ */
+document.addEventListener('DOMContentLoaded', init());
+
+/**
+ * Initialize player id on socket connection
+ */
 socket.on('connect', function () {
   // Tell server to add this player
   socket.emit('new player');
@@ -175,19 +204,12 @@ socket.on('connect', function () {
 });
 
 /**
- * modern browser equivalent of jQuery $(document).ready()
+ * Listen to server sending objects to draw.
+ * Contains the drawing loop
  */
-document.addEventListener('DOMContentLoaded', init());
-
-/**
- * Shim for animation loop.
- * Selects one that's available or uses fallback with setTimeout.
- */
-window.requestAnimFrame = function () {
-  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) {
-    window.setTimeout(callback, 1000 / 60);
-  };
-}();
+socket.on('state', function (players) {
+  draw(players);
+});
 
 /***/ }),
 /* 1 */
@@ -395,8 +417,8 @@ var AssetManager = function () {
      */
 
   }, {
-    key: 'downLoadAll',
-    value: function downLoadAll(callback) {
+    key: 'loadAll',
+    value: function loadAll(callback) {
       var _this = this;
 
       if (this.downloadQueue.length === 0) {
@@ -590,6 +612,130 @@ var KeyboardEventHandler = function () {
 }();
 
 exports.default = KeyboardEventHandler;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Sprite sheet definition.
+ * TODO: Finish implementation
+ */
+var SpriteSheet =
+/**
+ * Constructor. Sets frame dimensions and calculates number of frames.
+ * @param sourcePath
+ * @param frameWidth
+ * @param frameHeight
+ */
+function SpriteSheet(sourcePath, frameWidth, frameHeight) {
+  var _this = this;
+
+  _classCallCheck(this, SpriteSheet);
+
+  this.image = new Image();
+  this.frameWidth = frameWidth;
+  this.frameHeight = frameHeight;
+
+  this.image.addEventListener('load', function () {
+    _this.framesPerRow = Math.floor(_this.image.width / _this.frameWidth);
+  });
+
+  this.image.src = sourcePath;
+};
+
+exports.default = SpriteSheet;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Implements sprite animation using spritesheet.
+ * TODO: Finish code
+ *
+ * @author Daniel Peters
+ * @version 0.3
+ */
+var Animation = function () {
+  /**
+   * Constructor Sets all animation data.
+   *
+   * @param spriteSheet corresponding sprite sheet
+   * @param speed animation speed
+   * @param start animation start frame
+   * @param end animation end frame
+   */
+  function Animation(spriteSheet, speed, start, end) {
+    _classCallCheck(this, Animation);
+
+    this.spriteSheet = spriteSheet;
+    this.speed = speed;
+    this.sequence = [];
+    this.currentFrame = 0;
+    this.counter = 0;
+
+    for (var frame = start; frame <= end; frame++) {
+      this.sequence.push(frame);
+    }
+  }
+
+  /**
+   * Update animation frames.
+   */
+
+
+  _createClass(Animation, [{
+    key: "update",
+    value: function update() {
+      if (this.counter === this.speed - 1) {
+        this.currentFrame = (this.currentFrame + 1) % this.sequence.length;
+      }
+      this.counter = (this.counter + 1) % this.speed;
+    }
+
+    /**
+     * Draw current frame
+     * @param ctx canvas context
+     * @param x location x
+     * @param y location y
+     * @param width display width
+     * @param height display height
+     */
+
+  }, {
+    key: "draw",
+    value: function draw(ctx, x, y, width, height) {
+      var row = Math.floor(this.sequence[this.currentFrame] / this.spriteSheet.framesPerRow);
+      var col = Math.floor(this.sequence[this.currentFrame] % this.spriteSheet.framesPerRow);
+      ctx.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, this.spriteSheet.frameWidth, this.spriteSheet.frameHeight, x, y, width, height);
+    }
+  }]);
+
+  return Animation;
+}();
+
+exports.default = Animation;
 
 /***/ })
 /******/ ]);

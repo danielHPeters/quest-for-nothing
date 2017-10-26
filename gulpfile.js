@@ -97,15 +97,6 @@ gulp.task('coveralls', (cb) => {
 })
 
 /**
- * Send coverage info to coveralls.io
- */
-/* gulp.task('coveralls', ['coverage-test'], () => {
-  // lcov.info is the file which has the coverage information we wan't to upload
-  return gulp.src(configuration.js.coverage + '/lcov.info')
-    .pipe(coveralls())
-}) */
-
-/**
  * Watch changes in css files.
  */
 gulp.task('watch-css', () => {
