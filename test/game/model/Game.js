@@ -5,7 +5,7 @@ const Settings = require('./../../../src/game/model/Settings')
 const should = chai.should()
 
 describe('Game', () => {
-  describe('#updae', () => {
+  describe('#update', () => {
     let game
     beforeEach(() => {
       game = new Game(new Settings())
