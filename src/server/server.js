@@ -1,17 +1,15 @@
 'use strict'
 
-let express = require('express')
-let app = express()
-let path = require('path')
-let http = require('http')
-let bodyParser = require('body-parser')
-let favicon = require('serve-favicon')
-let logger = require('./utils/logger') // use customized winston logger
-let server = http.Server(app)
-
-let routes = require('./routes/index') // get routes
-
-let io = require('socket.io')(server) // integrate socket.io
+const express = require('express')
+const app = express()
+const path = require('path')
+const http = require('http')
+const bodyParser = require('body-parser')
+const favicon = require('serve-favicon')
+const logger = require('./utils/logger') // use customized winston logger
+const server = http.Server(app)
+const routes = require('./routes/index') // get routes
+const io = require('socket.io')(server) // integrate socket.io
 require('./../game/gameLoop')(io) // pass socket io to the game loop to allow sending and receiving game status events
 
 app.use(bodyParser.json())
@@ -25,34 +23,37 @@ app.use(require('morgan')('dev', {'stream': logger.stream})) // pass custom logg
 app.use('/', routes)
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  let err = new Error('Page: ' + req.path + ' not found')
+app.use((req, res, next) => {
+  const err = new Error('Page: ' + req.path + ' not found')
   err.status = 404
   next(err)
 })
+const pages = ['Home', 'Game', 'Controls', 'About', 'Levels']
 
 // error handlers
 
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
+  app.use((err, req, res, next) => {
     console.log(err.status)
     res.status(err.status || 500)
-    res.render('error', {title: '404', message: err.message, error: err})
+    res.render('error', {title: '404', pages: pages, message: err.message, error: err})
   })
 }
 
 // production error handler
 // no stack traces leaked to user
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   console.log(err.status)
   res.status(err.status || 500)
-  res.render('error', {title: '404', message: err.message, error: {}})
+  res.render('error', {title: '404', pages: pages, message: err.message, error: {}})
 })
 
 app.set('port', process.env.PORT || 3000)
 
-server.listen(app.get('port'), function () {
+server.listen(app.get('port'), () => {
   logger.log('info', 'Express server listening on port ' + server.address().port)
 })
+
+module.exports = server

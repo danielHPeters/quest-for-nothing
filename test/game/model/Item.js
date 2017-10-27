@@ -14,11 +14,18 @@ describe('Item', () => {
     it('should be a function', () => {
       item.action.should.be.a('function')
     })
+
+    it('should only accept functions', () => {
+      let func = () => {
+        item.action = 'function'
+      }
+      func.should.throw(Error)
+    })
   })
 
   describe('#use', () => {
     it('should not return anything', () => {
-      should.equal(item.action(), undefined)
+      should.equal(item.use(), undefined)
     })
   })
 
