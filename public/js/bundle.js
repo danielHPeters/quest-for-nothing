@@ -103,6 +103,7 @@ var spritesLoaded = false; // set to true when asset manager finishes to start d
 var spriteSheet = void 0;
 var animationRight = void 0;
 var animationLeft = void 0;
+var animationIdle = void 0;
 var currentAnimation = void 0;
 
 /**
@@ -130,9 +131,10 @@ function init() {
     assetManager.queueDownload('player', 'assets/textures/player.png');
     assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg');
     assetManager.queueDownload('heart', 'assets/textures/heart.png');
-    spriteSheet = new _SpriteSheet2.default('assets/textures/character.png', 108, 140);
-    animationRight = new _Animation2.default(spriteSheet, 3, 0, 7);
-    animationLeft = new _Animation2.default(spriteSheet, 3, 8, 14);
+    spriteSheet = new _SpriteSheet2.default('assets/textures/test.png', 32, 64);
+    animationRight = new _Animation2.default(spriteSheet, 3, 3, 6);
+    animationLeft = new _Animation2.default(spriteSheet, 3, 3, 6);
+    animationIdle = new _Animation2.default(spriteSheet, 10, 0, 2);
     currentAnimation = animationLeft;
     audioManager.loadAll(function () {
       // Download all sprites
@@ -175,6 +177,9 @@ function draw(players) {
         }
         if (player.keyActionsRegister['d']) {
           currentAnimation = animationRight;
+        }
+        if (!player.keyActionsRegister['d'] && !player.keyActionsRegister['a']) {
+          currentAnimation = animationIdle;
         }
         currentAnimation.draw(ctx, player.position._x, player.position._y, player.width, player.height);
       }

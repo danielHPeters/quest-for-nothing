@@ -17,6 +17,7 @@ let spritesLoaded = false // set to true when asset manager finishes to start dr
 let spriteSheet
 let animationRight
 let animationLeft
+let animationIdle
 let currentAnimation
 
 /**
@@ -49,9 +50,10 @@ function init () {
     assetManager.queueDownload('player', 'assets/textures/player.png')
     assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg')
     assetManager.queueDownload('heart', 'assets/textures/heart.png')
-    spriteSheet = new SpriteSheet('assets/textures/character.png', 108, 140)
-    animationRight = new Animation(spriteSheet, 3, 0, 7)
-    animationLeft = new Animation(spriteSheet, 3, 8, 14)
+    spriteSheet = new SpriteSheet('assets/textures/test.png', 32, 64)
+    animationRight = new Animation(spriteSheet, 3, 3, 6)
+    animationLeft = new Animation(spriteSheet, 3, 3, 6)
+    animationIdle = new Animation(spriteSheet, 10, 0, 2)
     currentAnimation = animationLeft
     audioManager.loadAll(() => {
       // Download all sprites
@@ -92,6 +94,9 @@ function draw (players) {
         }
         if (player.keyActionsRegister['d']) {
           currentAnimation = animationRight
+        }
+        if (!player.keyActionsRegister['d'] && !player.keyActionsRegister['a']) {
+          currentAnimation = animationIdle
         }
         currentAnimation.draw(ctx, player.position._x, player.position._y, player.width, player.height)
       }
