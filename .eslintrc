@@ -2,7 +2,8 @@
   "extends": "standard",
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "mocha": true
   },
   "parserOptions": {
     "ecmaVersion": 6,
@@ -11,9 +12,6 @@
     }
   },
   "globals": {
-    "io": true,
-    "describe": true,
-    "it": true,
-    "beforeEach": true
+    "io": true
   }
 }
