@@ -4,59 +4,67 @@
  *
  * @type {module.Game|Game}
  */
-let game = require('./app')
-
+const game = require('./app')
 /**
  *
- * @type {module.Player}
+ * @type {module.GameObjectFactory}
  */
-let Player = require('./model/Player')
-/**
- *
- * @type {module.Material}
- */
-let Material = require('./model/Material')
+const GameObjectFactory = require('./factory/GameObjectFactory')
 
 /**
- * Listen to socket.io events.
+ * Add player on "new player" event.
  *
- * @param io socket.io instance
+ * @param {{}} socket socket.io socket
  */
-module.exports = io => {
-  io.on('connection', socket => {
-    // Add new connected player and set player location to predefined spawn point
-    socket.on('new player', () => {
-      let player = new Player(
-        game.spawnPoint.position.x,
-        game.spawnPoint.position.y,
-        game.spawnPoint.width,
-        game.spawnPoint.height,
-        new Material('player'),
-        game.spawnPoint.area.blocks
-      )
-      // Currently player is identified via socket id. TODO set a unique player name to identify player
-      player.name = 'Player'
-      game.players[socket.id] = player
-      game.spawnPoint.area.add(player)
+function addPlayer (socket) {
+  // Add new connected player and set player location to predefined spawn point
+  socket.on('new player', () => {
+    let player = GameObjectFactory.getPlayer(
+      game.spawnPoint.position.x,
+      game.spawnPoint.position.y,
+      game.spawnPoint.width,
+      game.spawnPoint.height,
+      'player',
+      game.spawnPoint.area.blocks
+    )
+    // Currently player is identified via socket id. TODO set a unique player name to identify player
+    // player.name = 'Player'
+    game.players[socket.id] = player
+    game.spawnPoint.area.add(player)
 
-      console.log('Player connected')
-    })
-
-    // Get user input
-    socket.on('movement', pressedKeys => {
-      let player = game.players[socket.id]
-      player.keyActionsRegister = pressedKeys
-    })
-
-    // Delete player on disconnect
-    socket.on('disconnect', () => {
-      let playerName = game.players[socket.id] ? game.players[socket.id].name : ''
-      delete game.players[socket.id]
-      console.log(playerName + ' disconnected')
-    })
+    console.log('Player connected')
   })
+}
 
-  // Send objects state 60 times per second to all connected players
+/**
+ * Receive player input and pass to player object.
+ *
+ * @param {{}} socket socket.io socket
+ */
+function handlePlayerInput (socket) {
+  socket.on('movement', pressedKeys => {
+    let player = game.players[socket.id]
+    player.registeredInputs = pressedKeys
+  })
+}
+
+/**
+ * Delete player object on disconnect.
+ *
+ * @param {{}} socket socket.io socket
+ */
+function handleDisconnect (socket) {
+  socket.on('disconnect', () => {
+    delete game.players[socket.id]
+    console.log('A player disconnected')
+  })
+}
+
+/**
+ * Send objects state 60 times per second to all connected players
+ * @param {{}} io socket.io instance
+ */
+function loopUpdate (io) {
   let lastUpdateTime = (new Date()).getTime()
   setInterval(() => {
     let currentTime = (new Date()).getTime()
@@ -65,4 +73,18 @@ module.exports = io => {
     lastUpdateTime = currentTime
     io.sockets.emit('state', game.players)
   }, 1000 / 60)
+}
+
+/**
+ * Listen to socket.io events and run update loop.
+ *
+ * @param io socket.io instance
+ */
+module.exports = io => {
+  io.on('connection', socket => {
+    addPlayer(socket)
+    handlePlayerInput(socket)
+    handleDisconnect(socket)
+  })
+  loopUpdate(io)
 }

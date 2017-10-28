@@ -1,5 +1,5 @@
 /**
- *
+ * Area / Room definition.
  * @type {module.Area}
  */
 module.exports = class Area {

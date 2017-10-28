@@ -1,3 +1,10 @@
+/**
+ * This class defines an item. Each item has a name, description and action.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ * @type {module.Item}
+ */
 module.exports = class Item {
   constructor (name, description, action) {
     this.name = name
@@ -55,7 +62,7 @@ module.exports = class Item {
   }
 
   /**
-   *
+   * Gets the action of this item.
    * @returns {function}
    */
   get action () {

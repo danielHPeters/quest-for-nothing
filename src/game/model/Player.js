@@ -2,7 +2,7 @@
  *
  * @type {module.Entity}
  */
-let Entity = require('./Entity')
+const Entity = require('./Entity')
 
 /**
  * Player class containing player information and objects currently visible to him/her.
@@ -31,7 +31,7 @@ module.exports = class Player extends Entity {
     this.jumping = false
     this.grounded = false
     this.solid = false
-    this.keyActionsRegister = []
+    this.registeredInputs = []
     this.friction = 0.8
     this.gravity = 0.2
     // Information about players current surroundings
@@ -53,7 +53,7 @@ module.exports = class Player extends Entity {
    */
   move (game, timeDifference) {
     // Jump on 'w' or space keys pressed
-    if (this.keyActionsRegister['w'] || this.keyActionsRegister[' ']) {
+    if (this.registeredInputs['w'] || this.registeredInputs[' ']) {
       // Check if players is not already jumping
       if (!this.jumping && this.grounded) {
         this.jumping = true
@@ -63,14 +63,14 @@ module.exports = class Player extends Entity {
     }
 
     // Move left on key 'a' pressed
-    if (this.keyActionsRegister['a']) {
+    if (this.registeredInputs['a']) {
       if (this.velocity.x > -this.speed) {
         this.velocity.x--
       }
     }
 
     // Move right on key 'd' pressed
-    if (this.keyActionsRegister['d']) {
+    if (this.registeredInputs['d']) {
       if (this.velocity.x < this.speed) {
         this.velocity.x++
       }

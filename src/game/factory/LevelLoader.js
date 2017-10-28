@@ -1,8 +1,8 @@
 /**
  *
- * @type {module.BlockFactory}
+ * @type {module.BlockGenerator}
  */
-let BlockFactory = require('./BlockFactory')
+let BlockGenerator = require('./BlockGenerator')
 
 /**
  *
@@ -37,7 +37,7 @@ module.exports = class LevelLoader {
     levelDefinition.areas.forEach(areaDefinition => {
       let area = new Area(areaDefinition.id)
       areasDone++
-      area.blocks = BlockFactory.generateBlocks(game, area, areaDefinition.blocks)
+      area.blocks = BlockGenerator.generateBlocks(game, area, areaDefinition.blocks)
       game.areas.push(area)
       if (areasDone === levelDefinition.areas.length) {
         this.setExits(game, levelDefinition)

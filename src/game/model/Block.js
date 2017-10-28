@@ -2,10 +2,13 @@
  *
  * @type {module.Entity}
  */
-let Entity = require('./Entity')
+const Entity = require('./Entity')
 
 /**
+ * Block class. Used as obstacles or hidden doors.
  *
+ * @author Daniel peters
+ * @version 1.0
  * @type {module.Block}
  */
 module.exports = class Block extends Entity {

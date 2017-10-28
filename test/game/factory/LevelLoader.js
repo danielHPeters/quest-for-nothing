@@ -17,7 +17,7 @@ describe('LevelLoader', () => {
       levelLoader = new LevelLoader('./../../levels/')
     })
 
-    it('should load the game data into the game object', () => {
+    it('should loadAudio the game data into the game object', () => {
       levelLoader.loadLevel(game, 'default')
     })
   })

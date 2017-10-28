@@ -70,23 +70,15 @@
 "use strict";
 
 
-var _AudioManager = __webpack_require__(1);
-
-var _AudioManager2 = _interopRequireDefault(_AudioManager);
-
-var _AssetManager = __webpack_require__(2);
+var _AssetManager = __webpack_require__(1);
 
 var _AssetManager2 = _interopRequireDefault(_AssetManager);
 
-var _KeyboardEventHandler = __webpack_require__(3);
+var _InputManager = __webpack_require__(3);
 
-var _KeyboardEventHandler2 = _interopRequireDefault(_KeyboardEventHandler);
+var _InputManager2 = _interopRequireDefault(_InputManager);
 
-var _SpriteSheet = __webpack_require__(4);
-
-var _SpriteSheet2 = _interopRequireDefault(_SpriteSheet);
-
-var _Animation = __webpack_require__(5);
+var _Animation = __webpack_require__(4);
 
 var _Animation2 = _interopRequireDefault(_Animation);
 
@@ -94,13 +86,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var socket = io();
 var canvas = document.getElementById('game');
-var keyEventHandler = new _KeyboardEventHandler2.default(canvas);
-var audioManager = new _AudioManager2.default(); // TODO Combine audio manager with asset manager to avoid duplicate code
+var inputManager = new _InputManager2.default(canvas);
 var assetManager = new _AssetManager2.default();
 var playerId = void 0; // player id is registered here on socket connection
 var ctx = void 0; // graphics context
 var spritesLoaded = false; // set to true when asset manager finishes to start drawing
-var spriteSheet = void 0;
 var animationRight = void 0;
 var animationLeft = void 0;
 var animationIdle = void 0;
@@ -125,28 +115,25 @@ function init() {
     socket.emit('new player');
     ctx = canvas.getContext('2d');
     // Add all sprites and music files to the download queue
-    audioManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3');
-    audioManager.queueDownload('jump', 'assets/audio/effects/jump.wav');
-    assetManager.queueDownload('background', 'assets/textures/background.png');
-    assetManager.queueDownload('player', 'assets/textures/player.png');
-    assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg');
-    assetManager.queueDownload('heart', 'assets/textures/heart.png');
-    spriteSheet = new _SpriteSheet2.default('assets/textures/test.png', 32, 64);
-    animationRight = new _Animation2.default(spriteSheet, 3, 3, 6);
-    animationLeft = new _Animation2.default(spriteSheet, 3, 3, 6);
-    animationIdle = new _Animation2.default(spriteSheet, 10, 0, 2);
-    currentAnimation = animationLeft;
-    audioManager.loadAll(function () {
-      // Download all sprites
-      assetManager.loadAll(function () {
-        // Play ambient sound
-        audioManager.playSound('ambient', true);
-        update();
-        // Draw Background only once to improve performance
-        document.getElementById('background').getContext('2d').drawImage(assetManager.getAsset('background'), 0, 0, canvas.width, canvas.height);
-        // tells socket.on(state) that all sprites needed for drawing are downloaded
-        spritesLoaded = true;
-      });
+    assetManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3', 'audio');
+    assetManager.queueDownload('jump', 'assets/audio/effects/jump.wav', 'audio');
+    assetManager.queueDownload('background', 'assets/textures/background.png', 'texture');
+    assetManager.queueDownload('player', 'assets/textures/player.png', 'texture');
+    assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg', 'texture');
+    assetManager.queueDownload('heart', 'assets/textures/heart.png', 'texture');
+    assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet');
+    assetManager.loadAll(function () {
+      animationRight = new _Animation2.default(assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12);
+      animationLeft = new _Animation2.default(assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12);
+      animationIdle = new _Animation2.default(assetManager.getSpriteSheet('playerSheet'), 10, 0, 2, 12);
+      currentAnimation = animationLeft;
+      // Play ambient sound
+      assetManager.playSound('ambient', true);
+      update();
+      // Draw Background only once to improve performance
+      document.getElementById('background').getContext('2d').drawImage(assetManager.getSprite('background'), 0, 0, canvas.width, canvas.height);
+      // tells socket.on(state) that all sprites needed for drawing are downloaded
+      spritesLoaded = true;
     });
   } else {
     document.getElementById('unsupported').textContent = 'Please update your browser or download another one which supports HTML5';
@@ -157,7 +144,7 @@ function init() {
  * Sends user input to the server.
  */
 function update() {
-  socket.emit('movement', keyEventHandler.keyActionsRegister);
+  socket.emit('movement', inputManager.registeredInputs);
   // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
   window.requestAnimationFrame(function () {
     return update();
@@ -172,13 +159,13 @@ function draw(players) {
       var player = players[key];
       // Make sure to only draw players in the same area
       if (player.viewport.areaId === players[playerId].viewport.areaId) {
-        if (player.keyActionsRegister['a']) {
+        if (player.registeredInputs['a']) {
           currentAnimation = animationLeft;
         }
-        if (player.keyActionsRegister['d']) {
+        if (player.registeredInputs['d']) {
           currentAnimation = animationRight;
         }
-        if (!player.keyActionsRegister['d'] && !player.keyActionsRegister['a']) {
+        if (!player.registeredInputs['d'] && !player.registeredInputs['a']) {
           currentAnimation = animationIdle;
         }
         currentAnimation.draw(ctx, player.position._x, player.position._y, player.width, player.height);
@@ -186,20 +173,15 @@ function draw(players) {
     });
     // Draw all blocks
     players[playerId].viewport.blocks.forEach(function (block) {
-      ctx.drawImage(assetManager.getAsset(block.material.name), block.position._x, block.position._y, block.width, block.height);
+      ctx.drawImage(assetManager.getSprite(block.material.name), block.position._x, block.position._y, block.width, block.height);
     });
     // Display health
     var x = canvas.width - 35;
     var y = 5;
     for (var i = 0; i < players[playerId].lives; i++) {
-      ctx.drawImage(assetManager.getAsset('heart'), x, y, 30, 30);
+      ctx.drawImage(assetManager.getSprite('heart'), x, y, 30, 30);
       x -= 30;
     }
-    if (players[playerId].jumping) {}
-    // audioManager.playSound('jump') TODO Currently fires multiple times. Find a way to only play when the last jump sound ended
-
-
-    // animation.draw(ctx, 12.5, 12.5, 50, 50)
   }
 }
 
@@ -239,45 +221,60 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _SpriteSheet = __webpack_require__(2);
+
+var _SpriteSheet2 = _interopRequireDefault(_SpriteSheet);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * Audio asset manager.
- * TODO: Merge with AssetManager to eliminate duplicate code.
+ * Asset manager.
  *
  * @author Daniel Peters
- * @version 1.1
+ * @version 2.0
  */
-var AudioManager = function () {
-  function AudioManager() {
-    _classCallCheck(this, AudioManager);
+var AssetManager = function () {
+  function AssetManager() {
+    _classCallCheck(this, AssetManager);
 
+    this.cache = {
+      audio: [],
+      sprite: [],
+      spriteSheet: []
+    };
     this.bufferCache = [];
-    this.downloadQueue = [];
+    this.queue = [];
     this.succesCount = 0;
     this.errorCount = 0;
-
-    try {
-      // Fix for browsers using prefixes
-      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-      this.context = new AudioContext();
-    } catch (e) {
-      alert('Web Audio API is not supported in this browser');
-    }
+    this.initAudioContext();
   }
 
-  /**
-   * Queue an audio file for download.
-   *
-   * @param {string} name name of the audio file
-   * @param {string} path location of the audio file
-   */
+  _createClass(AssetManager, [{
+    key: 'initAudioContext',
+    value: function initAudioContext() {
+      try {
+        // Fix for browsers using prefixes
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.context = new AudioContext();
+      } catch (e) {
+        alert('Web Audio API is not supported in this browser');
+      }
+    }
 
+    /**
+     * Queue an audio file for download.
+     *
+     * @param {string} name name of the audio file
+     * @param {string} path location of the audio file
+     * @param {string} type of file
+     */
 
-  _createClass(AudioManager, [{
+  }, {
     key: 'queueDownload',
-    value: function queueDownload(name, path) {
-      this.downloadQueue.push({ name: name, path: path });
+    value: function queueDownload(name, path, type) {
+      this.queue.push({ name: name, path: path, type: type });
     }
 
     /**
@@ -289,39 +286,45 @@ var AudioManager = function () {
   }, {
     key: 'loadAll',
     value: function loadAll(callback) {
-      if (this.downloadQueue.length === 0) {
+      var _this = this;
+
+      if (this.queue.length === 0) {
         callback();
       }
-      var managerInstance = this;
-      this.downloadQueue.forEach(function (item) {
-        managerInstance.load(item.name, item.path, callback);
+      this.queue.forEach(function (item) {
+        if (item.type === 'audio') {
+          _this.loadAudio(item, callback);
+        } else if (item.type === 'texture') {
+          _this.loadSprite(item, callback);
+        } else if (item.type === 'spriteSheet') {
+          _this.loadSpriteSheet(item, callback);
+        }
       });
     }
 
     /**
-     * Build an AJAX Request to load audio file into the buffer cache.
+     * Build an AJAX Request to loadAudio audio file into the buffer cache.
      *
-     * @param name file name
-     * @param path location of the file
+     * @param {{}} item object with name of file and path to file
      * @param callback function to execute on done
      */
 
   }, {
-    key: 'load',
-    value: function load(name, path, callback) {
-      var instance = this;
+    key: 'loadAudio',
+    value: function loadAudio(item, callback) {
+      var _this2 = this;
+
       var request = new XMLHttpRequest();
 
-      request.open('GET', path, true);
+      request.open('GET', item.path, true);
       request.responseType = 'arraybuffer';
 
       // Decode asynchronously
       request.onload = function () {
-        instance.context.decodeAudioData(request.response, function (buffer) {
-          instance.bufferCache[name] = buffer;
-          instance.succesCount += 1;
-
-          if (instance.done()) {
+        _this2.context.decodeAudioData(request.response, function (buffer) {
+          _this2.cache.audio[item.name] = buffer;
+          _this2.succesCount += 1;
+          if (_this2.done()) {
             callback();
           }
         });
@@ -329,13 +332,84 @@ var AudioManager = function () {
 
       // Register error
       request.onerror = function () {
-        instance.errorCount += 1;
-
-        if (instance.done()) {
+        _this2.errorCount += 1;
+        if (_this2.done()) {
           callback();
         }
       };
       request.send();
+    }
+
+    /**
+     * Load simple sprites as image.
+     *
+     * @param item sprite info
+     * @param callback called upon downloading all
+     */
+
+  }, {
+    key: 'loadSprite',
+    value: function loadSprite(item, callback) {
+      var _this3 = this;
+
+      var img = new Image();
+      img.addEventListener('load', function () {
+        _this3.succesCount += 1;
+
+        if (_this3.done()) {
+          callback();
+        }
+      }, false);
+      img.addEventListener('error', function () {
+        _this3.errorCount += 1;
+
+        if (_this3.done()) {
+          callback();
+        }
+      }, false);
+      img.src = item.path;
+      this.cache.sprite[item.name] = img;
+    }
+
+    /**
+     * Load sprites sheet.
+     *
+     * @param item sprite sheet info
+     * @param callback called upon downloading all
+     */
+
+  }, {
+    key: 'loadSpriteSheet',
+    value: function loadSpriteSheet(item, callback) {
+      this.cache.spriteSheet[item.name] = new _SpriteSheet2.default(item.path, 32, 64);
+      this.succesCount += 1;
+      if (this.done()) {
+        callback();
+      }
+    }
+
+    /**
+     * Get sprite by name.
+     *
+     * @param {string} name sprite name
+     */
+
+  }, {
+    key: 'getSprite',
+    value: function getSprite(name) {
+      return this.cache.sprite[name];
+    }
+
+    /**
+     * Get sprite sheet by name.
+     *
+     * @param {string} name sprite sheet name
+     */
+
+  }, {
+    key: 'getSpriteSheet',
+    value: function getSpriteSheet(name) {
+      return this.cache.spriteSheet[name];
     }
 
     /**
@@ -353,7 +427,7 @@ var AudioManager = function () {
 
       var sound = this.context.createBufferSource();
 
-      sound.buffer = this.bufferCache[name];
+      sound.buffer = this.cache.audio[name];
       sound.connect(this.context.destination);
       if (loop) {
         sound.loop = loop;
@@ -370,14 +444,14 @@ var AudioManager = function () {
   }, {
     key: 'done',
     value: function done() {
-      return this.downloadQueue.length === this.succesCount + this.errorCount;
+      return this.queue.length === this.succesCount + this.errorCount;
     }
   }]);
 
-  return AudioManager;
+  return AssetManager;
 }();
 
-exports.default = AudioManager;
+exports.default = AssetManager;
 
 /***/ }),
 /* 2 */
@@ -390,107 +464,35 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * Texture asset manager.
- * TODO: Merge with AudioManager to eliminate duplicate code.
- *
- * @author Daniel Peters
- * @version 1.1
+ * Sprite sheet definition.
  */
-var AssetManager = function () {
-  function AssetManager() {
-    _classCallCheck(this, AssetManager);
+var SpriteSheet =
+/**
+ * Constructor. Sets frame dimensions and calculates number of frames.
+ * @param sourcePath
+ * @param frameWidth
+ * @param frameHeight
+ */
+function SpriteSheet(sourcePath, frameWidth, frameHeight) {
+  var _this = this;
 
-    this.downloadQueue = [];
-    this.cache = {};
-    this.succesCount = 0;
-    this.errorCount = 0;
-  }
+  _classCallCheck(this, SpriteSheet);
 
-  /**
-   * Queue an image to download.
-   *
-   * @param {string} name name of file
-   * @param {string} path location of file
-   */
+  this.image = new Image();
+  this.frameWidth = frameWidth;
+  this.frameHeight = frameHeight;
 
+  this.image.addEventListener('load', function () {
+    _this.framesPerRow = Math.floor(_this.image.width / _this.frameWidth);
+  });
 
-  _createClass(AssetManager, [{
-    key: 'queueDownload',
-    value: function queueDownload(name, path) {
-      this.downloadQueue.push({ name: name, path: path });
-    }
+  this.image.src = sourcePath;
+};
 
-    /**
-     * Download all queued items and execute the callback function ond finish.
-     *
-     * @param callback function go be executed on download end
-     */
-
-  }, {
-    key: 'loadAll',
-    value: function loadAll(callback) {
-      var _this = this;
-
-      if (this.downloadQueue.length === 0) {
-        callback();
-      }
-
-      var managerInstance = this;
-      this.downloadQueue.forEach(function (item) {
-        var img = new Image();
-        img.addEventListener('load', function () {
-          managerInstance.succesCount += 1;
-
-          if (managerInstance.done()) {
-            callback();
-          }
-        }, false);
-        img.addEventListener('error', function () {
-          managerInstance.errorCount += 1;
-
-          if (managerInstance.done()) {
-            callback();
-          }
-        }, false);
-        img.src = item.path;
-        _this.cache[item.name] = img;
-      });
-    }
-
-    /**
-     * Get asset by name.
-     *
-     * @param {string} name asset name
-     */
-
-  }, {
-    key: 'getAsset',
-    value: function getAsset(name) {
-      return this.cache[name];
-    }
-
-    /**
-     * Check if downloading is done.
-     *
-     * @returns {boolean} true when downloading done
-     */
-
-  }, {
-    key: 'done',
-    value: function done() {
-      return this.downloadQueue.length === this.succesCount + this.errorCount;
-    }
-  }]);
-
-  return AssetManager;
-}();
-
-exports.default = AssetManager;
+exports.default = SpriteSheet;
 
 /***/ }),
 /* 3 */
@@ -513,16 +515,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @author Daniel Peters
  * @version 2.0
  */
-var KeyboardEventHandler = function () {
-  function KeyboardEventHandler() {
-    _classCallCheck(this, KeyboardEventHandler);
+var InputManager = function () {
+  function InputManager() {
+    _classCallCheck(this, InputManager);
 
     this.initializeKeyHandler();
     this.initializeTouchHandler();
 
     // All keystrokes and touch swipes are registered here
     // This object is then sent to the server to process player movement
-    this.keyActionsRegister = {};
+    this.registeredInputs = {};
   }
 
   /**
@@ -532,16 +534,16 @@ var KeyboardEventHandler = function () {
    */
 
 
-  _createClass(KeyboardEventHandler, [{
+  _createClass(InputManager, [{
     key: 'initializeKeyHandler',
     value: function initializeKeyHandler() {
       var _this = this;
 
       window.addEventListener('keydown', function (event) {
-        _this.keyActionsRegister[event.key] = true;
+        _this.registeredInputs[event.key] = true;
       }, false);
       window.addEventListener('keyup', function (event) {
-        _this.keyActionsRegister[event.key] = false;
+        _this.registeredInputs[event.key] = false;
       }, false);
     }
 
@@ -586,14 +588,14 @@ var KeyboardEventHandler = function () {
 
         // Positive values equals left. Negative values equals right
         if (xDiff > 0) {
-          handlerInstance.keyActionsRegister['a'] = true;
+          handlerInstance.registeredInputs['a'] = true;
         } else {
-          handlerInstance.keyActionsRegister['d'] = true;
+          handlerInstance.registeredInputs['d'] = true;
         }
 
         // Positive = up. Negative = down
         if (yDiff > 0) {
-          handlerInstance.keyActionsRegister['w'] = true;
+          handlerInstance.registeredInputs['w'] = true;
         } else {}
         /* down swipe */
 
@@ -605,73 +607,20 @@ var KeyboardEventHandler = function () {
       function handleTouchEnd(evt) {
         // Prevent divide scrolling
         evt.preventDefault();
-        Object.keys(handlerInstance.keyActionsRegister).forEach(function (key) {
-          handlerInstance.keyActionsRegister[key] = false;
+        Object.keys(handlerInstance.registeredInputs).forEach(function (key) {
+          handlerInstance.registeredInputs[key] = false;
         });
       }
     }
-
-    /**
-     * Get registered keyboard input and touch swipes
-     * @returns {*}
-     */
-
-  }, {
-    key: 'getKeyActionsRegister',
-    value: function getKeyActionsRegister() {
-      return this.keyActionsRegister;
-    }
   }]);
 
-  return KeyboardEventHandler;
+  return InputManager;
 }();
 
-exports.default = KeyboardEventHandler;
+exports.default = InputManager;
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * Sprite sheet definition.
- * TODO: Finish implementation
- */
-var SpriteSheet =
-/**
- * Constructor. Sets frame dimensions and calculates number of frames.
- * @param sourcePath
- * @param frameWidth
- * @param frameHeight
- */
-function SpriteSheet(sourcePath, frameWidth, frameHeight) {
-  var _this = this;
-
-  _classCallCheck(this, SpriteSheet);
-
-  this.image = new Image();
-  this.frameWidth = frameWidth;
-  this.frameHeight = frameHeight;
-
-  this.image.addEventListener('load', function () {
-    _this.framesPerRow = Math.floor(_this.image.width / _this.frameWidth);
-  });
-
-  this.image.src = sourcePath;
-};
-
-exports.default = SpriteSheet;
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -686,8 +635,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * Implements sprite animation using spritesheet.
- * TODO: Finish code
+ * Implements sprite animation using sprite sheet.
  *
  * @author Daniel Peters
  * @version 0.3
@@ -696,12 +644,15 @@ var Animation = function () {
   /**
    * Constructor Sets all animation data.
    *
-   * @param spriteSheet corresponding sprite sheet
-   * @param speed animation speed
-   * @param start animation start frame
-   * @param end animation end frame
+   * @param {SpriteSheet} spriteSheet corresponding sprite sheet
+   * @param {number} speed animation speed
+   * @param {number} start animation start frame
+   * @param {number} end animation end frame
+   * @param {number} offsetBottom drawing offset at the bottom of source image
    */
   function Animation(spriteSheet, speed, start, end) {
+    var offsetBottom = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+
     _classCallCheck(this, Animation);
 
     this.spriteSheet = spriteSheet;
@@ -709,6 +660,7 @@ var Animation = function () {
     this.sequence = [];
     this.currentFrame = 0;
     this.counter = 0;
+    this.offsetBottom = offsetBottom;
 
     for (var frame = start; frame <= end; frame++) {
       this.sequence.push(frame);
@@ -743,7 +695,7 @@ var Animation = function () {
     value: function draw(ctx, x, y, width, height) {
       var row = Math.floor(this.sequence[this.currentFrame] / this.spriteSheet.framesPerRow);
       var col = Math.floor(this.sequence[this.currentFrame] % this.spriteSheet.framesPerRow);
-      ctx.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, this.spriteSheet.frameWidth, this.spriteSheet.frameHeight, x, y, width, height);
+      ctx.drawImage(this.spriteSheet.image, col * this.spriteSheet.frameWidth, row * this.spriteSheet.frameHeight, this.spriteSheet.frameWidth, this.spriteSheet.frameHeight - this.offsetBottom, x, y, width, height);
     }
   }]);
 

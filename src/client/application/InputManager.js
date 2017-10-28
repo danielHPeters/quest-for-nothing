@@ -4,14 +4,14 @@
  * @author Daniel Peters
  * @version 2.0
  */
-export default class KeyboardEventHandler {
+export default class InputManager {
   constructor () {
     this.initializeKeyHandler()
     this.initializeTouchHandler()
 
     // All keystrokes and touch swipes are registered here
     // This object is then sent to the server to process player movement
-    this.keyActionsRegister = {}
+    this.registeredInputs = {}
   }
 
   /**
@@ -20,8 +20,8 @@ export default class KeyboardEventHandler {
    * This allows the separation of keystrokes from actual movement.
    */
   initializeKeyHandler () {
-    window.addEventListener('keydown', event => { this.keyActionsRegister[event.key] = true }, false)
-    window.addEventListener('keyup', event => { this.keyActionsRegister[event.key] = false }, false)
+    window.addEventListener('keydown', event => { this.registeredInputs[event.key] = true }, false)
+    window.addEventListener('keyup', event => { this.registeredInputs[event.key] = false }, false)
   }
 
   /**
@@ -62,14 +62,14 @@ export default class KeyboardEventHandler {
 
       // Positive values equals left. Negative values equals right
       if (xDiff > 0) {
-        handlerInstance.keyActionsRegister['a'] = true
+        handlerInstance.registeredInputs['a'] = true
       } else {
-        handlerInstance.keyActionsRegister['d'] = true
+        handlerInstance.registeredInputs['d'] = true
       }
 
       // Positive = up. Negative = down
       if (yDiff > 0) {
-        handlerInstance.keyActionsRegister['w'] = true
+        handlerInstance.registeredInputs['w'] = true
       } else {
         /* down swipe */
       }
@@ -81,15 +81,7 @@ export default class KeyboardEventHandler {
     function handleTouchEnd (evt) {
       // Prevent divide scrolling
       evt.preventDefault()
-      Object.keys(handlerInstance.keyActionsRegister).forEach(key => { handlerInstance.keyActionsRegister[key] = false })
+      Object.keys(handlerInstance.registeredInputs).forEach(key => { handlerInstance.registeredInputs[key] = false })
     }
-  }
-
-  /**
-   * Get registered keyboard input and touch swipes
-   * @returns {*}
-   */
-  getKeyActionsRegister () {
-    return this.keyActionsRegister
   }
 }

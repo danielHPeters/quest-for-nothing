@@ -1,6 +1,5 @@
 /**
- * Implements sprite animation using spritesheet.
- * TODO: Finish code
+ * Implements sprite animation using sprite sheet.
  *
  * @author Daniel Peters
  * @version 0.3
@@ -9,17 +8,19 @@ export default class Animation {
   /**
    * Constructor Sets all animation data.
    *
-   * @param spriteSheet corresponding sprite sheet
-   * @param speed animation speed
-   * @param start animation start frame
-   * @param end animation end frame
+   * @param {SpriteSheet} spriteSheet corresponding sprite sheet
+   * @param {number} speed animation speed
+   * @param {number} start animation start frame
+   * @param {number} end animation end frame
+   * @param {number} offsetBottom drawing offset at the bottom of source image
    */
-  constructor (spriteSheet, speed, start, end) {
+  constructor (spriteSheet, speed, start, end, offsetBottom = 0) {
     this.spriteSheet = spriteSheet
     this.speed = speed
     this.sequence = []
     this.currentFrame = 0
     this.counter = 0
+    this.offsetBottom = offsetBottom
 
     for (let frame = start; frame <= end; frame++) {
       this.sequence.push(frame)
@@ -52,7 +53,7 @@ export default class Animation {
       col * this.spriteSheet.frameWidth,
       row * this.spriteSheet.frameHeight,
       this.spriteSheet.frameWidth,
-      this.spriteSheet.frameHeight,
+      this.spriteSheet.frameHeight - this.offsetBottom,
       x,
       y,
       width,

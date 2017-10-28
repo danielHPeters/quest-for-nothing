@@ -1,6 +1,5 @@
 /**
  * Sprite sheet definition.
- * TODO: Finish implementation
  */
 export default class SpriteSheet {
   /**

@@ -1,13 +1,15 @@
-let Block = require('./../model/Block')
-let SpawnPoint = require('./../model/SpawnPoint')
-let Material = require('./../model/Material')
+/**
+ *
+ * @type {module.GameObjectFactory}
+ */
+let GameObjectFactory = require('./GameObjectFactory')
 
 /**
  * Generate blocks and other game objects from json level files
  *
- * @type {module.BlockFactory}
+ * @type {module.BlockGenerator}
  */
-module.exports = class BlockFactory {
+module.exports = class BlockGenerator {
   /**
    * Static factory method to generate game objects and spawn points for players.
    *
@@ -26,7 +28,7 @@ module.exports = class BlockFactory {
       for (let j = 0; j < blocksList[i].length; j++) {
         if (blocksList[i][j] !== null) {
           if (blocksList[i][j].type === 'stone') {
-            let block = new Block(objX, objY, objWidth, objHeight, new Material('stone-block'))
+            let block = GameObjectFactory.getBlock(objX, objY, objWidth, objHeight, 'stone-block')
 
             if (!blocksList[i][j].solid) {
               block.setSolid(false)
@@ -34,7 +36,7 @@ module.exports = class BlockFactory {
             blocks.push(block)
             // Currently only one spawn point is allowed. May change later
           } else if (blocksList[i][j].type === 'spawn') {
-            game.spawnPoint = new SpawnPoint(objX, objY, objWidth, objHeight, area)
+            game.spawnPoint = GameObjectFactory.getSpawnPoint(objX, objY, objWidth, objHeight, area)
           }
         }
         objX += objWidth
