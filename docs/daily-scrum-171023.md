@@ -20,7 +20,7 @@ Jeder war im klaren über seine Aufgaben.
 Manche Teammitglieder brauchen etwas mehr motivation bei der Arbeit.  
 Das Team einigte sich darauf, denjenigen Teammitgliedern ein reminder Personlich oder auch schrftlich zu übergeben die dies wünschen.
 
-## Sprint 3
+## Sprint 3 Planning
 Das Team einigte sich mit dem Product owner darauf, einen prototyp von einem Level Editor zu implementieren (Herr Peters hat sich ). 
 Items zum Aufnehmen sollen implementiert werden.
 Savegames werden weiterhin implementiert (Herr Stalder ist aktiv daran am entwickeln).
