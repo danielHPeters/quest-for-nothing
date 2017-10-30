@@ -74,14 +74,25 @@ function update () {
   window.requestAnimationFrame(() => update())
 }
 
+/**
+ * Draw all objects.
+ * @param players player objects with objects within their viewport
+ */
 function draw (players) {
   if (playerId && players[playerId] && spritesLoaded) {
+    let currentPlayer = players[playerId]
+    if (inputManager.registeredInputs['w'] || inputManager.registeredInputs[' ']) {
+      // Check if players is not already jumping
+      if (!currentPlayer.jumping && currentPlayer.grounded) {
+        assetManager.playSound('jump')
+      }
+    }
     currentAnimation.update()
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     Object.keys(players).forEach(key => {
       const player = players[key]
       // Make sure to only draw players in the same area
-      if (player.viewport.areaId === players[playerId].viewport.areaId) {
+      if (player.viewport.areaId === currentPlayer.viewport.areaId) {
         if (player.registeredInputs['a']) {
           currentAnimation = animationLeft
         }
