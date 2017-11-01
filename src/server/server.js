@@ -6,19 +6,29 @@ const path = require('path')
 const http = require('http')
 const bodyParser = require('body-parser')
 const favicon = require('serve-favicon')
+const cookieParser = require('cookie-parser')
+const sassMiddleware = require('node-sass-middleware')
 const logger = require('./utils/logger') // use customized winston logger
 const server = http.Server(app)
 const routes = require('./routes/index') // get routes
 const io = require('socket.io')(server) // integrate socket.io
 require('./../game/gameLoop')(io) // pass socket io to the game loop to allow sending and receiving game status events
-
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(favicon(path.join(__dirname, '../../public/favicon/favicon.ico')))
-app.use(express.static(path.join(__dirname, '../../public')))
 app.set('views', path.join(__dirname, '../views'))
 app.set('view engine', 'pug')
 app.use(require('morgan')('dev', {'stream': logger.stream})) // pass custom logger to default express logger
+
+app.use(bodyParser.json())
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(favicon(path.join(__dirname, '../../public/favicon/favicon.ico')))
+app.use(sassMiddleware({
+  src: path.join(__dirname, '../../public'),
+  dest: path.join(__dirname, '../../public'),
+  indentedSyntax: true, // true = .sass and false = .scss
+  sourceMap: true,
+  outputStyle: 'compressed'
+}))
+app.use(express.static(path.join(__dirname, '../../public')))
 
 app.use('/', routes)
 
