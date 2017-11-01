@@ -1,7 +1,22 @@
 extends templates/layout
 
+block stylesheets
+  link(rel='stylesheet' href='css/editor.css')
+
 block content
-  main.containter
-    #editor
+  main.containter-fluid
+    .area-grid
+      -var row = 0
+        while row < 8
+          .row-container
+            - var col = 0
+            while col < 14
+              .box(id= row + '-' + col)
+              - col++
+          - row++
+    .game-objects
+      img.game-object(id='stoneBlock', src='assets/textures/stone-block.jpg', draggable='true')
+      img.game-object(id='player' src='assets/textures/player.png', draggable='true')
+
 block scripts
-  script(src='js/editor.min.js' async)
+  script(src='js/editor/drag-and-copy.js' async)

@@ -26,5 +26,8 @@
   },
   "resolutions": {
     "bootstrap": "^3.3.7"
+  },
+  "dependencies": {
+    "normalize-css": "normalize.css#^7.0.0"
   }
 }
