@@ -78,7 +78,7 @@ gulp.task('lint', () => {
  * Run npm test task which runs mocha with nyc coverage reporter.
  */
 gulp.task('test', (cb) => {
-  const npm = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['test'], {stdio: 'inherit'})
+  const npm = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['test'], {shell: true, stdio: 'inherit'})
   npm.on('close', code => {
     console.log('test exited with code ' + code)
     cb(code)
@@ -89,8 +89,11 @@ gulp.task('test', (cb) => {
  * Send coverage information to coveralls.io.
  */
 gulp.task('coveralls', (cb) => {
-  const npm = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['run', 'coveralls'], {stdio: 'inherit'})
-  npm.on('close', function (code) {
+  const npm = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['run', 'coveralls'], {
+    shell: true,
+    stdio: 'inherit'
+  })
+  npm.on('close', code => {
     console.log('coveralls exited with code ' + code)
     cb(code)
   })
