@@ -1,15 +1,25 @@
 .box
   float: left
   width: 7.14%
-  height: 60px
+  height: 70px
   border: 1px solid black
-.area-grid
+  overflow: hidden
+.box:hover
+    cursor: pointer
+#area-grid
   width: 90%
   float: left
 .game-objects
   padding: 1%
   width: 10%
   float: left
+  img
+    opacity: 0.3
+    display: block
+  img:hover
+    opacity: 1
+  img.selected
+    opacity: 1
 .game-object
   width: 100%
   height: auto
