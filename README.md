@@ -22,3 +22,7 @@ This project uses gulp for build automation (transpiling and minifying JavaScrip
 - 'gulp lint' for checking code style.   
   We use eslint in combination with the standard.js coding standard and some project specific settings deined in '.eslintrc'.
 - Sourcemaps are automatically generated on build. This allows debugging of minified scripts in browser dev consoles
+## Roadmap
+See [ROADMAP.md](ROADMAP.md)
+## Contributing to this Project
+See [CONTRIBUTING.md](CONTRIBUTING.md)
