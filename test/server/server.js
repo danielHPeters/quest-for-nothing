@@ -5,10 +5,9 @@ chai.expect()
 
 describe('server', () => {
   let server
-  beforeEach(done => {
+  beforeEach(() => {
     delete require.cache[require.resolve('../../src/server/server')]
     server = require('../../src/server/server')
-    done()
   })
   afterEach(done => {
     server.close(done)
