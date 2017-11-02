@@ -5,7 +5,7 @@ const LevelLoader = require('./../../editor/backend/LevelLoader')
 
 // Register all routes here. Each requires a pug view with same name in lowercase.
 // '/' will redirect to the first one in the list
-const pages = ['Home', 'Game', 'Controls', 'About', 'Levels', 'Editor']
+const pages = ['Home', 'Game', 'Controls', 'About', 'Editor', 'Levels']
 
 router.get('/', (req, res, next) => {
   res.redirect('/' + pages[0].toLowerCase())

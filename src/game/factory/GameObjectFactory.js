@@ -59,13 +59,18 @@ module.exports = class GameObjectFactory {
 
   /**
    * Get an Item instance.
+   *
+   * @param {number} x - x position
+   * @param {number} y - y position
+   * @param {number} w - player width
+   * @param {number} h - player height
    * @param {string} name item name
    * @param {string} description item description
    * @param {function} action us action
    * @returns {module.Item} new Item
    */
-  static getItem (name, description, action) {
-    return new Item(name, description, action)
+  static getItem (x, y, h, w, name, description, action) {
+    return new Item(x, y, w, h, new Material(name), name, description, action)
   }
 
   /**

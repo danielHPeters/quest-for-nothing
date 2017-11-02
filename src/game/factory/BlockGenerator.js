@@ -37,6 +37,11 @@ module.exports = class BlockGenerator {
             // Currently only one spawn point is allowed. May change later
           } else if (blocksList[i][j].type === 'spawn') {
             game.spawnPoint = GameObjectFactory.getSpawnPoint(objX, objY, objWidth, objHeight, area)
+          } else if (blocksList[i][j].type === 'coin') {
+            let coin = GameObjectFactory.getItem(objX, objY, objWidth, objHeight, 'coin', 'A coin', function () {
+              console.log('You got monies!')
+            })
+            blocks.push(coin)
           }
         }
         objX += objWidth

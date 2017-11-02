@@ -5,6 +5,10 @@ block stylesheets
 
 block content
   main.containter-fluid
+    .game-objects
+      img.game-object(id='stone', src='assets/textures/stone-block.jpg', draggable='true')
+      img.game-object(id='spawn' src='assets/textures/player.png', draggable='true')
+      img.game-object(id='coin' src='assets/textures/coin.png', draggable='true')
     #area-grid
       -var row = 0
         while row < 8
@@ -14,11 +18,9 @@ block content
               .box(id= row + '-' + col)
               - col++
           - row++
-    .game-objects
-      img.game-object(id='stone', src='assets/textures/stone-block.jpg', draggable='true')
-      img.game-object(id='spawn' src='assets/textures/player.png', draggable='true')
+    .fix
     .controls
-      button#submitButton Save
+      button#submitButton.btn.btn-primary Save
       p#messages
 
 block scripts

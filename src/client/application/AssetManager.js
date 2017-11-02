@@ -36,9 +36,10 @@ export default class AssetManager {
    * @param {string} name name of the audio file
    * @param {string} path location of the audio file
    * @param {string} type of file
+   * @param {{}} opts additional options
    */
-  queueDownload (name, path, type) {
-    this.queue.push({name: name, path: path, type: type})
+  queueDownload (name, path, type, opts = {}) {
+    this.queue.push({name: name, path: path, type: type, opts: opts})
   }
 
   /**
@@ -129,7 +130,7 @@ export default class AssetManager {
    * @param callback called upon downloading all
    */
   loadSpriteSheet (item, callback) {
-    this.cache.spriteSheet[item.name] = new SpriteSheet(item.path, 32, 64)
+    this.cache.spriteSheet[item.name] = new SpriteSheet(item.path, item.opts.frameWidth || 0, item.opts.frameHeight || 0)
     this.succesCount += 1
     if (this.done()) {
       callback()

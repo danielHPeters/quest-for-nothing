@@ -8,19 +8,19 @@
  *
  * @type {module.Game}
  */
-let Game = require('./model/Game')
+const Game = require('./model/Game')
 
 /**
  *
  * @type {module.Settings}
  */
-let Settings = require('./model/Settings')
+const Settings = require('./model/Settings')
 
 /**
  *
  * @type {module.LevelLoader}
  */
-let LevelLoader = require('./factory/LevelLoader')
+const LevelLoader = require('./factory/LevelLoader')
 
 let gameSettings = new Settings()
 let game = new Game(gameSettings)

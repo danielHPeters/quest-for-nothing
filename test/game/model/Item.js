@@ -1,4 +1,5 @@
 'use strict'
+const Material = require('./../../../src/game/model/Material')
 const chai = require('chai')
 const Item = require('./../../../src/game/model/Item')
 const should = chai.should()
@@ -6,7 +7,7 @@ const should = chai.should()
 describe('Item', () => {
   let item
   beforeEach(() => {
-    item = new Item('bottle', 'a regular bottle', function () {
+    item = new Item(10, 10, 20, 20, new Material('bottle'), 'bottle', 'a regular bottle', function () {
       console.log('I am an Item')
     })
   })

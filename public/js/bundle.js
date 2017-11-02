@@ -95,6 +95,7 @@ var animationRight = void 0;
 var animationLeft = void 0;
 var animationIdle = void 0;
 var currentAnimation = void 0;
+var coinAnimation = void 0;
 
 /**
  * Shim for animation loop.
@@ -121,11 +122,18 @@ function init() {
     assetManager.queueDownload('player', 'assets/textures/player.png', 'texture');
     assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg', 'texture');
     assetManager.queueDownload('heart', 'assets/textures/heart.png', 'texture');
-    assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet');
+    assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet', {
+      frameWidth: 32,
+      frameHeight: 64
+    });
+    assetManager.queueDownload('coinSheet', 'assets/textures/coin-sprite-animation-sprite-sheet.png', 'spriteSheet', {
+      frameWidth: 44, frameHeight: 44
+    });
     assetManager.loadAll(function () {
       animationRight = new _Animation2.default(assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12);
       animationLeft = new _Animation2.default(assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12);
       animationIdle = new _Animation2.default(assetManager.getSpriteSheet('playerSheet'), 10, 0, 2, 12);
+      coinAnimation = new _Animation2.default(assetManager.getSpriteSheet('coinSheet'), 3, 0, 9);
       currentAnimation = animationLeft;
       // Play ambient sound
       assetManager.playSound('ambient', true);
@@ -165,6 +173,7 @@ function draw(players) {
       }
     }
     currentAnimation.update();
+    coinAnimation.update();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     Object.keys(players).forEach(function (key) {
       var player = players[key];
@@ -184,7 +193,11 @@ function draw(players) {
     });
     // Draw all blocks
     players[playerId].viewport.blocks.forEach(function (block) {
-      ctx.drawImage(assetManager.getSprite(block.material.name), block.position._x, block.position._y, block.width, block.height);
+      if (block.material.name === 'stone-block') {
+        ctx.drawImage(assetManager.getSprite(block.material.name), block.position._x, block.position._y, block.width, block.height);
+      } else if (block.material.name === 'coin') {
+        coinAnimation.draw(ctx, block.position._x, block.position._y, block.width, block.height);
+      }
     });
     // Display health
     var x = canvas.width - 35;
@@ -280,12 +293,15 @@ var AssetManager = function () {
      * @param {string} name name of the audio file
      * @param {string} path location of the audio file
      * @param {string} type of file
+     * @param {{}} opts additional options
      */
 
   }, {
     key: 'queueDownload',
     value: function queueDownload(name, path, type) {
-      this.queue.push({ name: name, path: path, type: type });
+      var opts = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+      this.queue.push({ name: name, path: path, type: type, opts: opts });
     }
 
     /**
@@ -392,7 +408,7 @@ var AssetManager = function () {
   }, {
     key: 'loadSpriteSheet',
     value: function loadSpriteSheet(item, callback) {
-      this.cache.spriteSheet[item.name] = new _SpriteSheet2.default(item.path, 32, 64);
+      this.cache.spriteSheet[item.name] = new _SpriteSheet2.default(item.path, item.opts.frameWidth || 0, item.opts.frameHeight || 0);
       this.succesCount += 1;
       if (this.done()) {
         callback();

@@ -1,3 +1,4 @@
+const Entity = require('./Entity')
 /**
  * This class defines an item. Each item has a name, description and action.
  *
@@ -5,8 +6,9 @@
  * @version 1.0
  * @type {module.Item}
  */
-module.exports = class Item {
-  constructor (name, description, action) {
+module.exports = class Item extends Entity {
+  constructor (x, y, width, height, material, name, description, action) {
+    super(x, y, width, height, material)
     this.name = name
     this.description = description
     this.action = action

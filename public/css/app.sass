@@ -1,7 +1,9 @@
 @charset "UTF-8"
-
+$shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)
 body
   font-family: 'Roboto', sans-serif
+nav
+  box-shadow: $shadow
 .game-container
   position: relative
   margin: 60px auto
@@ -10,7 +12,7 @@ canvas
   top: 0
   left: 0
   background: transparent
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)
+  box-shadow: $shadow
 
 #background
   z-index: -2

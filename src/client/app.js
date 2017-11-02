@@ -15,6 +15,7 @@ let animationRight
 let animationLeft
 let animationIdle
 let currentAnimation
+let coinAnimation
 
 /**
  * Shim for animation loop.
@@ -46,11 +47,18 @@ function init () {
     assetManager.queueDownload('player', 'assets/textures/player.png', 'texture')
     assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg', 'texture')
     assetManager.queueDownload('heart', 'assets/textures/heart.png', 'texture')
-    assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet')
+    assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet', {
+      frameWidth: 32,
+      frameHeight: 64
+    })
+    assetManager.queueDownload('coinSheet', 'assets/textures/coin-sprite-animation-sprite-sheet.png', 'spriteSheet', {
+      frameWidth: 44, frameHeight: 44
+    })
     assetManager.loadAll(() => {
       animationRight = new Animation(assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12)
       animationLeft = new Animation(assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12)
       animationIdle = new Animation(assetManager.getSpriteSheet('playerSheet'), 10, 0, 2, 12)
+      coinAnimation = new Animation(assetManager.getSpriteSheet('coinSheet'), 3, 0, 9)
       currentAnimation = animationLeft
       // Play ambient sound
       assetManager.playSound('ambient', true)
@@ -88,6 +96,7 @@ function draw (players) {
       }
     }
     currentAnimation.update()
+    coinAnimation.update()
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     Object.keys(players).forEach(key => {
       const player = players[key]
@@ -107,7 +116,11 @@ function draw (players) {
     })
     // Draw all blocks
     players[playerId].viewport.blocks.forEach(block => {
-      ctx.drawImage(assetManager.getSprite(block.material.name), block.position._x, block.position._y, block.width, block.height)
+      if (block.material.name === 'stone-block') {
+        ctx.drawImage(assetManager.getSprite(block.material.name), block.position._x, block.position._y, block.width, block.height)
+      } else if (block.material.name === 'coin') {
+        coinAnimation.draw(ctx, block.position._x, block.position._y, block.width, block.height)
+      }
     })
     // Display health
     let x = canvas.width - 35

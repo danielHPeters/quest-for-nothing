@@ -79,6 +79,8 @@ function submitLevel (event) {
           data.areas[0].blocks[i].push({type: 'stone', solid: true})
         } else if (node.firstChild.classList.contains('spawn')) {
           data.areas[0].blocks[i].push({type: 'spawn', solid: true})
+        }else if (node.firstChild.classList.contains('coin')) {
+          data.areas[0].blocks[i].push({type: 'coin', solid: false})
         }
       } else {
         data.areas[0].blocks[i].push(null)
@@ -109,8 +111,10 @@ function init () {
   }
   document.getElementById('stone').addEventListener('dragstart', drag, false)
   document.getElementById('spawn').addEventListener('dragstart', drag, false)
+  document.getElementById('coin').addEventListener('dragstart', drag, false)
   document.getElementById('stone').addEventListener('click', toggleSelectItem, false)
   document.getElementById('spawn').addEventListener('click', toggleSelectItem, false)
+  document.getElementById('coin').addEventListener('click', toggleSelectItem, false)
   document.getElementById('submitButton').addEventListener('click', submitLevel, false)
 }
 
