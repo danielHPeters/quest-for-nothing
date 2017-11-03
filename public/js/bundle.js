@@ -122,6 +122,7 @@ function init() {
     assetManager.queueDownload('player', 'assets/textures/player.png', 'texture');
     assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg', 'texture');
     assetManager.queueDownload('heart', 'assets/textures/heart.png', 'texture');
+    assetManager.queueDownload('coin', 'assets/textures/coin.png', 'texture');
     assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet', {
       frameWidth: 32,
       frameHeight: 64
@@ -201,11 +202,14 @@ function draw(players) {
     });
     // Display health
     var x = canvas.width - 35;
-    var y = 5;
     for (var i = 0; i < players[playerId].lives; i++) {
-      ctx.drawImage(assetManager.getSprite('heart'), x, y, 30, 30);
+      ctx.drawImage(assetManager.getSprite('heart'), x, 5, 30, 30);
       x -= 30;
     }
+    ctx.drawImage(assetManager.getSprite('coin'), 5, 5, 30, 30);
+    ctx.font = '30px serif';
+    ctx.fillStyle = 'red';
+    ctx.fillText(players[playerId].coins.toString(), 35, 30);
   }
 }
 

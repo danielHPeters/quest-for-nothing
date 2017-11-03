@@ -3,6 +3,11 @@
  * @type {module.Entity}
  */
 const Entity = require('./Entity')
+/**
+ *
+ * @type {module.Item}
+ */
+const Item = require('./Item')
 
 /**
  * Player class containing player information and objects currently visible to him/her.
@@ -25,6 +30,7 @@ module.exports = class Player extends Entity {
   constructor (x, y, width, height, material, area) {
     super(x, y, width, height, material)
     this.lives = 3
+    this.coins = 0
     this.jumpHeight = 3.6
     this.speed = 12
     this.running = false
@@ -152,6 +158,12 @@ module.exports = class Player extends Entity {
     // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
     // figures out on which side we are colliding (top, bottom, left, or right)
     if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
+      if (object instanceof Item && object.name === 'coin') {
+        console.log('coin')
+        this.coins += 1
+        this.viewport.blocks.splice(this.viewport.blocks.indexOf(object), 1)
+        return ''
+      }
       let oX = hWidths - Math.abs(vX)
       let oY = hHeights - Math.abs(vY)
       if (oX >= oY) {
@@ -173,7 +185,6 @@ module.exports = class Player extends Entity {
         }
       }
     }
-
     return colDir
   }
 

@@ -12,6 +12,7 @@ module.exports = class Item extends Entity {
     this.name = name
     this.description = description
     this.action = action
+    this.solid = true
   }
 
   /**
