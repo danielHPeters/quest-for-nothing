@@ -1,6 +1,7 @@
-# Dayly Scrum 23.10.2017
+# Daily Scrum 23.10.2017
 
-## Sprint Review
+## Sprint 2
+### Review
 - Die meisten items im Sprint Backlog konnten bearbeitet werden.
 - Multiplayer wurde implementiert von Herrn Peters.  
  Hierzu wurde das projekt in server, game und client aufgeteilt.  
@@ -14,13 +15,19 @@
  Der js code wird mit jslint nach code style fehlern geprüft.
 - Continuous integregation wurde mit TravisCi implementiert.
 
-## Sprint Retrospection
+### Retrospection
 Kommunikation hat sich verbessert.
 Jeder war im klaren über seine Aufgaben.
 Manche Teammitglieder brauchen etwas mehr motivation bei der Arbeit.  
 Das Team einigte sich darauf, denjenigen Teammitgliedern ein reminder Personlich oder auch schrftlich zu übergeben die dies wünschen.
 
-## Sprint 3 Planning
-Das Team einigte sich mit dem Product owner darauf, einen prototyp von einem Level Editor zu implementieren (Herr Peters hat sich ). 
-Items zum Aufnehmen sollen implementiert werden.
-Savegames werden weiterhin implementiert (Herr Stalder ist aktiv daran am entwickeln).
+## Sprint 3
+### Planning
+#### Beschlüsse
+- Das Team einigte sich mit dem Product owner darauf, einen prototyp von einem Level Editor zu implementieren (Herr Peters hat sich ). 
+- Items zum Aufnehmen sollen implementiert werden.
+- Savegames werden weiterhin implementiert (Herr Stalder ist aktiv daran am entwickeln).
+- Herr Hill arbeitet an Animationen.
+- Frau Corrodi Implementiert das GUI für den Level Editor
+#### Kano Modell
+![Kano Sprint 3](kano-sprint3.png)
