@@ -12,7 +12,7 @@ Jedoch hätten wir noch viel mehr erreichen können, wenn alle am gleichen Stric
 Offenbar war die Kommunikation nicht zureichend, denn es gab einige Teammitglieder, die nicht genau wussten, was sie tun sollten.
 Ein Burndown Chart zur graphischen Darstellung des Fortschrittes wäre auch hilfreich um die Motivation aufrecht zu erhalten.
 
-##Sprint 2
+## Sprint 2
 ### Planning
 #### Todos
 - Assets Fertigstellen
