@@ -29,13 +29,35 @@ module.exports = class Entity {
     this.width = width
     this.height = height
     this.material = material
+    this.collideAbleWith = []
+    this.colliding = false
+    this.type = ''
   }
 
   /**
    * Get collision bounds in form of a surrounding rectangle
+   *
    * @returns {module.Bounds}
    */
   getCollisionBox () {
     return new Bounds(this.position.x, this.position.y, this.width, this.height)
+  }
+
+  draw () {
+
+  }
+
+  move () {
+
+  }
+
+  /**
+   * Check if this Entity is collideable with another object
+   *
+   * @param {module.Entity} object
+   * returns boolean
+   */
+  isCollideAbleWith (object) {
+    return this.collideAbleWith.includes(object.type)
   }
 }
