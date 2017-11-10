@@ -8,7 +8,7 @@
 ## Version 2.0 - [23.10.2017](https://github.com/danielHPeters/jump-and-run/tree/v2.0)
 - Multiplayer
 - JSON level loader
-## Version 3.0 - Scheduled: 06.11.2017
+## Version 3.0 - [06.11.2017](https://github.com/danielHPeters/jump-and-run/tree/v3.0)
 - Items
 - Level editor prototype
 - Animations
