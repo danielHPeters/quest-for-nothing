@@ -70,153 +70,19 @@
 "use strict";
 
 
-var _AssetManager = __webpack_require__(1);
+var _GameClient = __webpack_require__(1);
 
-var _AssetManager2 = _interopRequireDefault(_AssetManager);
-
-var _InputManager = __webpack_require__(3);
-
-var _InputManager2 = _interopRequireDefault(_InputManager);
-
-var _Animation = __webpack_require__(4);
-
-var _Animation2 = _interopRequireDefault(_Animation);
+var _GameClient2 = _interopRequireDefault(_GameClient);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var socket = io();
-var canvas = document.getElementById('game');
-var inputManager = new _InputManager2.default(canvas);
-var assetManager = new _AssetManager2.default();
-var playerId = void 0; // player id is registered here on socket connection
-var ctx = void 0; // graphics context
-var spritesLoaded = false; // set to true when asset manager finishes to start drawing
-var animationRight = void 0;
-var animationLeft = void 0;
-var animationIdle = void 0;
-var currentAnimation = void 0;
-var coinAnimation = void 0;
-
-/**
- * Shim for animation loop.
- * Selects one that's available or uses fallback with setTimeout.
- */
-window.requestAnimFrame = function () {
-  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) {
-    window.setTimeout(callback, 1000 / 60);
-  };
-}();
-
-/**
- * Download all game assets.
- */
-function init() {
-  // check if canvas is supported by browser
-  if (canvas.getContext) {
-    socket.emit('new player');
-    ctx = canvas.getContext('2d');
-    // Add all sprites and music files to the download queue
-    assetManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3', 'audio');
-    assetManager.queueDownload('jump', 'assets/audio/effects/jump.wav', 'audio');
-    assetManager.queueDownload('background', 'assets/textures/background.png', 'texture');
-    assetManager.queueDownload('player', 'assets/textures/player.png', 'texture');
-    assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg', 'texture');
-    assetManager.queueDownload('heart', 'assets/textures/heart.png', 'texture');
-    assetManager.queueDownload('coin', 'assets/textures/coin.png', 'texture');
-    assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet', {
-      frameWidth: 32,
-      frameHeight: 64
-    });
-    assetManager.queueDownload('coinSheet', 'assets/textures/coin-sprite-animation-sprite-sheet.png', 'spriteSheet', {
-      frameWidth: 44, frameHeight: 44
-    });
-    assetManager.loadAll(function () {
-      animationRight = new _Animation2.default(assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12);
-      animationLeft = new _Animation2.default(assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12);
-      animationIdle = new _Animation2.default(assetManager.getSpriteSheet('playerSheet'), 10, 0, 2, 12);
-      coinAnimation = new _Animation2.default(assetManager.getSpriteSheet('coinSheet'), 3, 0, 9);
-      currentAnimation = animationLeft;
-      // Play ambient sound
-      assetManager.playSound('ambient', true);
-      update();
-      // Draw Background only once to improve performance
-      document.getElementById('background').getContext('2d').drawImage(assetManager.getSprite('background'), 0, 0, canvas.width, canvas.height);
-      // tells socket.on(state) that all sprites needed for drawing are downloaded
-      spritesLoaded = true;
-    });
-  } else {
-    document.getElementById('unsupported').textContent = 'Please update your browser or download another one which supports HTML5';
-  }
-}
-
-/**
- * Sends user input to the server.
- */
-function update() {
-  socket.emit('movement', inputManager.registeredInputs);
-  // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
-  window.requestAnimationFrame(function () {
-    return update();
-  });
-}
-
-/**
- * Draw all objects.
- * @param players player objects with objects within their viewport
- */
-function draw(players) {
-  if (playerId && players[playerId] && spritesLoaded) {
-    var currentPlayer = players[playerId];
-    if (inputManager.registeredInputs['w'] || inputManager.registeredInputs[' ']) {
-      // Check if players is not already jumping
-      if (!currentPlayer.jumping && currentPlayer.grounded) {
-        assetManager.playSound('jump');
-      }
-    }
-    currentAnimation.update();
-    coinAnimation.update();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    Object.keys(players).forEach(function (key) {
-      var player = players[key];
-      // Make sure to only draw players in the same area
-      if (player.viewport.areaId === currentPlayer.viewport.areaId) {
-        if (player.registeredInputs['a']) {
-          currentAnimation = animationLeft;
-        }
-        if (player.registeredInputs['d']) {
-          currentAnimation = animationRight;
-        }
-        if (!player.registeredInputs['d'] && !player.registeredInputs['a']) {
-          currentAnimation = animationIdle;
-        }
-        currentAnimation.draw(ctx, player.position._x, player.position._y, player.width, player.height);
-      }
-    });
-    // Draw all blocks
-    players[playerId].viewport.blocks.forEach(function (block) {
-      if (block.material.name === 'stone-block') {
-        ctx.drawImage(assetManager.getSprite(block.material.name), block.position._x, block.position._y, block.width, block.height);
-      } else if (block.material.name === 'coin') {
-        coinAnimation.draw(ctx, block.position._x, block.position._y, block.width, block.height);
-      }
-    });
-    // Display health
-    var x = canvas.width - 35;
-    for (var i = 0; i < players[playerId].lives; i++) {
-      ctx.drawImage(assetManager.getSprite('heart'), x, 5, 30, 30);
-      x -= 30;
-    }
-    ctx.drawImage(assetManager.getSprite('coin'), 5, 5, 30, 30);
-    ctx.font = '30px serif';
-    ctx.fillStyle = 'red';
-    ctx.fillText(players[playerId].coins.toString(), 35, 30);
-  }
-}
+var client = new _GameClient2.default(socket, document.getElementById('game'));
 
 /**
  * modern browser equivalent of jQuery $(document).ready()
  */
-document.addEventListener('DOMContentLoaded', init());
+document.addEventListener('DOMContentLoaded', client.init());
 
 /**
  * Initialize player id on socket connection
@@ -225,7 +91,7 @@ socket.on('connect', function () {
   // Tell server to add this player
   socket.emit('new player');
   // remember socket id to identify current player when drawing
-  playerId = socket.io.engine.id;
+  client.playerId = socket.io.engine.id;
 });
 
 /**
@@ -233,7 +99,7 @@ socket.on('connect', function () {
  * Contains the drawing loop
  */
 socket.on('state', function (players) {
-  draw(players);
+  client.render(players);
 });
 
 /***/ }),
@@ -249,7 +115,184 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _SpriteSheet = __webpack_require__(2);
+var _AssetManager = __webpack_require__(2);
+
+var _AssetManager2 = _interopRequireDefault(_AssetManager);
+
+var _InputManager = __webpack_require__(4);
+
+var _InputManager2 = _interopRequireDefault(_InputManager);
+
+var _Animation = __webpack_require__(5);
+
+var _Animation2 = _interopRequireDefault(_Animation);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var GameClient = function () {
+  function GameClient(socket, canvas) {
+    _classCallCheck(this, GameClient);
+
+    this.socket = socket;
+    this.canvas = canvas;
+    this.inputManager = new _InputManager2.default(canvas);
+    this.assetManager = new _AssetManager2.default();
+    this.spritesLoaded = false;
+    this.ctx = null;
+    this.playerId = null;
+    this.animations = {};
+    this.registerLoop();
+  }
+
+  /**
+   * Shim for animation loop.
+   * Selects one that's available or uses fallback with setTimeout.
+   */
+
+
+  _createClass(GameClient, [{
+    key: 'registerLoop',
+    value: function registerLoop() {
+      window.requestAnimFrame = function () {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+      }();
+    }
+  }, {
+    key: 'init',
+    value: function init() {
+      var _this = this;
+
+      // check if canvas is supported by browser
+      if (this.canvas.getContext) {
+        this.socket.emit('new player');
+        this.ctx = this.canvas.getContext('2d');
+        // Add all sprites and music files to the download queue
+        this.assetManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3', 'audio');
+        this.assetManager.queueDownload('jump', 'assets/audio/effects/jump.wav', 'audio');
+        this.assetManager.queueDownload('background', 'assets/textures/background.png', 'texture');
+        this.assetManager.queueDownload('player', 'assets/textures/player.png', 'texture');
+        this.assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg', 'texture');
+        this.assetManager.queueDownload('heart', 'assets/textures/heart.png', 'texture');
+        this.assetManager.queueDownload('coin', 'assets/textures/coin.png', 'texture');
+        this.assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet', {
+          frameWidth: 32,
+          frameHeight: 64
+        });
+        this.assetManager.queueDownload('coinSheet', 'assets/textures/coin-sprite-animation-sprite-sheet.png', 'spriteSheet', {
+          frameWidth: 44, frameHeight: 44
+        });
+        this.assetManager.loadAll(function () {
+          _this.animations.right = new _Animation2.default(_this.assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12);
+          _this.animations.left = new _Animation2.default(_this.assetManager.getSpriteSheet('playerSheet'), 3, 3, 6, 12);
+          _this.animations.idle = new _Animation2.default(_this.assetManager.getSpriteSheet('playerSheet'), 10, 0, 2, 12);
+          _this.animations.coin = new _Animation2.default(_this.assetManager.getSpriteSheet('coinSheet'), 3, 0, 9);
+          _this.animations.current = _this.animations.left;
+          // Play ambient sound
+          _this.assetManager.playSound('ambient', true);
+          _this.update();
+          // Draw Background only once to improve performance
+          document.getElementById('background').getContext('2d').drawImage(_this.assetManager.getSprite('background'), 0, 0, _this.canvas.width, _this.canvas.height);
+          // tells socket.on(state) that all sprites needed for drawing are downloaded
+          _this.spritesLoaded = true;
+        });
+      } else {
+        document.getElementById('unsupported').textContent = 'Please update your browser or download another one which supports HTML5';
+      }
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      var _this2 = this;
+
+      this.socket.emit('movement', this.inputManager.registeredInputs);
+      // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
+      window.requestAnimationFrame(function () {
+        return _this2.update();
+      });
+    }
+
+    /**
+     * Draw all objects.
+     * @param players player objects with objects within their viewport
+     */
+
+  }, {
+    key: 'render',
+    value: function render(players) {
+      var _this3 = this;
+
+      if (this.playerId && players[this.playerId] && this.spritesLoaded) {
+        var currentPlayer = players[this.playerId];
+        if (this.inputManager.registeredInputs['w'] || this.inputManager.registeredInputs[' ']) {
+          // Check if players is not already jumping
+          if (!currentPlayer.jumping && currentPlayer.grounded) {
+            this.assetManager.playSound('jump');
+          }
+        }
+        this.animations.current.update();
+        this.animations.coin.update();
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        Object.keys(players).forEach(function (key) {
+          var player = players[key];
+          // Make sure to only draw players in the same area
+          if (player.viewport.areaId === currentPlayer.viewport.areaId) {
+            if (player.registeredInputs['a']) {
+              _this3.animations.current = _this3.animations.left;
+            }
+            if (player.registeredInputs['d']) {
+              _this3.animations.current = _this3.animations.right;
+            }
+            if (!player.registeredInputs['d'] && !player.registeredInputs['a']) {
+              _this3.animations.current = _this3.animations.idle;
+            }
+            _this3.animations.current.draw(_this3.ctx, player.position._x, player.position._y, player.width, player.height);
+          }
+        });
+        // Draw all blocks
+        players[this.playerId].viewport.blocks.forEach(function (block) {
+          if (block.material.name === 'stone-block') {
+            _this3.ctx.drawImage(_this3.assetManager.getSprite(block.material.name), block.position._x, block.position._y, block.width, block.height);
+          } else if (block.material.name === 'coin') {
+            _this3.animations.coin.draw(_this3.ctx, block.position._x, block.position._y, block.width, block.height);
+          }
+        });
+        // Display health
+        var x = this.canvas.width - 35;
+        for (var i = 0; i < players[this.playerId].lives; i++) {
+          this.ctx.drawImage(this.assetManager.getSprite('heart'), x, 5, 30, 30);
+          x -= 30;
+        }
+        this.ctx.drawImage(this.assetManager.getSprite('coin'), 5, 5, 30, 30);
+        this.ctx.font = '30px serif';
+        this.ctx.fillStyle = 'red';
+        this.ctx.fillText(players[this.playerId].coins.toString(), 35, 30);
+      }
+    }
+  }]);
+
+  return GameClient;
+}();
+
+exports.default = GameClient;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _SpriteSheet = __webpack_require__(3);
 
 var _SpriteSheet2 = _interopRequireDefault(_SpriteSheet);
 
@@ -485,7 +528,7 @@ var AssetManager = function () {
 exports.default = AssetManager;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -526,7 +569,7 @@ function SpriteSheet(sourcePath, frameWidth, frameHeight) {
 exports.default = SpriteSheet;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -651,7 +694,7 @@ var InputManager = function () {
 exports.default = InputManager;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

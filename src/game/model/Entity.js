@@ -2,7 +2,7 @@
  *
  * @type {module.Vector2}
  */
-let Vector2 = require('./Vector2')
+let Vector2 = require('./../../lib/Vector2')
 /**
  *
  * @type {module.Bounds}

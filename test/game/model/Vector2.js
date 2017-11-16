@@ -1,6 +1,6 @@
 'use strict'
 const chai = require('chai')
-const Vector2 = require('./../../../src/game/model/Vector2')
+const Vector2 = require('../../../src/lib/Vector2')
 
 chai.should()
 
