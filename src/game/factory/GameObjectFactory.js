@@ -70,15 +70,16 @@ module.exports = class GameObjectFactory {
 
   /**
    * Get a player instance.
+   * @param {string} id - player id
    * @param {number} x - x position
    * @param {number} y - y position
    * @param {number} w - player width
    * @param {number} h - player height
-   * @param {string} materialName name of texture file
+   * @param {string} type name of texture file
    * @param {module.Area} area starting area
    * @returns {module.Player} new Player
    */
-  static getPlayer (x, y, w, h, type, area) {
-    return new Player(x, y, w, h, type, area)
+  static getPlayer (id, x, y, w, h, type, area) {
+    return new Player(id, x, y, w, h, type, area)
   }
 }

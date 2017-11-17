@@ -20,7 +20,7 @@ const configuration = {
     testSource: 'test/**/*.js',
     coverage: 'coverage',
     bundledSource: 'src/entry.js',
-    destination: ''
+    destination: 'public/js'
   },
   webpack: {
     config: './webpack.config.js'
@@ -63,7 +63,7 @@ gulp.task('js', () => {
 /**
  * Lint all js source files.
  * The standard used is standard.js as defined in the '.eslintrc' file
- * with the addition of socket.io globals
+ * with the addition of server.io globals
  */
 gulp.task('lint', () => {
   return gulp.src([configuration.js.source, '!node_modules/**'])

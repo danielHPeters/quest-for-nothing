@@ -74,28 +74,33 @@ var _GameClient = __webpack_require__(1);
 
 var _GameClient2 = _interopRequireDefault(_GameClient);
 
+var _Remote = __webpack_require__(6);
+
+var _Remote2 = _interopRequireDefault(_Remote);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var socket = io();
-var client = new _GameClient2.default(socket, document.getElementById('game'));
+var remote = new _Remote2.default(socket);
+var client = new _GameClient2.default(remote, document.getElementById('game'));
 
 /**
  * modern browser equivalent of jQuery $(document).ready()
  */
-document.addEventListener('DOMContentLoaded', client.init());
+document.addEventListener('DOMContentLoaded', function () {
+  client.init();
+});
 
 /**
- * Initialize player id on socket connection
+ * Initialize player id on remote connection
  */
 socket.on('connect', function () {
-  // Tell server to add this player
   socket.emit('new player');
-  // remember socket id to identify current player when drawing
   client.playerId = socket.io.engine.id;
 });
 
 /**
- * Listen to server sending objects to draw.
+ * Listen to remote sending objects to draw.
  * Contains the drawing loop
  */
 socket.on('state', function (players) {
@@ -132,16 +137,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var GameClient = function () {
-  function GameClient(socket, canvas) {
+  function GameClient(playerId, remote, canvas) {
     _classCallCheck(this, GameClient);
 
-    this.socket = socket;
     this.canvas = canvas;
     this.inputManager = new _InputManager2.default(canvas);
+    this.inputManager.observers.push(remote);
     this.assetManager = new _AssetManager2.default();
     this.spritesLoaded = false;
     this.ctx = null;
-    this.playerId = null;
+    this.playerId = playerId;
     this.animations = {};
     this.registerLoop();
   }
@@ -168,7 +173,6 @@ var GameClient = function () {
 
       // check if canvas is supported by browser
       if (this.canvas.getContext) {
-        this.socket.emit('new player');
         this.ctx = this.canvas.getContext('2d');
         // Add all sprites and music files to the download queue
         this.assetManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3', 'audio');
@@ -193,11 +197,11 @@ var GameClient = function () {
           _this.animations.current = _this.animations.left;
           // Play ambient sound
           _this.assetManager.playSound('ambient', true);
-          _this.update();
           // Draw Background only once to improve performance
           document.getElementById('background').getContext('2d').drawImage(_this.assetManager.getSprite('background'), 0, 0, _this.canvas.width, _this.canvas.height);
-          // tells socket.on(state) that all sprites needed for drawing are downloaded
+          // make sure that all sprites needed for drawing are downloaded
           _this.spritesLoaded = true;
+          _this.update();
         });
       } else {
         document.getElementById('unsupported').textContent = 'Please update your browser or download another one which supports HTML5';
@@ -208,7 +212,7 @@ var GameClient = function () {
     value: function update() {
       var _this2 = this;
 
-      this.socket.emit('input', this.inputManager.registeredInputs);
+      this.inputManager.notify();
       // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
       window.requestAnimationFrame(function () {
         return _this2.update();
@@ -225,8 +229,10 @@ var GameClient = function () {
     value: function render(players) {
       var _this3 = this;
 
-      if (this.playerId && players[this.playerId] && this.spritesLoaded) {
-        var currentPlayer = players[this.playerId];
+      var currentPlayer = players.find(function (player) {
+        return player.id === _this3.playerId;
+      });
+      if (this.playerId && currentPlayer && this.spritesLoaded) {
         if (this.inputManager.registeredInputs['w'] || this.inputManager.registeredInputs[' ']) {
           // Check if players is not already jumping
           if (!currentPlayer.jumping && currentPlayer.grounded) {
@@ -236,8 +242,7 @@ var GameClient = function () {
         this.animations.current.update();
         this.animations.coin.update();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        Object.keys(players).forEach(function (key) {
-          var player = players[key];
+        players.forEach(function (player) {
           // Make sure to only draw players in the same area
           if (player.viewport.areaId === currentPlayer.viewport.areaId) {
             if (player.registeredInputs['a']) {
@@ -253,7 +258,7 @@ var GameClient = function () {
           }
         });
         // Draw all blocks
-        players[this.playerId].viewport.blocks.forEach(function (block) {
+        currentPlayer.viewport.blocks.forEach(function (block) {
           if (block.type === 'stone') {
             _this3.ctx.drawImage(_this3.assetManager.getSprite(block.type), block.position._x, block.position._y, block.width, block.height);
           } else if (block.type === 'coin') {
@@ -262,14 +267,14 @@ var GameClient = function () {
         });
         // Display health
         var x = this.canvas.width - 35;
-        for (var i = 0; i < players[this.playerId].lives; i++) {
+        for (var i = 0; i < currentPlayer.lives; i++) {
           this.ctx.drawImage(this.assetManager.getSprite('heart'), x, 5, 30, 30);
           x -= 30;
         }
         this.ctx.drawImage(this.assetManager.getSprite('coin'), 5, 5, 30, 30);
-        this.ctx.font = '30px serif';
-        this.ctx.fillStyle = 'red';
-        this.ctx.fillText(players[this.playerId].coins.toString(), 35, 30);
+        this.ctx.font = '30px sans-serif';
+        this.ctx.fillStyle = '#081966';
+        this.ctx.fillText(currentPlayer.coins.toString(), 35, 30);
       }
     }
   }]);
@@ -558,11 +563,9 @@ var SpriteSheet = function () {
     _classCallCheck(this, SpriteSheet);
 
     this._image = new Image();
-
     this._image.addEventListener('load', function () {
       _this._framesPerRow = Math.floor(_this._image.width / _this._frameWidth);
     });
-
     this._image.src = sourcePath;
     this._sourcePath = sourcePath;
     this._frameWidth = frameWidth;
@@ -717,27 +720,37 @@ var InputManager = function () {
     this.initializeTouchHandler();
 
     // All keystrokes and touch swipes are registered here
-    // This object is then sent to the server to process player movement
+    // This object is then sent to the remote to process player movement
     this.registeredInputs = {};
+    this.observers = [];
   }
 
-  /**
-   * Handle keyboard key presses.
-   * Only booleans are set to express the movement direction intention
-   * This allows the separation of keystrokes from actual movement.
-   */
-
-
   _createClass(InputManager, [{
-    key: 'initializeKeyHandler',
-    value: function initializeKeyHandler() {
+    key: 'notify',
+    value: function notify() {
       var _this = this;
 
+      this.observers.forEach(function (observer) {
+        return observer.update(_this.registeredInputs);
+      });
+    }
+
+    /**
+     * Handle keyboard key presses.
+     * Only booleans are set to express the movement direction intention
+     * This allows the separation of keystrokes from actual movement.
+     */
+
+  }, {
+    key: 'initializeKeyHandler',
+    value: function initializeKeyHandler() {
+      var _this2 = this;
+
       window.addEventListener('keydown', function (event) {
-        _this.registeredInputs[event.key] = true;
+        _this2.registeredInputs[event.key] = true;
       }, false);
       window.addEventListener('keyup', function (event) {
-        _this.registeredInputs[event.key] = false;
+        _this2.registeredInputs[event.key] = false;
       }, false);
     }
 
@@ -898,6 +911,40 @@ var Animation = function () {
 
 exports.default = Animation;
 
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Remote = function () {
+  function Remote(socket) {
+    _classCallCheck(this, Remote);
+
+    this.socket = socket;
+  }
+
+  _createClass(Remote, [{
+    key: 'update',
+    value: function update(data) {
+      this.socket.emit('input', data);
+    }
+  }]);
+
+  return Remote;
+}();
+
+exports.default = Remote;
+
 /***/ })
 /******/ ]);
-//# sourceMappingURL=bundle.js.map
+//# sourceMappingURL=game.bundle.js.map

@@ -1,4 +1,5 @@
 'use strict'
+const logger = require('./../../server/utils/logger')
 const fs = require('fs')
 const levelsSource = 'src/levels'
 /**
@@ -17,10 +18,10 @@ module.exports = class LevelLoader {
     let jsonString = JSON.stringify(data)
     fs.writeFile('src/levels/newLevel.json', jsonString, 'utf8', (err) => {
       if (err) {
-        return console.log(err)
+        return logger.log('debug', err)
       }
 
-      console.log('Successfully wrote level data to JSON!')
+      logger.log('info', 'Successfully wrote level data to JSON!')
     })
   }
 

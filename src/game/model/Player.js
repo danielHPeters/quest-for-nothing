@@ -20,6 +20,7 @@ module.exports = class Player extends Entity {
   /**
    * Constructor. Initializes position and surroundings information.
    *
+   * @param {string} id player id
    * @param {number} x initial x
    * @param {number} y initial y
    * @param {number} width initial width
@@ -27,8 +28,9 @@ module.exports = class Player extends Entity {
    * @param {string} type texture and sprite data
    * @param {module.Area} area initial area
    */
-  constructor (x, y, width, height, type, area) {
+  constructor (id, x, y, width, height, type, area) {
     super(x, y, width, height, type)
+    this.id = id
     this.lives = 3
     this.coins = 0
     this.jumpHeight = 3.6

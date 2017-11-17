@@ -184,13 +184,19 @@
             "type": "stone",
             "solid": true
           },
+          {
+            "type": "coin",
+            "solid": true
+          },
           null,
           null,
           null,
           null,
           null,
-          null,
-          null,
+          {
+            "type": "coin",
+            "solid": true
+          },
           null,
           null,
           null,
@@ -448,7 +454,10 @@
           },
           null,
           null,
-          null,
+          {
+            "type": "coin",
+            "solid": true
+          },
           null,
           null,
           null,
@@ -708,7 +717,10 @@
           null,
           null,
           null,
-          null,
+          {
+            "type": "coin",
+            "solid": true
+          },
           null,
           null,
           null,

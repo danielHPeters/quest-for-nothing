@@ -4,14 +4,14 @@ import InputManager from './InputManager'
 import Animation from './../graphics/2D/Animation'
 
 export default class GameClient {
-  constructor (socket, canvas) {
-    this.socket = socket
+  constructor (playerId, remote, canvas) {
     this.canvas = canvas
     this.inputManager = new InputManager(canvas)
+    this.inputManager.observers.push(remote)
     this.assetManager = new AssetManager()
     this.spritesLoaded = false
     this.ctx = null
-    this.playerId = null
+    this.playerId = playerId
     this.animations = {}
     this.registerLoop()
   }
@@ -36,7 +36,6 @@ export default class GameClient {
   init () {
     // check if canvas is supported by browser
     if (this.canvas.getContext) {
-      this.socket.emit('new player')
       this.ctx = this.canvas.getContext('2d')
       // Add all sprites and music files to the download queue
       this.assetManager.queueDownload('ambient', 'assets/audio/ambient/ambient.mp3', 'audio')
@@ -61,11 +60,11 @@ export default class GameClient {
         this.animations.current = this.animations.left
         // Play ambient sound
         this.assetManager.playSound('ambient', true)
-        this.update()
         // Draw Background only once to improve performance
         document.getElementById('background').getContext('2d').drawImage(this.assetManager.getSprite('background'), 0, 0, this.canvas.width, this.canvas.height)
-        // tells socket.on(state) that all sprites needed for drawing are downloaded
+        // make sure that all sprites needed for drawing are downloaded
         this.spritesLoaded = true
+        this.update()
       })
     } else {
       document.getElementById('unsupported').textContent = 'Please update your browser or download another one which supports HTML5'
@@ -73,7 +72,7 @@ export default class GameClient {
   }
 
   update () {
-    this.socket.emit('input', this.inputManager.registeredInputs)
+    this.inputManager.notify()
     // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
     window.requestAnimationFrame(() => this.update())
   }
@@ -83,8 +82,8 @@ export default class GameClient {
    * @param players player objects with objects within their viewport
    */
   render (players) {
-    if (this.playerId && players[this.playerId] && this.spritesLoaded) {
-      let currentPlayer = players[this.playerId]
+    let currentPlayer = players.find(player => { return player.id === this.playerId })
+    if (this.playerId && currentPlayer && this.spritesLoaded) {
       if (this.inputManager.registeredInputs['w'] || this.inputManager.registeredInputs[' ']) {
         // Check if players is not already jumping
         if (!currentPlayer.jumping && currentPlayer.grounded) {
@@ -94,8 +93,7 @@ export default class GameClient {
       this.animations.current.update()
       this.animations.coin.update()
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-      Object.keys(players).forEach(key => {
-        const player = players[key]
+      players.forEach(player => {
         // Make sure to only draw players in the same area
         if (player.viewport.areaId === currentPlayer.viewport.areaId) {
           if (player.registeredInputs['a']) {
@@ -111,7 +109,7 @@ export default class GameClient {
         }
       })
       // Draw all blocks
-      players[this.playerId].viewport.blocks.forEach(block => {
+      currentPlayer.viewport.blocks.forEach(block => {
         if (block.type === 'stone') {
           this.ctx.drawImage(this.assetManager.getSprite(block.type), block.position._x, block.position._y, block.width, block.height)
         } else if (block.type === 'coin') {
@@ -120,14 +118,14 @@ export default class GameClient {
       })
       // Display health
       let x = this.canvas.width - 35
-      for (let i = 0; i < players[this.playerId].lives; i++) {
+      for (let i = 0; i < currentPlayer.lives; i++) {
         this.ctx.drawImage(this.assetManager.getSprite('heart'), x, 5, 30, 30)
         x -= 30
       }
       this.ctx.drawImage(this.assetManager.getSprite('coin'), 5, 5, 30, 30)
-      this.ctx.font = '30px serif'
-      this.ctx.fillStyle = 'red'
-      this.ctx.fillText(players[this.playerId].coins.toString(), 35, 30)
+      this.ctx.font = '30px sans-serif'
+      this.ctx.fillStyle = '#081966'
+      this.ctx.fillText(currentPlayer.coins.toString(), 35, 30)
     }
   }
 }

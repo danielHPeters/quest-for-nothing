@@ -16,7 +16,7 @@ describe('Area', () => {
         new Area('area4'),
         new Area('area5')
       )
-      player = new Player(10, 20, 50, 50, 'player', area)
+      player = new Player('p1', 10, 20, 50, 50, 'player', area)
       area.add(player)
     })
 

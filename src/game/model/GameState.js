@@ -13,7 +13,7 @@ module.exports = class GameState {
   constructor (settings) {
     this.settings = settings
     this.spawnPoint = null
-    this.players = {}
+    this.players = []
     this.running = false
     this.areas = []
     this.blocks = []
@@ -24,7 +24,7 @@ module.exports = class GameState {
    * @param {number} timeDifference
    */
   update (timeDifference) {
-    Object.keys(this.players).forEach(key => this.players[key].move(this, timeDifference))
+    this.players.forEach(player => player.move(this, timeDifference))
     this.areas.forEach(area => area.checkPlayers())
   }
 }

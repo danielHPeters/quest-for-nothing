@@ -10,11 +10,9 @@ export default class SpriteSheet {
    */
   constructor (sourcePath, frameWidth, frameHeight) {
     this._image = new Image()
-
     this._image.addEventListener('load', () => {
       this._framesPerRow = Math.floor(this._image.width / this._frameWidth)
     })
-
     this._image.src = sourcePath
     this._sourcePath = sourcePath
     this._frameWidth = frameWidth

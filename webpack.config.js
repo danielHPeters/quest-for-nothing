@@ -1,7 +1,13 @@
+const path = require('path')
+
 module.exports = {
-  entry: './src/client/app.js',
+  entry: {
+    game: './src/client/app.js',
+    editor: './src/editor/client/app.js'
+  },
   output: {
-    filename: './public/js/bundle.js'
+    path: path.join(__dirname, 'public/js'),
+    filename: '[name].bundle.js'
   },
   devtool: 'source-map',
   module: {

@@ -23,43 +23,68 @@ const LevelLoader = require('./factory/LevelLoader')
  * @type {module.GameObjectFactory}
  */
 const GameObjectFactory = require('./factory/GameObjectFactory')
+
 /**
+ * Main class of the JumpAndRun game.
  *
  * @type {module.JumpAndRun}
  */
 module.exports = class JumpAndRun {
+  /**
+   * Constructor initializes the game state.
+   */
   constructor () {
     this.settings = new Settings()
     this.state = new GameState(this.settings)
     this.levelLoader = new LevelLoader('./../../levels/')
-    this.levelLoader.loadLevel(this.state, 'newLevel')
+    this.levelLoader.loadLevel(this.state, 'default')
   }
 
+  /**
+   * Add a new Player.
+   *
+   * @param playerId id of the player
+   */
   addPlayer (playerId) {
-    let player = GameObjectFactory.getPlayer(
-      this.state.spawnPoint.position.x,
-      this.state.spawnPoint.position.y,
-      this.state.spawnPoint.width,
-      this.state.spawnPoint.height,
-      'player',
-      this.state.spawnPoint.area.blocks
-    )
-    // Currently player is identified via socket id. TODO set a unique player name to identify player
-    // player.name = 'Player'
-    this.state.players[playerId] = player
-    this.state.spawnPoint.area.add(player)
-
-    console.log('Player connected')
+    if (!this.state.players.find(player => { return player.id === playerId })) {
+      let player = GameObjectFactory.getPlayer(
+        playerId,
+        this.state.spawnPoint.position.x,
+        this.state.spawnPoint.position.y,
+        this.state.spawnPoint.width,
+        this.state.spawnPoint.height,
+        'player',
+        this.state.spawnPoint.area.blocks
+      )
+      this.state.players.push(player)
+      this.state.spawnPoint.area.add(player)
+    }
   }
 
+  /**
+   * Remove player from game by id.
+   *
+   * @param {string} playerId player id
+   */
   removePlayer (playerId) {
-    delete this.state.players[playerId]
+    this.state.players = this.state.players.filter(player => { return player.id !== playerId })
   }
 
+  /**
+   * Register player action to game state.
+   *
+   * @param playerId id of the player to be updated
+   * @param actions player input
+   */
   registerPlayerAction (playerId, actions) {
-    this.state.players[playerId].registeredInputs = actions
+    this.state.players.find(player => { return player.id === playerId }).registeredInputs = actions
   }
 
+  /**
+   * Main game loop.
+   *
+   * @param callback function that sends game state data to destination
+   */
   run (callback) {
     let lastUpdateTime = (new Date()).getTime()
     setInterval(() => {

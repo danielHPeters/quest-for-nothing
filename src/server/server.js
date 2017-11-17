@@ -11,8 +11,8 @@ const sassMiddleware = require('node-sass-middleware')
 const logger = require('./utils/logger') // use customized winston logger
 const server = http.Server(app)
 const routes = require('./routes/index') // get routes
-const io = require('socket.io')(server) // integrate socket.io
-require('./../game/gameLoop')(io) // pass socket io to the game loop to allow sending and receiving game status events
+const io = require('socket.io')(server) // integrate remote.io
+require('./gameLoop')(io) // pass remote io to the game loop to allow sending and receiving game status events
 app.set('views', path.join(__dirname, '../views'))
 app.set('view engine', 'pug')
 app.use(require('morgan')('dev', {'stream': logger.stream})) // pass custom logger to default express logger
@@ -63,7 +63,7 @@ app.use((err, req, res, next) => {
 app.set('port', process.env.PORT || 3000)
 
 server.listen(app.get('port'), () => {
-  logger.log('info', 'Express server listening on port ' + server.address().port)
+  logger.log('info', 'Express remote listening on port ' + server.address().port)
 })
 
 module.exports = server

@@ -10,8 +10,13 @@ export default class InputManager {
     this.initializeTouchHandler()
 
     // All keystrokes and touch swipes are registered here
-    // This object is then sent to the server to process player movement
+    // This object is then sent to the remote to process player movement
     this.registeredInputs = {}
+    this.observers = []
+  }
+
+  notify () {
+    this.observers.forEach(observer => observer.update(this.registeredInputs))
   }
 
   /**
