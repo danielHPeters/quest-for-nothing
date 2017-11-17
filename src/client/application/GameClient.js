@@ -43,7 +43,7 @@ export default class GameClient {
       this.assetManager.queueDownload('jump', 'assets/audio/effects/jump.wav', 'audio')
       this.assetManager.queueDownload('background', 'assets/textures/background.png', 'texture')
       this.assetManager.queueDownload('player', 'assets/textures/player.png', 'texture')
-      this.assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg', 'texture')
+      this.assetManager.queueDownload('stone', 'assets/textures/stone-block.jpg', 'texture')
       this.assetManager.queueDownload('heart', 'assets/textures/heart.png', 'texture')
       this.assetManager.queueDownload('coin', 'assets/textures/coin.png', 'texture')
       this.assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet', {
@@ -73,7 +73,7 @@ export default class GameClient {
   }
 
   update () {
-    this.socket.emit('movement', this.inputManager.registeredInputs)
+    this.socket.emit('input', this.inputManager.registeredInputs)
     // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
     window.requestAnimationFrame(() => this.update())
   }
@@ -112,9 +112,9 @@ export default class GameClient {
       })
       // Draw all blocks
       players[this.playerId].viewport.blocks.forEach(block => {
-        if (block.material.name === 'stone-block') {
-          this.ctx.drawImage(this.assetManager.getSprite(block.material.name), block.position._x, block.position._y, block.width, block.height)
-        } else if (block.material.name === 'coin') {
+        if (block.type === 'stone') {
+          this.ctx.drawImage(this.assetManager.getSprite(block.type), block.position._x, block.position._y, block.width, block.height)
+        } else if (block.type === 'coin') {
           this.animations.coin.draw(this.ctx, block.position._x, block.position._y, block.width, block.height)
         }
       })

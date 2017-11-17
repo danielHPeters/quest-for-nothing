@@ -18,10 +18,10 @@ module.exports = class Block extends Entity {
    * @param {number} y
    * @param {number} width
    * @param {number} height
-   * @param {module.Material} material
+   * @param {string} type
    */
-  constructor (x, y, width, height, material) {
-    super(x, y, width, height, material)
+  constructor (x, y, width, height, type) {
+    super(x, y, width, height, type)
     this.solid = true
   }
 

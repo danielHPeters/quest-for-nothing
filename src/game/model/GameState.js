@@ -3,9 +3,9 @@
  *
  * @author Daniel Peters
  * @version 1.2
- * @type {module.Game}
+ * @type {module.GameState}
  */
-module.exports = class Game {
+module.exports = class GameState {
   /**
    * Constructor. Requires default settings to calculate size of objects etc.
    * @param {module.Settings} settings

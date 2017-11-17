@@ -8,11 +8,6 @@ const Block = require('./../model/Block')
  * @type {module.SpawnPoint}
  */
 const SpawnPoint = require('./../model/SpawnPoint')
-/**
- *
- * @type {module.Material}
- */
-const Material = require('./../model/Material')
 
 /**
  *
@@ -41,7 +36,7 @@ module.exports = class GameObjectFactory {
    * @returns {module.Block} new Block
    */
   static getBlock (x, y, w, h, type) {
-    return new Block(x, y, w, h, new Material(type))
+    return new Block(x, y, w, h, type)
   }
 
   /**
@@ -64,13 +59,13 @@ module.exports = class GameObjectFactory {
    * @param {number} y - y position
    * @param {number} w - player width
    * @param {number} h - player height
-   * @param {string} name item name
+   * @param {string} type item type
    * @param {string} description item description
    * @param {function} action us action
    * @returns {module.Item} new Item
    */
-  static getItem (x, y, h, w, name, description, action) {
-    return new Item(x, y, w, h, new Material(name), name, description, action)
+  static getItem (x, y, h, w, type, description, action) {
+    return new Item(x, y, w, h, type, description, action)
   }
 
   /**
@@ -83,7 +78,7 @@ module.exports = class GameObjectFactory {
    * @param {module.Area} area starting area
    * @returns {module.Player} new Player
    */
-  static getPlayer (x, y, w, h, materialName, area) {
-    return new Player(x, y, w, h, new Material(materialName), area)
+  static getPlayer (x, y, w, h, type, area) {
+    return new Player(x, y, w, h, type, area)
   }
 }

@@ -175,7 +175,7 @@ var GameClient = function () {
         this.assetManager.queueDownload('jump', 'assets/audio/effects/jump.wav', 'audio');
         this.assetManager.queueDownload('background', 'assets/textures/background.png', 'texture');
         this.assetManager.queueDownload('player', 'assets/textures/player.png', 'texture');
-        this.assetManager.queueDownload('stone-block', 'assets/textures/stone-block.jpg', 'texture');
+        this.assetManager.queueDownload('stone', 'assets/textures/stone-block.jpg', 'texture');
         this.assetManager.queueDownload('heart', 'assets/textures/heart.png', 'texture');
         this.assetManager.queueDownload('coin', 'assets/textures/coin.png', 'texture');
         this.assetManager.queueDownload('playerSheet', 'assets/textures/test.png', 'spriteSheet', {
@@ -208,7 +208,7 @@ var GameClient = function () {
     value: function update() {
       var _this2 = this;
 
-      this.socket.emit('movement', this.inputManager.registeredInputs);
+      this.socket.emit('input', this.inputManager.registeredInputs);
       // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
       window.requestAnimationFrame(function () {
         return _this2.update();
@@ -254,9 +254,9 @@ var GameClient = function () {
         });
         // Draw all blocks
         players[this.playerId].viewport.blocks.forEach(function (block) {
-          if (block.material.name === 'stone-block') {
-            _this3.ctx.drawImage(_this3.assetManager.getSprite(block.material.name), block.position._x, block.position._y, block.width, block.height);
-          } else if (block.material.name === 'coin') {
+          if (block.type === 'stone') {
+            _this3.ctx.drawImage(_this3.assetManager.getSprite(block.type), block.position._x, block.position._y, block.width, block.height);
+          } else if (block.type === 'coin') {
             _this3.animations.coin.draw(_this3.ctx, block.position._x, block.position._y, block.width, block.height);
           }
         });
@@ -538,33 +538,153 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Sprite sheet definition.
  */
-var SpriteSheet =
-/**
- * Constructor. Sets frame dimensions and calculates number of frames.
- * @param sourcePath
- * @param frameWidth
- * @param frameHeight
- */
-function SpriteSheet(sourcePath, frameWidth, frameHeight) {
-  var _this = this;
+var SpriteSheet = function () {
+  /**
+   * Constructor. Sets frame dimensions and calculates number of frames.
+   * @param sourcePath
+   * @param frameWidth
+   * @param frameHeight
+   */
+  function SpriteSheet(sourcePath, frameWidth, frameHeight) {
+    var _this = this;
 
-  _classCallCheck(this, SpriteSheet);
+    _classCallCheck(this, SpriteSheet);
 
-  this.image = new Image();
-  this.frameWidth = frameWidth;
-  this.frameHeight = frameHeight;
+    this._image = new Image();
 
-  this.image.addEventListener('load', function () {
-    _this.framesPerRow = Math.floor(_this.image.width / _this.frameWidth);
-  });
+    this._image.addEventListener('load', function () {
+      _this._framesPerRow = Math.floor(_this._image.width / _this._frameWidth);
+    });
 
-  this.image.src = sourcePath;
-};
+    this._image.src = sourcePath;
+    this._sourcePath = sourcePath;
+    this._frameWidth = frameWidth;
+    this._frameHeight = frameHeight;
+  }
+
+  /**
+   *
+   * @returns {string}
+   */
+
+
+  _createClass(SpriteSheet, [{
+    key: 'sourcePath',
+    get: function get() {
+      return this._sourcePath;
+    }
+
+    /**
+     *
+     * @param {string} sourcePath
+     */
+    ,
+    set: function set(sourcePath) {
+      if (typeof sourcePath !== 'string') {
+        throw new Error('Param sourcePath must be of type number!');
+      }
+      this._sourcePath = sourcePath;
+    }
+
+    /**
+     *
+     * @returns {number}
+     */
+
+  }, {
+    key: 'frameWidth',
+    get: function get() {
+      return this._frameWidth;
+    }
+
+    /**
+     *
+     * @param {number} frameWidth
+     */
+    ,
+    set: function set(frameWidth) {
+      if (typeof frameWidth !== 'number') {
+        throw new Error('Param frameWidth must be of type number!');
+      }
+      this._frameWidth = frameWidth;
+    }
+
+    /**
+     *
+     * @returns {number}
+     */
+
+  }, {
+    key: 'frameHeight',
+    get: function get() {
+      return this._frameHeight;
+    }
+
+    /**
+     *
+     * @param {number} frameHeight
+     */
+    ,
+    set: function set(frameHeight) {
+      if (typeof frameHeight !== 'number') {
+        throw new Error('Param frameHeight must be of type number!');
+      }
+      this._frameHeight = frameHeight;
+    }
+
+    /**
+     *
+     * @returns {Image}
+     */
+
+  }, {
+    key: 'image',
+    get: function get() {
+      return this._image;
+    }
+
+    /**
+     *
+     * @param {Image} image
+     */
+    ,
+    set: function set(image) {
+      if (!(image instanceof Image)) {
+        throw new Error('Param image must be of type Image!');
+      }
+      this._image = image;
+    }
+
+    /**
+     *
+     * @returns {number}
+     */
+
+  }, {
+    key: 'framesPerRow',
+    get: function get() {
+      return this._framesPerRow;
+    }
+
+    /**
+     *
+     * @param {number} framesPerRow
+     */
+    ,
+    set: function set(framesPerRow) {
+      this._framesPerRow = framesPerRow;
+    }
+  }]);
+
+  return SpriteSheet;
+}();
 
 exports.default = SpriteSheet;
 

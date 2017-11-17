@@ -48,7 +48,7 @@ module.exports = class LevelLoader {
   /**
    * After loading level. The areas need to be set to allow travelling between them.
    *
-   * @param {module.Game} game initialized game instance
+   * @param {module.GameState} game initialized game instance
    * @param {{}} levelDefinition level definition data loaded from file
    */
   setExits (game, levelDefinition) {

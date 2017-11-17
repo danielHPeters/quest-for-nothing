@@ -1,7 +1,7 @@
 'use strict'
 const chai = require('chai')
 const LevelLoader = require('./../../../src/game/factory/LevelLoader')
-const Game = require('./../../../src/game/model/Game')
+const Game = require('../../../src/game/model/GameState')
 const Settings = require('./../../../src/game/model/Settings')
 
 chai.should()

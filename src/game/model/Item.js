@@ -7,23 +7,11 @@ const Entity = require('./Entity')
  * @type {module.Item}
  */
 module.exports = class Item extends Entity {
-  constructor (x, y, width, height, material, name, description, action) {
-    super(x, y, width, height, material)
-    this.name = name
+  constructor (x, y, width, height, type, description, action) {
+    super(x, y, width, height, type)
     this.description = description
     this.action = action
     this.solid = true
-  }
-
-  /**
-   * Sets the name of the item.
-   * @param {string} name
-   */
-  set name (name) {
-    if (typeof name !== 'string') {
-      throw new Error('item name must be of type string')
-    }
-    this._name = name
   }
 
   /**
@@ -46,14 +34,6 @@ module.exports = class Item extends Entity {
       throw new Error('item action must be of type function')
     }
     this._action = action
-  }
-
-  /**
-   * Gets the name of the item.
-   * @returns {string}
-   */
-  get name () {
-    return this._name
   }
 
   /**

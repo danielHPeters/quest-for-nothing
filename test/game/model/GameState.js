@@ -1,14 +1,14 @@
 'use strict'
 const chai = require('chai')
-const Game = require('./../../../src/game/model/Game')
+const GameState = require('./../../../src/game/model/GameState')
 const Settings = require('./../../../src/game/model/Settings')
 const should = chai.should()
 
-describe('Game', () => {
+describe('GameState', () => {
   describe('#update', () => {
     let game
     beforeEach(() => {
-      game = new Game(new Settings())
+      game = new GameState(new Settings())
     })
     it('returns undefined', () => {
       should.equal(game.update(), undefined)

@@ -13,7 +13,7 @@ module.exports = class BlockGenerator {
   /**
    * Static factory method to generate game objects and spawn points for players.
    *
-   * @param {module.Game} game
+   * @param {module.GameState} game
    * @param {Array} blocksList
    * @returns {Array}
    */
@@ -28,7 +28,7 @@ module.exports = class BlockGenerator {
       for (let j = 0; j < blocksList[i].length; j++) {
         if (blocksList[i][j] !== null) {
           if (blocksList[i][j].type === 'stone') {
-            let block = GameObjectFactory.getBlock(objX, objY, objWidth, objHeight, 'stone-block')
+            let block = GameObjectFactory.getBlock(objX, objY, objWidth, objHeight, 'stone')
 
             if (!blocksList[i][j].solid) {
               block.setSolid(false)

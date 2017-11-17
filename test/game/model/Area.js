@@ -2,7 +2,6 @@
 const chai = require('chai')
 const Area = require('./../../../src/game/model/Area')
 const Player = require('./../../../src/game/model/Player')
-const Material = require('./../../../src/game/model/Material')
 const should = chai.should()
 
 describe('Area', () => {
@@ -17,7 +16,7 @@ describe('Area', () => {
         new Area('area4'),
         new Area('area5')
       )
-      player = new Player(10, 20, 50, 50, new Material('test'), area)
+      player = new Player(10, 20, 50, 50, 'player', area)
       area.add(player)
     })
 

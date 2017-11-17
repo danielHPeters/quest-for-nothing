@@ -20,18 +20,17 @@ module.exports = class Entity {
    * @param {number} y
    * @param {number} width
    * @param {number} height
-   * @param {module.Material} material
+   * @param {string} type
    */
-  constructor (x, y, width, height, material) {
+  constructor (x, y, width, height, type) {
     this.position = new Vector2(x, y)
     this.velocity = new Vector2(0, 0)
     this.acceleration = new Vector2(0, 0)
+    this.type = type
     this.width = width
     this.height = height
-    this.material = material
     this.collideAbleWith = []
     this.colliding = false
-    this.type = ''
   }
 
   /**

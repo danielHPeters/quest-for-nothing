@@ -24,11 +24,11 @@ module.exports = class Player extends Entity {
    * @param {number} y initial y
    * @param {number} width initial width
    * @param {number} height initial height
-   * @param {module.Material} material texture and sprite data
+   * @param {string} type texture and sprite data
    * @param {module.Area} area initial area
    */
-  constructor (x, y, width, height, material, area) {
-    super(x, y, width, height, material)
+  constructor (x, y, width, height, type, area) {
+    super(x, y, width, height, type)
     this.lives = 3
     this.coins = 0
     this.jumpHeight = 3.6
@@ -54,7 +54,7 @@ module.exports = class Player extends Entity {
   /**
    * Players object update method
    *
-   * @param {module.Game} game
+   * @param {module.GameState} game
    * @param {number} timeDifference
    */
   move (game, timeDifference) {
@@ -158,8 +158,7 @@ module.exports = class Player extends Entity {
     // if the x and y vector are less than the half width or half height, they we must be inside the object, causing a collision
     // figures out on which side we are colliding (top, bottom, left, or right)
     if (Math.abs(vX) < hWidths && Math.abs(vY) < hHeights) {
-      if (object instanceof Item && object.name === 'coin') {
-        console.log('coin')
+      if (object instanceof Item && object.type === 'coin') {
         this.coins += 1
         this.viewport.blocks.splice(this.viewport.blocks.indexOf(object), 1)
         return ''
@@ -193,7 +192,7 @@ module.exports = class Player extends Entity {
    * If yes the player object expresses intent to switch to next area.
    * The switching is handled by Area objects.
    *
-   * @param {module.Game} game instance of the game
+   * @param {module.GameState} game instance of the game
    */
   checkEdges (game) {
     if (this.position.x > game.settings.canvasWidth) {

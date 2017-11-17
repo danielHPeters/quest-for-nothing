@@ -38,7 +38,7 @@ app.use((req, res, next) => {
   err.status = 404
   next(err)
 })
-const pages = ['Home', 'Game', 'Controls', 'About', 'Levels']
+const pages = ['Home', 'GameState', 'Controls', 'About', 'Levels']
 
 // error handlers
 
