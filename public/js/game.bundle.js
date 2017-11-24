@@ -80,31 +80,29 @@ var _Remote2 = _interopRequireDefault(_Remote);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var socket = io();
-var remote = new _Remote2.default(socket);
-var client = new _GameClient2.default(remote, document.getElementById('game'));
-
 /**
  * modern browser equivalent of jQuery $(document).ready()
  */
 document.addEventListener('DOMContentLoaded', function () {
-  client.init();
-});
+  var socket = io();
+  var remote = new _Remote2.default(socket);
+  var client = new _GameClient2.default(remote, document.getElementById('game'));
+  console.log('hi');
+  /**
+   * Initialize player id on remote connection
+   */
+  socket.on('connect', function () {
+    socket.emit('new player');
+    client.playerId = socket.io.engine.id;
+  });
 
-/**
- * Initialize player id on remote connection
- */
-socket.on('connect', function () {
-  socket.emit('new player');
-  client.playerId = socket.io.engine.id;
-});
-
-/**
- * Listen to remote sending objects to draw.
- * Contains the drawing loop
- */
-socket.on('state', function (players) {
-  client.render(players);
+  /**
+   * Listen to remote sending objects to draw.
+   * Contains the drawing loop
+   */
+  socket.on('state', function (players) {
+    client.render(players);
+  });
 });
 
 /***/ }),
@@ -137,18 +135,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var GameClient = function () {
-  function GameClient(playerId, remote, canvas) {
+  function GameClient(remote, canvas) {
     _classCallCheck(this, GameClient);
 
+    this.registerLoop();
     this.canvas = canvas;
     this.inputManager = new _InputManager2.default(canvas);
     this.inputManager.observers.push(remote);
     this.assetManager = new _AssetManager2.default();
     this.spritesLoaded = false;
     this.ctx = null;
-    this.playerId = playerId;
     this.animations = {};
-    this.registerLoop();
+    this.init();
   }
 
   /**
@@ -171,6 +169,7 @@ var GameClient = function () {
     value: function init() {
       var _this = this;
 
+      console.log('start');
       // check if canvas is supported by browser
       if (this.canvas.getContext) {
         this.ctx = this.canvas.getContext('2d');

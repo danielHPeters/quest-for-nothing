@@ -4,16 +4,16 @@ import InputManager from './InputManager'
 import Animation from './../graphics/2D/Animation'
 
 export default class GameClient {
-  constructor (playerId, remote, canvas) {
+  constructor (remote, canvas) {
+    this.registerLoop()
     this.canvas = canvas
     this.inputManager = new InputManager(canvas)
     this.inputManager.observers.push(remote)
     this.assetManager = new AssetManager()
     this.spritesLoaded = false
     this.ctx = null
-    this.playerId = playerId
     this.animations = {}
-    this.registerLoop()
+    this.init()
   }
 
   /**
@@ -34,6 +34,7 @@ export default class GameClient {
   }
 
   init () {
+    console.log('start')
     // check if canvas is supported by browser
     if (this.canvas.getContext) {
       this.ctx = this.canvas.getContext('2d')

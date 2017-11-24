@@ -3,10 +3,10 @@ const chai = require('chai')
 const request = require('supertest')
 chai.expect()
 
-describe('remote', () => {
+describe('server', () => {
   let server
   beforeEach(() => {
-    delete require.cache[require.resolve('../../src/remote/remote')]
+    delete require.cache[require.resolve('../../src/server/server')]
     server = require('../../src/server/server')
   })
   afterEach(done => {
