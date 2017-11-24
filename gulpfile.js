@@ -99,4 +99,4 @@ gulp.task('watch-all', ['watch-js'])
 /**
  * Default task to perform all previously defined tasks
  */
-gulp.task('default', ['lint', 'test', 'css', 'js'])
+gulp.task('default', ['lint', 'test', 'js'])
