@@ -26,7 +26,7 @@ export default class AssetManager {
       window.AudioContext = window.AudioContext || window.webkitAudioContext
       this.context = new AudioContext()
     } catch (e) {
-      alert('Web Audio API is not supported in this browser')
+      console.log('Web Audio API is not supported in this browser')
     }
   }
 

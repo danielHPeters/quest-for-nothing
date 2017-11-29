@@ -329,11 +329,9 @@ var Ajax = function () {
      * @param callback success callback function
      */
     value: function createAndSendRequest(data, url, callback) {
-      var _this = this;
-
       var xHttp = new XMLHttpRequest();
       xHttp.onreadystatechange = function () {
-        if (_this.readyState === 4 && _this.status === 200) {
+        if (this.readyState === 4 && this.status === 200) {
           callback();
         }
       };
