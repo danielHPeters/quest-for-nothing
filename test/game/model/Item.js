@@ -1,6 +1,6 @@
 'use strict'
 const chai = require('chai')
-const Item = require('./../../../src/game/model/Item')
+const Item = require('./Item')
 const should = chai.should()
 
 describe('Item', () => {

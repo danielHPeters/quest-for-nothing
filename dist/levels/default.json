@@ -1,0 +1,935 @@
+{
+  "id": "default",
+  "areas": [
+    {
+      "id": "area1",
+      "exits": {
+        "left": null,
+        "right": "area2",
+        "top": null,
+        "bottom": null
+      },
+      "blocks": [
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "coin",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "coin",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": false
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ]
+      ]
+    },
+    {
+      "id": "area2",
+      "exits": {
+        "left": "area1",
+        "right": null,
+        "top": null,
+        "bottom": "area3"
+      },
+      "blocks": [
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          {
+            "type": "coin",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "spawn",
+            "solid": "false"
+          },
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": false
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ]
+      ]
+    },
+    {
+      "id": "area3",
+      "exits": {
+        "left": null,
+        "right": null,
+        "top": "area2",
+        "bottom": null
+      },
+      "blocks": [
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "coin",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ],
+        [
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          },
+          {
+            "type": "stone",
+            "solid": true
+          }
+        ]
+      ]
+    }
+  ]
+}

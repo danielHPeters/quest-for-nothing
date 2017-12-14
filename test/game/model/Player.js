@@ -1,7 +1,7 @@
 'use strict'
 const chai = require('chai')
-const Player = require('./../../../src/game/model/Player')
-const Area = require('./../../../src/game/model/Area')
+const Player = require('./Player')
+const Area = require('./Area')
 
 chai.should()
 

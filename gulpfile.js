@@ -7,6 +7,9 @@ const webpack = require('webpack-stream')
 const sourceMaps = require('gulp-sourcemaps')
 const rename = require('gulp-rename')
 const esLint = require('gulp-eslint')
+const ts = require('gulp-typescript')
+const tsProject = ts.createProject('tsconfig.json')
+const babel = require('gulp-babel')
 
 // Define sources, destination and config file locations here
 const configuration = {
@@ -35,14 +38,25 @@ const configuration = {
 gulp.task('js', () => {
   return gulp.src(configuration.js.bundledSource)
     .pipe(webpack(require(configuration.webpack.config)))
-    .pipe(sourceMaps.init({loadMaps: true}))
-    .pipe(sourceMaps.write('.'))
     .pipe(gulp.dest(configuration.js.destination))
+    .pipe(filter('**/*.js'))
+    .pipe(sourceMaps.init())
+    .pipe(babel({
+      presets: ['env']
+    }))
+    .pipe(sourceMaps.write('.'))
     .pipe(filter('**/*.js'))
     .pipe(gulpUglify())
     .pipe(rename({suffix: '.min'}))
     .pipe(sourceMaps.write('.'))
     .pipe(gulp.dest(configuration.js.destination))
+})
+
+gulp.task('build', () => {
+  return tsProject.src()
+    .pipe(tsProject())
+    .js
+    .pipe(gulp.dest('dist'))
 })
 
 /**
@@ -99,4 +113,4 @@ gulp.task('watch-all', ['watch-js'])
 /**
  * Default task to perform all previously defined tasks
  */
-gulp.task('default', ['lint', 'test', 'js'])
+gulp.task('default', ['js', 'build'])

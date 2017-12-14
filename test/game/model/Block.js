@@ -1,6 +1,6 @@
 'use strict'
 const chai = require('chai')
-const Block = require('./../../../src/game/model/Block')
+const Block = require('./Block')
 
 chai.should()
 

@@ -1,7 +1,7 @@
 'use strict'
 const chai = require('chai')
-const Entity = require('./../../../src/game/model/Entity')
-const Bounds = require('./../../../src/game/collision/Bounds')
+const Entity = require('./Entity')
+const Bounds = require('../../../src/game/collision/Bounds')
 chai.should()
 
 describe('Entity', () => {

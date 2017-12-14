@@ -7,7 +7,7 @@ describe('server', () => {
   let server
   beforeEach(() => {
     delete require.cache[require.resolve('../../src/server/server')]
-    server = require('../../src/server/server')
+    server = require('./server')
   })
   afterEach(done => {
     server.close(done)

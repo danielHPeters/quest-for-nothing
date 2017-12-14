@@ -1,0 +1,23 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var EntityType;
+(function (EntityType) {
+    EntityType["PLAYER"] = "ship";
+    EntityType["ENEMY"] = "enmey";
+    EntityType["ENEMY_BULLET"] = "bulletEnemy";
+    EntityType["PLAYER_BULLET"] = "bullet";
+    EntityType["BACKGROUND"] = "background";
+    EntityType["MAP"] = "map";
+    EntityType["GAME_OVER"] = "gameOver";
+    EntityType["LASER"] = "laser";
+    EntityType["MAIN_THEME"] = "shockWave";
+    EntityType["EXPLOSION_I"] = "explosion1";
+    EntityType["EXPLOSION_II"] = "explosion2";
+    EntityType["BOX"] = "box";
+    EntityType["JUMP"] = "jump";
+    EntityType["STONE"] = "stone";
+    EntityType["HEART"] = "heart";
+    EntityType["COIN"] = "coint";
+    EntityType["PLAYER_SHEET"] = "playerSheet";
+    EntityType["COIN_SHEET"] = "cointSheet";
+})(EntityType = exports.EntityType || (exports.EntityType = {}));
