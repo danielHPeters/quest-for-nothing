@@ -43,7 +43,7 @@ class GameClient {
                 this.animations.idle = new Animation_1.default(this.assetManager.getSpriteSheet(CollideAble_1.EntityType.PLAYER_SHEET), 10, 0, 2, 12);
                 this.animations.coin = new Animation_1.default(this.assetManager.getSpriteSheet(CollideAble_1.EntityType.COIN_SHEET), 3, 0, 9);
                 this.animations.current = this.animations.left;
-                this.assetManager.getSound(CollideAble_1.EntityType.MAIN_THEME, AssetManager_1.AssetType.AUDIO_LOOP);
+                this.assetManager.getSound(CollideAble_1.EntityType.MAIN_THEME, AssetManager_1.AssetType.AUDIO_LOOP).play(true);
                 this.backgroundCanvas.getContext('2d').drawImage(this.assetManager.getSprite(CollideAble_1.EntityType.BACKGROUND), 0, 0, this.canvas.width, this.canvas.height);
                 this.spritesLoaded = true;
                 this.loop();
@@ -65,7 +65,7 @@ class GameClient {
         if (this.playerId && currentPlayer && this.spritesLoaded) {
             if (this.state[InputManager_1.Actions.UP] || this.state[InputManager_1.Actions.JUMP]) {
                 if (!currentPlayer.jumping && currentPlayer.grounded) {
-                    this.assetManager.getSound(CollideAble_1.EntityType.JUMP, AssetManager_1.AssetType.AUDIO);
+                    this.assetManager.getSound(CollideAble_1.EntityType.JUMP, AssetManager_1.AssetType.AUDIO).play();
                 }
             }
             this.animations.current.update();

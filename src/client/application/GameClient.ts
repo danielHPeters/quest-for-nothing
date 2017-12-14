@@ -58,7 +58,7 @@ export default class GameClient implements Observer {
         this.animations.coin = new Animation(this.assetManager.getSpriteSheet(EntityType.COIN_SHEET), 3, 0, 9)
         this.animations.current = this.animations.left
         // Play ambient sound
-        this.assetManager.getSound(EntityType.MAIN_THEME, AssetType.AUDIO_LOOP)
+        this.assetManager.getSound(EntityType.MAIN_THEME, AssetType.AUDIO_LOOP).play(true)
         // Draw Background only once to improve performance
         this.backgroundCanvas.getContext('2d').drawImage(this.assetManager.getSprite(EntityType.BACKGROUND), 0, 0, this.canvas.width, this.canvas.height)
         // make sure that all sprites needed for drawing are downloaded
@@ -90,7 +90,7 @@ export default class GameClient implements Observer {
       if (this.state[Actions.UP] || this.state[Actions.JUMP]) {
         // Check if players is not already jumping
         if (!currentPlayer.jumping && currentPlayer.grounded) {
-          this.assetManager.getSound(EntityType.JUMP, AssetType.AUDIO)
+          this.assetManager.getSound(EntityType.JUMP, AssetType.AUDIO).play()
         }
       }
       this.animations.current.update()
