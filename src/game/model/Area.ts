@@ -6,9 +6,9 @@ import { Player } from './Player'
  * @type {Area}
  */
 export class Area {
-  id: string
-  blocks: Block[]
-  players: Player[]
+  private _id: string
+  private _blocks: Block[]
+  private _players: Player[]
   private _top: Area
   private _bottom: Area
   private _left: Area
@@ -24,13 +24,13 @@ export class Area {
    * @param {Area} bottom bottom exit
    */
   constructor (id, left = null, right = null, top = null, bottom = null) {
-    this.id = id
+    this._id = id
     this.top = top
     this.bottom = bottom
     this.left = left
     this.right = right
-    this.blocks = []
-    this.players = []
+    this._blocks = []
+    this._players = []
   }
 
   /**
@@ -38,7 +38,7 @@ export class Area {
    * desired area.
    */
   checkPlayers () {
-    this.players.forEach(player => {
+    this._players.forEach(player => {
       if (player.edges.left && this.hasLeft()) {
         player.edges.left = false
         this._left.add(player)
@@ -57,6 +57,30 @@ export class Area {
         this.remove(player)
       }
     })
+  }
+
+  get id (): string {
+    return this._id
+  }
+
+  set id (value: string) {
+    this._id = value
+  }
+
+  get blocks (): Block[] {
+    return this._blocks
+  }
+
+  set blocks (value: Block[]) {
+    this._blocks = value
+  }
+
+  get players (): Player[] {
+    return this._players
+  }
+
+  set players (value: Player[]) {
+    this._players = value
   }
 
   set left (left) {
@@ -110,9 +134,9 @@ export class Area {
    * @param {Player} player
    */
   add (player: Player) {
-    this.players.push(player)
-    player.viewport.blocks = this.blocks
-    player.viewport.areaId = this.id
+    this._players.push(player)
+    player.viewport.blocks = this._blocks
+    player.viewport.areaId = this._id
   }
 
   /**
@@ -121,7 +145,7 @@ export class Area {
    */
   remove (player) {
     // let index = this.players.indexOf(player)
-    this.players = this.players.filter(item => item !== player)
+    this._players = this._players.filter(item => item !== player)
   }
 
   /**

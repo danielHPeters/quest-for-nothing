@@ -6,8 +6,14 @@
   "functions": 0,
   "branches": 0,
   "include": [
-    "src/**/*.js"
+    "src/**/*.ts"
   ],
+  "extension": [
+    ".ts"
+  ],
+  "require": [
+      "ts-node/register"
+    ],
   "cache": false,
   "all": true
 }

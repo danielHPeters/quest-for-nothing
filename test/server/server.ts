@@ -1,13 +1,12 @@
-'use strict'
-const chai = require('chai')
-const request = require('supertest')
-chai.expect()
+import * as chai from 'chai'
+import * as request from 'supertest'
+import { Server } from '../../src/server/server'
 
 describe('server', () => {
   let server
   beforeEach(() => {
     delete require.cache[require.resolve('../../src/server/server')]
-    server = require('./server')
+    server = Server.bootstrap().httpServer
   })
   afterEach(done => {
     server.close(done)
@@ -33,5 +32,4 @@ describe('server', () => {
   it('should send 404 for everything else', done => {
     request(server).get('/blabla').expect(404).end(done)
   })
-
 })

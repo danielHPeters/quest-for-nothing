@@ -1,6 +1,5 @@
-'use strict'
-const chai = require('chai')
-const Vector2 = require('../../../src/lib/Vector2')
+import * as chai from 'chai'
+import { Vector2 } from '../../../src/lib/Vector2'
 
 chai.should()
 
@@ -84,7 +83,7 @@ describe('Vector2', () => {
     })
   })
 
-  describe('#add', () => {
+  describe('#addVector', () => {
     let vector
     let anotherVector
     beforeEach(() => {
@@ -94,13 +93,13 @@ describe('Vector2', () => {
 
     it('only accepts Vector2 instances as parameter', () => {
       let func = () => {
-        vector.add('vector')
+        vector.addVector('vector')
       }
       func.should.throw(Error)
     })
 
     it('adds the value of another vector to this vector', () => {
-      vector.add(anotherVector)
+      vector.addVector(anotherVector)
       vector.x.should.equal(30)
       vector.y.should.equal(30)
     })
@@ -114,31 +113,19 @@ describe('Vector2', () => {
       anotherVector = new Vector2(10, 20)
     })
 
-    it('only accepts Vector2 instances as parameter', () => {
-      let func = () => {
-        Vector2.add(vector, 'foo')
-      }
-      let func2 = () => {
-        Vector2.add('foo', anotherVector)
-      }
-      func.should.throw(Error)
-
-      func2.should.throw(Error)
-    })
-
     it('returns an instance of Vector2', () => {
-      let resultingVector = Vector2.add(vector, anotherVector)
-      resultingVector.should.be.deep.an.instanceof(Vector2)
+      let resultingVector = Vector2.addVector(vector, anotherVector)
+      resultingVector.should.be.deep['an'].instanceof(Vector2)
     })
 
     it('combines the values of two vectors into a new vector', () => {
-      let resultingVector = Vector2.add(vector, anotherVector)
+      let resultingVector = Vector2.addVector(vector, anotherVector)
       resultingVector.x.should.equal(30)
       resultingVector.y.should.equal(30)
     })
   })
 
-  describe('#subtract', () => {
+  describe('#subtractVector', () => {
     let vector
     let anotherVector
     beforeEach(() => {
@@ -147,7 +134,7 @@ describe('Vector2', () => {
     })
 
     it('subtracts the value of another vector from this vector', () => {
-      vector.subtract(anotherVector)
+      vector.subtractVector(anotherVector)
       vector.x.should.equal(0)
       vector.y.should.equal(0)
     })
@@ -162,12 +149,12 @@ describe('Vector2', () => {
     })
 
     it('returns an instance of Vector2', () => {
-      let resultingVector = Vector2.subtract(vector, anotherVector)
-      resultingVector.should.be.deep.an.instanceof(Vector2)
+      let resultingVector = Vector2.subtractVector(vector, anotherVector)
+      resultingVector.should.be.deep['an'].instanceof(Vector2)
     })
 
     it('subtracts the values of the second vector from the first vector and returns a new vector', () => {
-      let resultingVector = Vector2.subtract(vector, anotherVector)
+      let resultingVector = Vector2.subtractVector(vector, anotherVector)
       resultingVector.x.should.equal(0)
       resultingVector.y.should.equal(0)
     })
@@ -199,23 +186,9 @@ describe('Vector2', () => {
       vector = new Vector2(20, 10)
     })
 
-    it('only accepts Vector2 instances as vector parameter', () => {
-      let func = () => {
-        Vector2.multiply('foo', 2)
-      }
-      func.should.throw(Error)
-    })
-
-    it('only accepts numbers as scalar parameter', () => {
-      let func = () => {
-        Vector2.multiply(vector, 'foo')
-      }
-      func.should.throw(Error)
-    })
-
     it('returns an instance of Vector2', () => {
       let resultingVector = Vector2.multiply(vector, 2)
-      resultingVector.should.be.deep.an.instanceof(Vector2)
+      resultingVector.should.be.deep['an'].instanceof(Vector2)
     })
 
     it('multiplies the vector x and y values by scalar', () => {
@@ -229,13 +202,6 @@ describe('Vector2', () => {
     let vector
     beforeEach(() => {
       vector = new Vector2(20, 10)
-    })
-
-    it('only accepts Vector2 instances as vector parameter', () => {
-      let func = () => {
-        Vector2.divide('foo', 2)
-      }
-      func.should.throw(Error)
     })
 
     it('only accepts numbers as parameter', () => {
@@ -265,13 +231,6 @@ describe('Vector2', () => {
       vector = new Vector2(20, 10)
     })
 
-    it('only accepts numbers as parameter scalar', () => {
-      let func = () => {
-        Vector2.divide(vector, 'foo')
-      }
-      func.should.throw(Error)
-    })
-
     it('does not allow division by zero', () => {
       let func = () => {
         Vector2.divide(vector, 0)
@@ -281,7 +240,7 @@ describe('Vector2', () => {
 
     it('returns an instance of Vector2', () => {
       let resultingVector = Vector2.divide(vector, 2)
-      resultingVector.should.be.deep.an.instanceof(Vector2)
+      resultingVector.should.be.deep['an'].instanceof(Vector2)
     })
 
     it('divides the vector x and y values by scalar', () => {

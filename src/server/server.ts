@@ -7,9 +7,11 @@ import * as cookieParser from 'cookie-parser'
 import * as sassMiddleware from 'node-sass-middleware'
 import * as socketIo from 'socket.io'
 import { logger, stream } from './utils/logger'
+import { Http2Server } from 'http2'
 
 export class Server {
   public app: express.Application
+  public httpServer: Http2Server
 
   constructor () {
     this.init()
@@ -21,9 +23,9 @@ export class Server {
 
   init () {
     this.app = express()
-    const httpServer = http.createServer(this.app)
+    this.httpServer = http.createServer(this.app)
     const routes = require('./routes/index') // get routes
-    const io = socketIo(httpServer) // integrate socket.io
+    const io = socketIo(this.httpServer) // integrate socket.io
     require('./gameLoop')(io) // pass remote io to the game loop to allow sending and receiving game status events
     this.app.set('views', path.join(__dirname, '../../views'))
     this.app.set('view engine', 'pug')
@@ -74,8 +76,8 @@ export class Server {
 
     this.app.set('port', process.env.PORT || 3000)
 
-    httpServer.listen(this.app.get('port'), () => {
-      logger.log('info', 'Express remote listening on port ' + httpServer.address().port)
+    this.httpServer.listen(this.app.get('port'), () => {
+      logger.log('info', 'Express remote listening on port ' + this.httpServer.address().port)
     })
   }
 }

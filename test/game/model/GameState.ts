@@ -1,7 +1,7 @@
-'use strict'
-const chai = require('chai')
-const GameState = require('./GameState')
-const Settings = require('./Settings')
+import * as chai from 'chai'
+import { GameState } from '../../../src/game/model/GameState'
+import { Settings } from '../../../src/game/model/Settings'
+
 const should = chai.should()
 
 describe('GameState', () => {

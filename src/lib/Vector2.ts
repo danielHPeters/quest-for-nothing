@@ -67,6 +67,9 @@ export class Vector2 {
    * @param {number} x new x value
    */
   set x (x: number) {
+    if (typeof x !== 'number') {
+      throw new Error('parameter x must be of type number')
+    }
     this._x = x
   }
 
@@ -76,6 +79,9 @@ export class Vector2 {
    * @param {number} y new y value
    */
   set y (y: number) {
+    if (typeof y !== 'number') {
+      throw new Error('parameter y must be of type number')
+    }
     this._y = y
   }
 
@@ -112,6 +118,9 @@ export class Vector2 {
    * @param {Vector2} vector other vector
    */
   setVector (vector: Vector2): void {
+    if (vector instanceof Vector2 !== true) {
+      throw new Error('vector must be an instance of Vector2')
+    }
     this.x = vector.x
     this.y = vector.y
   }
@@ -133,6 +142,9 @@ export class Vector2 {
    * @param {Vector2} vector other vector
    */
   addVector (vector: Vector2): void {
+    if (vector instanceof Vector2 !== true) {
+      throw new Error('vector must be an instance of Vector2')
+    }
     this.x += vector.x
     this.y += vector.y
   }
@@ -164,6 +176,9 @@ export class Vector2 {
    * @param scalar scalar to multiply the vector
    */
   multiply (scalar: number): void {
+    if (typeof scalar !== 'number') {
+      throw new Error('Scalar must be of type number')
+    }
     this.x *= scalar
     this.y *= scalar
   }
@@ -175,6 +190,9 @@ export class Vector2 {
    * @param {number} scalar scalar used to divide this vector
    */
   divide (scalar: number): void {
+    if (typeof scalar !== 'number') {
+      throw new Error('scalar must be of type number!')
+    }
     if (scalar === 0) {
       throw new Error('cannot divide vector by "0"')
     }
@@ -229,6 +247,9 @@ export class Vector2 {
    * @returns {number} calculated distance
    */
   distanceTo (vector: Vector2): number {
+    if (vector instanceof Vector2 !== true) {
+      throw new Error('vector must be an instance of Vector2!')
+    }
     return Math.sqrt(Math.pow(vector.x - this.x, 2) + Math.pow(vector.y - this.y, 2))
   }
 
@@ -239,12 +260,26 @@ export class Vector2 {
    * @returns {number} the dot product of this vector and the one passed as param.
    */
   dot (vector: Vector2): number {
+    if (vector instanceof Vector2 !== true) {
+      throw new Error('Only Vector instances are allowed as param')
+    }
     return this.x * vector.x + this.y * vector.y
   }
 
+  /**
+   *
+   */
   floor (): void {
     this.x = Math.floor(this.x)
-    this.x = Math.floor(this.x)
+    this.y = Math.floor(this.y)
+  }
+
+  /**
+   *
+   */
+  round (): void {
+    this.x = Math.round(this.x)
+    this.y = Math.round(this.y)
   }
 
   /**

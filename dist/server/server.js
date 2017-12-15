@@ -18,9 +18,9 @@ class Server {
     }
     init() {
         this.app = express();
-        const httpServer = http.createServer(this.app);
+        this.httpServer = http.createServer(this.app);
         const routes = require('./routes/index');
-        const io = socketIo(httpServer);
+        const io = socketIo(this.httpServer);
         require('./gameLoop')(io);
         this.app.set('views', path.join(__dirname, '../../views'));
         this.app.set('view engine', 'pug');
@@ -57,8 +57,8 @@ class Server {
             res.render('error', { title: '404', pages: pages, message: err.message, error: {} });
         });
         this.app.set('port', process.env.PORT || 3000);
-        httpServer.listen(this.app.get('port'), () => {
-            logger_1.logger.log('info', 'Express remote listening on port ' + httpServer.address().port);
+        this.httpServer.listen(this.app.get('port'), () => {
+            logger_1.logger.log('info', 'Express remote listening on port ' + this.httpServer.address().port);
         });
     }
 }

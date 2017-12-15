@@ -20,6 +20,7 @@ class Entity {
         throw new Error('Not Implemented!');
     }
     move(game, timeDifference) {
+        throw new Error('Not Implemented!');
     }
     isCollideAbleWith(object) {
         return this.collideAbleWith.includes(object.type);

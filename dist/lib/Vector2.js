@@ -21,9 +21,15 @@ class Vector2 {
         return new Vector2(vector.x / scalar, vector.y / scalar);
     }
     set x(x) {
+        if (typeof x !== 'number') {
+            throw new Error('parameter x must be of type number');
+        }
         this._x = x;
     }
     set y(y) {
+        if (typeof y !== 'number') {
+            throw new Error('parameter y must be of type number');
+        }
         this._y = y;
     }
     get x() {
@@ -37,6 +43,9 @@ class Vector2 {
         this.y = y;
     }
     setVector(vector) {
+        if (vector instanceof Vector2 !== true) {
+            throw new Error('vector must be an instance of Vector2');
+        }
         this.x = vector.x;
         this.y = vector.y;
     }
@@ -45,6 +54,9 @@ class Vector2 {
         this.y += y;
     }
     addVector(vector) {
+        if (vector instanceof Vector2 !== true) {
+            throw new Error('vector must be an instance of Vector2');
+        }
         this.x += vector.x;
         this.y += vector.y;
     }
@@ -57,10 +69,16 @@ class Vector2 {
         this.y -= vector.y;
     }
     multiply(scalar) {
+        if (typeof scalar !== 'number') {
+            throw new Error('Scalar must be of type number');
+        }
         this.x *= scalar;
         this.y *= scalar;
     }
     divide(scalar) {
+        if (typeof scalar !== 'number') {
+            throw new Error('scalar must be of type number!');
+        }
         if (scalar === 0) {
             throw new Error('cannot divide vector by "0"');
         }
@@ -86,14 +104,24 @@ class Vector2 {
         }
     }
     distanceTo(vector) {
+        if (vector instanceof Vector2 !== true) {
+            throw new Error('vector must be an instance of Vector2!');
+        }
         return Math.sqrt(Math.pow(vector.x - this.x, 2) + Math.pow(vector.y - this.y, 2));
     }
     dot(vector) {
+        if (vector instanceof Vector2 !== true) {
+            throw new Error('Only Vector instances are allowed as param');
+        }
         return this.x * vector.x + this.y * vector.y;
     }
     floor() {
         this.x = Math.floor(this.x);
-        this.x = Math.floor(this.x);
+        this.y = Math.floor(this.y);
+    }
+    round() {
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
     }
     clone() {
         return new Vector2(this.x, this.y);

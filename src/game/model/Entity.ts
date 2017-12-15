@@ -50,7 +50,7 @@ export class Entity {
   }
 
   public move (game: GameState, timeDifference: number): void {
-
+    throw new Error('Not Implemented!')
   }
 
   /**

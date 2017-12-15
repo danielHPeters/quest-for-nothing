@@ -2,16 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class Area {
     constructor(id, left = null, right = null, top = null, bottom = null) {
-        this.id = id;
+        this._id = id;
         this.top = top;
         this.bottom = bottom;
         this.left = left;
         this.right = right;
-        this.blocks = [];
-        this.players = [];
+        this._blocks = [];
+        this._players = [];
     }
     checkPlayers() {
-        this.players.forEach(player => {
+        this._players.forEach(player => {
             if (player.edges.left && this.hasLeft()) {
                 player.edges.left = false;
                 this._left.add(player);
@@ -33,6 +33,24 @@ class Area {
                 this.remove(player);
             }
         });
+    }
+    get id() {
+        return this._id;
+    }
+    set id(value) {
+        this._id = value;
+    }
+    get blocks() {
+        return this._blocks;
+    }
+    set blocks(value) {
+        this._blocks = value;
+    }
+    get players() {
+        return this._players;
+    }
+    set players(value) {
+        this._players = value;
     }
     set left(left) {
         if (!(left instanceof Area || left === null)) {
@@ -71,12 +89,12 @@ class Area {
         return this._bottom;
     }
     add(player) {
-        this.players.push(player);
-        player.viewport.blocks = this.blocks;
-        player.viewport.areaId = this.id;
+        this._players.push(player);
+        player.viewport.blocks = this._blocks;
+        player.viewport.areaId = this._id;
     }
     remove(player) {
-        this.players = this.players.filter(item => item !== player);
+        this._players = this._players.filter(item => item !== player);
     }
     hasLeft() {
         return this.left !== null;

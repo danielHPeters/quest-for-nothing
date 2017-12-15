@@ -6,25 +6,24 @@ const gulpUglify = require('gulp-uglify')
 const webpack = require('webpack-stream')
 const sourceMaps = require('gulp-sourcemaps')
 const rename = require('gulp-rename')
-const esLint = require('gulp-eslint')
 const ts = require('gulp-typescript')
 const tsProject = ts.createProject('tsconfig.json')
 const babel = require('gulp-babel')
+const tsLint = require('gulp-tslint')
 
 // Define sources, destination and config file locations here
 const configuration = {
+  ts: {
+    source: 'src/**/*ts',
+    tests: 'test/**/*ts'
+  },
   js: {
-    source: 'src/**/*.js',
-    testSource: 'test/**/*.js',
     coverage: 'coverage',
     bundledSource: 'src/entry.js',
     destination: 'public/js'
   },
   webpack: {
     config: './webpack.config.js'
-  },
-  esLint: {
-    config: '.eslintrc'
   }
 }
 
@@ -35,7 +34,7 @@ const configuration = {
  * After that, the js wil be minified.
  * Source maps are generated to allow source debugging in the consoles of most browsers.
  */
-gulp.task('js', () => {
+gulp.task('build:client', () => {
   return gulp.src(configuration.js.bundledSource)
     .pipe(webpack(require(configuration.webpack.config)))
     .pipe(gulp.dest(configuration.js.destination))
@@ -47,12 +46,12 @@ gulp.task('js', () => {
     .pipe(sourceMaps.write('.'))
     .pipe(filter('**/*.js'))
     .pipe(gulpUglify())
-    .pipe(rename({suffix: '.min'}))
+    .pipe(rename({ suffix: '.min' }))
     .pipe(sourceMaps.write('.'))
     .pipe(gulp.dest(configuration.js.destination))
 })
 
-gulp.task('build', () => {
+gulp.task('build:server', () => {
   return tsProject.src()
     .pipe(tsProject())
     .js
@@ -60,24 +59,22 @@ gulp.task('build', () => {
 })
 
 /**
- * Lint all js source files.
- * The standard used is standard.js as defined in the '.eslintrc' file
- * with the addition of server.io globals
+ * Lint all typescript source files.
+ * The standard used is standard.js as defined in the 'tslint.json' file.
  */
-gulp.task('lint', () => {
-  return gulp.src([configuration.js.source, '!node_modules/**'])
-    .pipe(esLint({
-      configFile: configuration.esLint.config
+gulp.task('lint', () =>
+  gulp.src(configuration.ts.source)
+    .pipe(tsLint({
+      formatter: 'verbose'
     }))
-    .pipe(esLint.format())
-    .pipe(esLint.failAfterError())
-})
+    .pipe(tsLint.report())
+)
 
 /**
  * Run npm test task which runs mocha with nyc coverage reporter.
  */
 gulp.task('test', (cb) => {
-  const npm = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['test'], {shell: true, stdio: 'inherit'})
+  const npm = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['test'], { shell: true, stdio: 'inherit' })
   npm.on('close', code => {
     console.log('test exited with code ' + code)
     cb(code)
@@ -101,8 +98,8 @@ gulp.task('coveralls', (cb) => {
 /**
  * Watch changes in js files.
  */
-gulp.task('watch-js', () => {
-  gulp.watch(configuration.js.source, ['js'])
+gulp.task('watch-ts', () => {
+  gulp.watch(configuration.ts.source, ['build:client', 'build:server'])
 })
 
 /**
@@ -113,4 +110,4 @@ gulp.task('watch-all', ['watch-js'])
 /**
  * Default task to perform all previously defined tasks
  */
-gulp.task('default', ['js', 'build'])
+gulp.task('default', ['lint', 'test', 'build:server', 'build:client'])

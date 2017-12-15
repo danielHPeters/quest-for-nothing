@@ -1,8 +1,7 @@
-'use strict'
-const chai = require('chai')
-const LevelLoader = require('./LevelLoader')
-const Game = require('../../../src/game/model/GameState')
-const Settings = require('../../../src/game/model/Settings')
+import * as chai from 'chai'
+import { GameState } from '../../../src/game/model/GameState'
+import { LevelLoader } from '../../../src/game/factory/LevelLoader'
+import { Settings } from '../../../src/game/model/Settings'
 
 chai.should()
 
@@ -13,7 +12,7 @@ describe('LevelLoader', () => {
     let game
     beforeEach(() => {
       gameSettings = new Settings()
-      game = new Game(gameSettings)
+      game = new GameState(gameSettings)
       levelLoader = new LevelLoader('./../../levels/')
     })
 
