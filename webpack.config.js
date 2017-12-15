@@ -3,7 +3,8 @@ const path = require('path')
 module.exports = {
   entry: {
     game: './src/client/app.ts',
-    editor: './src/editor/client/app.ts'
+    editor: './src/editor/client/app.ts',
+    navigation: './src/lib/navigation/active-links.ts'
   },
   output: {
     path: path.join(__dirname, 'public/js'),
