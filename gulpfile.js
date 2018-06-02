@@ -1,16 +1,12 @@
 'use strict'
+
 const spawn = require('child_process').spawn
 const gulp = require('gulp')
-const filter = require('gulp-filter')
-const gulpUglify = require('gulp-uglify')
 const webpack = require('webpack')
 const webpackConfig = require('./webpack.config.js')
 const gulpWebpack = require('webpack-stream')
-const sourceMaps = require('gulp-sourcemaps')
-const rename = require('gulp-rename')
 const ts = require('gulp-typescript')
 const tsProject = ts.createProject('tsconfig.json')
-const babel = require('gulp-babel')
 const tsLint = require('gulp-tslint')
 
 // Define sources, destination and config file locations here

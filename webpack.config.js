@@ -9,7 +9,6 @@ module.exports = {
     editor: './src/editor/client/app.ts',
     navigation: './src/lib/navigation/active-links.ts'
   },
-  devtool: 'source-map',
   output: {
     path: path.join(__dirname, './public/js'),
     filename: '[name].min.js'
@@ -21,7 +20,7 @@ module.exports = {
   },
   module: {
     rules: [
-      // all files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'
+      // all files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
       { test: /\.tsx?$/, loaders: ['awesome-typescript-loader'] },
       { test: /\.jsx?$/, loaders: ['babel-loader'] }
     ]
