@@ -32,8 +32,6 @@ export class AssetManager {
 
   initAudioContext (): void {
     try {
-      // Fix for browsers using prefixes
-      window.AudioContext = window.AudioContext || webkitAudioContext
       this.audioContext = new AudioContext()
       this.masterGain = this.audioContext.createGain()
       this.effectsGain = this.audioContext.createGain()

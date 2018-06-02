@@ -58,7 +58,7 @@ class Server {
         });
         this.app.set('port', process.env.PORT || 3000);
         this.httpServer.listen(this.app.get('port'), () => {
-            logger_1.logger.log('info', 'Express remote listening on port ' + this.httpServer.address().port);
+            logger_1.logger.log('info', 'Express server listening on port ' + this.httpServer.address().port);
         });
     }
 }

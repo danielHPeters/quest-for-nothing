@@ -3,7 +3,9 @@ const spawn = require('child_process').spawn
 const gulp = require('gulp')
 const filter = require('gulp-filter')
 const gulpUglify = require('gulp-uglify')
-const webpack = require('webpack-stream')
+const webpack = require('webpack')
+const webpackConfig = require('./webpack.config.js')
+const gulpWebpack = require('webpack-stream')
 const sourceMaps = require('gulp-sourcemaps')
 const rename = require('gulp-rename')
 const ts = require('gulp-typescript')
@@ -21,9 +23,6 @@ const configuration = {
     coverage: 'coverage',
     bundledSource: 'src/entry.js',
     destination: 'public/js'
-  },
-  webpack: {
-    config: './webpack.config.js'
   }
 }
 
@@ -35,22 +34,14 @@ const configuration = {
  * Source maps are generated to allow source debugging in the consoles of most browsers.
  */
 gulp.task('build:client', () => {
-  return gulp.src(configuration.js.bundledSource)
-    .pipe(webpack(require(configuration.webpack.config)))
-    .pipe(gulp.dest(configuration.js.destination))
-    .pipe(filter('**/*.js'))
-    .pipe(sourceMaps.init())
-    .pipe(babel({
-      presets: ['env']
-    }))
-    .pipe(sourceMaps.write('.'))
-    .pipe(filter('**/*.js'))
-    .pipe(gulpUglify())
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(sourceMaps.write('.'))
+  return gulp.src(configuration.js.bundledSource, { allowEmpty: true })
+    .pipe(gulpWebpack(webpackConfig, webpack))
     .pipe(gulp.dest(configuration.js.destination))
 })
 
+/**
+ * Generates the server JavaScript files from TypeScript and puts them in the dist folder.
+ */
 gulp.task('build:server', () => {
   return tsProject.src()
     .pipe(tsProject())
@@ -96,18 +87,15 @@ gulp.task('coveralls', (cb) => {
 })
 
 /**
- * Watch changes in js files.
+ * Watch changes in ts files.
  */
-gulp.task('watch-ts', () => {
+gulp.task('watch', () => {
   gulp.watch(configuration.ts.source, ['build:client', 'build:server'])
 })
 
 /**
- * Start all file watcher tasks
+ * Default task to perform all previously defined tasks.
  */
-gulp.task('watch-all', ['watch-js'])
-
-/**
- * Default task to perform all previously defined tasks
- */
-gulp.task('default', ['lint', 'test', 'build:server', 'build:client'])
+gulp.task('default', gulp.series(['lint', 'test', 'build:server', 'build:client'], done => {
+  done()
+}))

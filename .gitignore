@@ -110,7 +110,6 @@ fabric.properties
 
 #Linux
 .directory
-.idea/checkstyle-idea.xml
 
 # ---------------- Microsoft Office ------------------
 
@@ -130,3 +129,11 @@ fabric.properties
 
 # Visio autosave temporary files
 *.~vsd*
+
+# Build
+build/
+dist/
+public/js/*.js
+public/js/*.map
+public/css/*.css
+public/css/*.map

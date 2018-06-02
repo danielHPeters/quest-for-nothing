@@ -10,8 +10,8 @@ import { logger, stream } from './utils/logger'
 import { Http2Server } from 'http2'
 
 export class Server {
-  public app: express.Application
-  public httpServer: Http2Server
+  app: express.Application
+  httpServer: Http2Server
 
   constructor () {
     this.init()
@@ -77,7 +77,7 @@ export class Server {
     this.app.set('port', process.env.PORT || 3000)
 
     this.httpServer.listen(this.app.get('port'), () => {
-      logger.log('info', 'Express remote listening on port ' + this.httpServer.address().port)
+      logger.log('info', 'Express server listening on port ' + this.httpServer.address().port)
     })
   }
 }
