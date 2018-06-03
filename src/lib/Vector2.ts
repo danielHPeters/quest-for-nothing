@@ -1,6 +1,6 @@
 export class Vector2 {
-  private _x: number
-  private _y: number
+  x: number
+  y: number
 
   /**
    * Default constructor. Sets x and y values.
@@ -59,46 +59,6 @@ export class Vector2 {
       throw new Error('cannot divide vector by scalar with value "0"')
     }
     return new Vector2(vector.x / scalar, vector.y / scalar)
-  }
-
-  /**
-   * Set x value of this vector.
-   *
-   * @param {number} x new x value
-   */
-  set x (x: number) {
-    if (typeof x !== 'number') {
-      throw new Error('parameter x must be of type number')
-    }
-    this._x = x
-  }
-
-  /**
-   * Set y value of this vector.
-   *
-   * @param {number} y new y value
-   */
-  set y (y: number) {
-    if (typeof y !== 'number') {
-      throw new Error('parameter y must be of type number')
-    }
-    this._y = y
-  }
-
-  /**
-   * Getter for x value
-   * @returns {number} x value
-   */
-  get x (): number {
-    return this._x
-  }
-
-  /**
-   * Getter for y value
-   * @returns {number} y value
-   */
-  get y (): number {
-    return this._y
   }
 
   /**
