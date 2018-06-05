@@ -86,7 +86,6 @@ export default class Editor {
         this.objectsCount++
         node.appendChild(clonedNode)
       } else {
-        console.log('hello')
         while (node.firstChild) {
           console.log(node.firstChild)
           node.removeChild(node.firstChild)
@@ -119,14 +118,18 @@ export default class Editor {
         }
       ]
     }
-    let children = this.editorGrid.childNodes
+    const children = this.editorGrid.childNodes
+
     for (let i = 0; i < children.length; i++) {
-      let childChildNodes = (children[i] as HTMLElement).children
+      const childChildNodes = (children[i] as HTMLElement).children
       data.areas[0].blocks[i] = []
+
       for (let j = 0; j < childChildNodes.length; j++) {
-        let node = childChildNodes[j]
+        const node = childChildNodes[j]
+
         if (node.firstChild) {
-          let elem = node.firstChild as HTMLElement
+          const elem = node.firstChild as HTMLElement
+
           if (elem.classList.contains('stone')) {
             data.areas[0].blocks[i].push({ type: 'stone', solid: true })
           } else if (elem.classList.contains('spawn')) {
@@ -142,10 +145,6 @@ export default class Editor {
     return data
   }
 
-  /**
-   *
-   * @param message
-   */
   displayMessage (message: string): void {
     this.messageBox.textContent = message
   }
