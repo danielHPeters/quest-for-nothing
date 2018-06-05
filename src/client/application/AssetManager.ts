@@ -1,13 +1,20 @@
-import { EntityType } from '../../lib/interfaces/CollideAble'
-import { Ajax } from '../../lib/Ajax'
-import { SpriteSheet } from '../graphics/2D/SpriteSheet'
-import { Sound } from './audio/Sound'
+import { EntityType } from '../../lib/interfaces/Collideable'
+import Ajax from '../../lib/Ajax'
+import SpriteSheet from '../graphics/2D/SpriteSheet'
+import Sound from './audio/Sound'
 
 export enum AssetType {
   SPRITE = 'SPRITE', SPRITE_SHEET = 'SPRITE_SHEET', AUDIO = 'AUDIO', AUDIO_LOOP = 'LOOP'
 }
 
-export class AssetManager {
+/**
+ * Asset manager class.
+ * Handles loading all static asset files.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
+export default class AssetManager {
   audioContext
   cache
   queue
@@ -16,9 +23,6 @@ export class AssetManager {
   effectsGain: GainNode
   ambientGain: GainNode
 
-  /**
-   *
-   */
   constructor () {
     this.cache = {
       sprites: {},
@@ -60,20 +64,13 @@ export class AssetManager {
   }
 
   /**
-   *
-   * @returns {boolean}
+   * Check if downloading has finished.
+   * @returns True if download count equals queue length
    */
   done (): boolean {
     return this.downloadCount === this.queue.length
   }
 
-  /**
-   *
-   * @param {EntityType} id
-   * @param {string} path
-   * @param {AssetType} type
-   * @param {{}} opts
-   */
   queueDownload (id: EntityType, path: string, type: AssetType, opts = null): void {
     this.queue.push({
       id: id,
@@ -91,7 +88,6 @@ export class AssetManager {
    */
   loadAudioFromUrl (item, callback): void {
     Ajax.create({
-      method: 'GET',
       url: item.path,
       responseType: 'arraybuffer'
     }, response => {
@@ -112,11 +108,6 @@ export class AssetManager {
     )
   }
 
-  /**
-   *
-   * @param item
-   * @param callback
-   */
   loadSprite (item, callback): void {
     let sprite = new Image()
     sprite.addEventListener('load', () => {
@@ -148,6 +139,7 @@ export class AssetManager {
   }
 
   /**
+   * Start downloading all items in the queue and exeucte a callback function on finish.
    *
    * @param callback
    */
@@ -167,8 +159,8 @@ export class AssetManager {
    * Create an audio buffer source node from cached buffer.
    * Send it to the destination of the audio context and play it.
    *
-   * @param {EntityType} id file id
-   * @param {AssetType} type
+   * @param id file id
+   * @param type
    */
   getSound (id: EntityType, type: AssetType): Sound {
     let gain
@@ -180,11 +172,6 @@ export class AssetManager {
     return new Sound(this.audioContext, gain, this.cache.audio[id])
   }
 
-  /**
-   *
-   * @param {string} id
-   * @returns {EntityType}
-   */
   getSprite (id: EntityType): any {
     return this.cache.sprites[id]
   }
@@ -192,8 +179,8 @@ export class AssetManager {
   /**
    * Get sprite sheet by name.
    *
-   * @param {EntityType} id
-   * @returns {SpriteSheet}
+   * @param id SpriteSheet id
+   * @returns The requested SpriteSheet
    */
   getSpriteSheet (id: EntityType): SpriteSheet {
     return this.cache.spriteSheets[id]

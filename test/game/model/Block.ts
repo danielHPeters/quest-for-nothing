@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import { Block } from '../../../src/game/model/Block'
+import Block from '../../../src/game/model/Block'
 
 chai.should()
 

@@ -1,9 +1,15 @@
-import { Vector2 } from '../../lib/Vector2'
-import { CollideAble, EntityType } from '../../lib/interfaces/CollideAble'
+import Vector2 from '../../lib/math/Vector2'
+import Collideable, { EntityType } from '../../lib/interfaces/Collideable'
 
-export class HitBox implements CollideAble {
+/**
+ * Bounding box used for collision detection on objects.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
+export default class HitBox implements Collideable {
   type: EntityType
-  collidesWith
+  collidesWith: EntityType[]
   colliding: boolean
   position: Vector2
   width: number
@@ -11,12 +17,13 @@ export class HitBox implements CollideAble {
 
   /**
    * Initializes position and dimension.
-   * @param {number} x position x
-   * @param {number} y position y
-   * @param {number} width dimension width
-   * @param {number} height dimension height
+   *
+   * @param x X coordinate
+   * @param y Y coordinate
+   * @param width Dimension width
+   * @param height Dimension height
    */
-  constructor (x, y, width, height) {
+  constructor (x: number, y: number, width: number, height: number) {
     this.position = new Vector2(x, y)
     this.width = width
     this.height = height
@@ -26,7 +33,7 @@ export class HitBox implements CollideAble {
     this.collidesWith.push(EntityType.PLAYER)
   }
 
-  isCollideAbleWith (other: CollideAble): boolean {
-    return this.collidesWith.includes(other.type.toString())
+  isCollideAbleWith (other: Collideable): boolean {
+    return this.collidesWith.includes(other.type)
   }
 }

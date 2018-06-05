@@ -1,9 +1,12 @@
-import { HitBox } from './HitBox'
+import HitBox from './HitBox'
 
 /**
+ * QuadTree class used to improve collision checking.
  *
+ * @author Daniel Peters
+ * @version 1.0
  */
-export class QuadTree {
+export default class QuadTree {
   level: number
   maxObjects: number
   maxLevels: number
@@ -14,10 +17,10 @@ export class QuadTree {
   /**
    * Constructor.
    *
-   * @param {HitBox} hitBox
-   * @param {number} level
+   * @param hitBox Bounding box
+   * @param level Layer level
    */
-  constructor (hitBox = new HitBox(0, 0, 0, 0), level = 0) {
+  constructor (hitBox: HitBox = new HitBox(0, 0, 0, 0), level: number = 0) {
     this.level = level
     this.maxObjects = 10
     this.maxLevels = 5
@@ -35,23 +38,12 @@ export class QuadTree {
     this.nodes = []
   }
 
-  /**
-   *
-   * @param returnedObjects
-   * @returns {any}
-   */
   getAllObjects (returnedObjects) {
     this.nodes.forEach(node => node.getAllObjects(returnedObjects))
     this.objects.forEach(object => returnedObjects.push(object))
     return returnedObjects
   }
 
-  /**
-   *
-   * @param returnedObjects
-   * @param object
-   * @returns {any}
-   */
   findObjects (returnedObjects, object) {
     if (typeof object === 'undefined') {
       console.log('UNDEFINED OBJECT')
@@ -108,7 +100,7 @@ export class QuadTree {
    * Get the index of an object from the QuadTree.
    *
    * @param object
-   * @returns {number}
+   * @returns Index of the object
    */
   getIndex (object): number {
     let index = -1

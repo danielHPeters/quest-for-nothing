@@ -1,7 +1,7 @@
 import * as chai from 'chai'
-import { GameState } from '../../../src/game/model/GameState'
-import { LevelLoader } from '../../../src/game/factory/LevelLoader'
-import { Settings } from '../../../src/game/model/Settings'
+import GameState from '../../../src/game/model/GameState'
+import LevelLoader from '../../../src/game/factory/LevelLoader'
+import Settings from '../../../src/game/model/Settings'
 
 chai.should()
 

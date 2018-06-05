@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import { Vector2 } from '../../../src/lib/Vector2'
+import Vector2 from '../../../src/lib/math/Vector2'
 
 chai.should()
 
@@ -18,13 +18,6 @@ describe('Vector2', () => {
       vector.x = 30
       vector.x.should.equal(30)
     })
-
-    it('only accepts numerical values', () => {
-      let func = () => {
-        vector.x = 'foo'
-      }
-      func.should.throw(Error)
-    })
   })
 
   describe('#y', () => {
@@ -40,13 +33,6 @@ describe('Vector2', () => {
     it('can be changed', () => {
       vector.y = 30
       vector.y.should.equal(30)
-    })
-
-    it('only accepts numerical values', () => {
-      let func = () => {
-        vector.y = 'foo'
-      }
-      func.should.throw(Error)
     })
   })
 
@@ -74,13 +60,6 @@ describe('Vector2', () => {
       vector.x.should.equal(4)
       vector.y.should.equal(9)
     })
-
-    it('only accepts Vector2 instances', () => {
-      let func = () => {
-        vector.setVector('foo')
-      }
-      func.should.throw(Error)
-    })
   })
 
   describe('#addVector', () => {
@@ -89,13 +68,6 @@ describe('Vector2', () => {
     beforeEach(() => {
       vector = new Vector2(20, 10)
       anotherVector = new Vector2(10, 20)
-    })
-
-    it('only accepts Vector2 instances as parameter', () => {
-      let func = () => {
-        vector.addVector('vector')
-      }
-      func.should.throw(Error)
     })
 
     it('adds the value of another vector to this vector', () => {
@@ -166,13 +138,6 @@ describe('Vector2', () => {
       vector = new Vector2(20, 10)
     })
 
-    it('only accepts numbers as parameter', () => {
-      let func = () => {
-        vector.multiply('foo')
-      }
-      func.should.throw(Error)
-    })
-
     it('multiplies the vector x and y values by scalar', () => {
       vector.multiply(2)
       vector.x.should.equal(40)
@@ -202,13 +167,6 @@ describe('Vector2', () => {
     let vector
     beforeEach(() => {
       vector = new Vector2(20, 10)
-    })
-
-    it('only accepts numbers as parameter', () => {
-      let func = () => {
-        vector.divide('foo')
-      }
-      func.should.throw(Error)
     })
 
     it('does not allow division by zero', () => {
@@ -334,13 +292,6 @@ describe('Vector2', () => {
       anotherVector = new Vector2(20, 10)
     })
 
-    it('only accepts Vector2 instances as parameter', () => {
-      let func = () => {
-        vector.distanceTo('foo')
-      }
-      func.should.throw(Error)
-    })
-
     it('returns a number', () => {
       vector.distanceTo(anotherVector).should.be.a('number')
     })
@@ -352,13 +303,6 @@ describe('Vector2', () => {
     beforeEach(() => {
       vector = new Vector2(20, 10)
       anotherVector = new Vector2(20, 10)
-    })
-
-    it('only accepts Vector2 instances as parameter', () => {
-      let func = () => {
-        vector.dot('foo')
-      }
-      func.should.throw(Error)
     })
 
     it('returns a number', () => {

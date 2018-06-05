@@ -1,6 +1,6 @@
 import * as chai from 'chai'
-import { GameState } from '../../../src/game/model/GameState'
-import { Settings } from '../../../src/game/model/Settings'
+import GameState from '../../../src/game/model/GameState'
+import Settings from '../../../src/game/model/Settings'
 
 const should = chai.should()
 

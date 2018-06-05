@@ -8,6 +8,7 @@ import * as sassMiddleware from 'node-sass-middleware'
 import * as socketIo from 'socket.io'
 import { logger, stream } from './utils/logger'
 import { Http2Server } from 'http2'
+import GameLoop from './gameLoop'
 
 export class Server {
   app: express.Application
@@ -26,11 +27,11 @@ export class Server {
     this.httpServer = http.createServer(this.app)
     const routes = require('./routes/index') // get routes
     const io = socketIo(this.httpServer) // integrate socket.io
-    require('./gameLoop')(io) // pass remote io to the game loop to allow sending and receiving game status events
+    const gameLoop = new GameLoop(io)
+    gameLoop.start()
     this.app.set('views', path.join(__dirname, '../../views'))
     this.app.set('view engine', 'pug')
     this.app.use(require('morgan')('dev', { 'stream': stream })) // pass custom logger to default express logger
-
     this.app.use(bodyParser.json())
     this.app.use(cookieParser())
     this.app.use(bodyParser.urlencoded({ extended: false }))

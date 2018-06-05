@@ -1,18 +1,30 @@
+import { Actions } from '../../client/application/InputManager'
+
+export interface AudioSettings {
+  master: number
+  ambient: number
+  effects: number
+}
+
+export interface PlayerSettings {
+  maxVelocity: number,
+  fireDelay: number,
+  friction: number,
+  acceleration: number
+}
+
 /**
- * Register default game settings here.
+ * Application settings class.
  *
  * @author Daniel Peters
  * @version 1.0
- * @type {module.Settings}
  */
-import { Actions } from '../../client/application/InputManager'
-
-export class Settings {
+export default class Settings {
   canvasWidth: number
   canvasHeight: number
   keyBoard
-  player
-  audio
+  player: PlayerSettings
+  audio: AudioSettings
 
   /**
    * Constructor. Sets default settings.

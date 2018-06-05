@@ -1,22 +1,25 @@
-import { Block } from '../model/Block'
-import { SpawnPoint } from '../model/SpawnPoint'
-import { Item } from '../model/Item'
-import { Player } from '../model/Player'
-import { Area } from '../model/Area'
+import Block from '../model/Block'
+import SpawnPoint from '../model/SpawnPoint'
+import Item from '../model/Item'
+import Player from '../model/Player'
+import Area from '../model/Area'
 
 /**
+ *  Game entity factory class.
  *
- * @type {GameObjectFactory}
+ * @author Daniel Peters
+ * @version 1.0
  */
-export class GameObjectFactory {
+export default class GameObjectFactory {
   /**
    * Get a Block instance.
-   * @param {number} x - x position
-   * @param {number} y - y position
-   * @param {number} w - block width
-   * @param {number} h - block height
-   * @param {string} type block type
-   * @returns {Block} new Block
+   *
+   * @param x - X coordinate
+   * @param y - Y coordinate
+   * @param w - Block width
+   * @param h - Block height
+   * @param type Block type
+   * @returns New Block
    */
   static getBlock (x: number, y: number, w: number, h: number, type: string): Block {
     return new Block(x, y, w, h, type)
@@ -24,12 +27,13 @@ export class GameObjectFactory {
 
   /**
    * Get a SpawnPoint instance.
-   * @param {number} x - x position
-   * @param {number} y - y position
-   * @param {number} w - spawn point width
-   * @param {number} h - spawn point height
-   * @param {Area} area containing Area
-   * @returns {SpawnPoint} new SpawnPoint
+   *
+   * @param x - X coordinate
+   * @param y - Y coordinate
+   * @param w - SpawnPoint width
+   * @param h - SpawnPoint height
+   * @param area Containing Area
+   * @returns Anew SpawnPoint
    */
   static getSpawnPoint (x: number, y: number, w: number, h: number, area: Area): SpawnPoint {
     return new SpawnPoint(x, y, w, h, area)
@@ -38,14 +42,14 @@ export class GameObjectFactory {
   /**
    * Get an Item instance.
    *
-   * @param {number} x - x position
-   * @param {number} y - y position
-   * @param {number} w - player width
-   * @param {number} h - player height
-   * @param {string} type item type
-   * @param {string} description item description
-   * @param {function} action us action
-   * @returns {Item} new Item
+   * @paramx - X coordinate
+   * @param y - Y coordinate
+   * @param w - Player width
+   * @param h - Player height
+   * @param type Item type
+   * @param description Item description
+   * @param action Use action
+   * @returns New Item
    */
   static getItem (x: number, y: number, h: number, w: number, type: string, description: string, action): Item {
     return new Item(x, y, w, h, type, description, action)
@@ -53,14 +57,15 @@ export class GameObjectFactory {
 
   /**
    * Get a player instance.
-   * @param {string} id - player id
-   * @param {number} x - x position
-   * @param {number} y - y position
-   * @param {number} w - player width
-   * @param {number} h - player height
-   * @param {string} type name of texture file
-   * @param {Area} area starting area
-   * @returns {Player} new Player
+   *
+   * @param id - Player id
+   * @param x - X coordinate
+   * @param y - Y coordinate
+   * @param w - Player width
+   * @param h - Player height
+   * @param type Name of texture file
+   * @param area Starting area
+   * @returns New Player
    */
   static getPlayer (id: string, x: number, y: number, w: number, h: number, type: string, area: Area): Player {
     return new Player(id, x, y, w, h, type, area)

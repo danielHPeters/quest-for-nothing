@@ -1,17 +1,20 @@
-import { Area } from '../model/Area'
-import { BlockGenerator } from './BlockGenerator'
+import Area from '../model/Area'
+import BlockGenerator from './BlockGenerator'
+import GameState from '../model/GameState'
 
 /**
+ * LeveLoader class.
  *
- * @type {LevelLoader}
+ * @author Daniel Peters
+ * @version 1.0
  */
-export class LevelLoader {
+export default class LevelLoader {
   private levelsPath: string
 
   /**
    * Default constructor. Sets the path to level definition files.
    *
-   * @param {string} levelsPath path to level files
+   * @param levelsPath Path to level files
    */
   constructor (levelsPath: string) {
     this.levelsPath = levelsPath
@@ -20,10 +23,10 @@ export class LevelLoader {
   /**
    * Loads level file.
    *
-   * @param {string} level level name
+   * @param level Level name
    */
-  loadLevel (game, level) {
-    let levelDefinition = require(this.levelsPath + level)
+  loadLevel (game: GameState, level: string): void {
+    const levelDefinition = require(this.levelsPath + level)
 
     let areasDone = 0
 
@@ -41,10 +44,10 @@ export class LevelLoader {
   /**
    * After loading level. The areas need to be set to allow travelling between them.
    *
-   * @param {module.GameState} game initialized game instance
-   * @param {{}} levelDefinition level definition data loaded from file
+   * @param game GameState instance
+   * @param levelDefinition Level definition data loaded from file
    */
-  setExits (game, levelDefinition) {
+  setExits (game: GameState, levelDefinition): void {
     levelDefinition.areas.forEach(areaDefinition => {
       let area = game.areas.filter(area => area.id === areaDefinition.id)[0]
       Object.keys(areaDefinition.exits).forEach((key) => {

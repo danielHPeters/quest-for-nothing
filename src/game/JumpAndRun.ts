@@ -1,17 +1,19 @@
-import { Settings } from './model/Settings'
-import { GameObjectFactory } from './factory/GameObjectFactory'
-import { GameState } from './model/GameState'
-import { LevelLoader } from './factory/LevelLoader'
+import Settings from './model/Settings'
+import GameObjectFactory from './factory/GameObjectFactory'
+import GameState from './model/GameState'
+import LevelLoader from './factory/LevelLoader'
 
 /**
- * Main class of the JumpAndRun game.
+ * Main class of quest for nothing.
  *
- * @type {JumpAndRun}
+ * @author Daniel Peters
+ * @version 1.0
  */
-export class JumpAndRun {
+export default class JumpAndRun {
   private settings: Settings
   private state: GameState
   private levelLoader: LevelLoader
+
   /**
    * Constructor initializes the game state.
    */
@@ -25,11 +27,11 @@ export class JumpAndRun {
   /**
    * Add a new Player.
    *
-   * @param playerId id of the player
+   * @param playerId Player ID
    */
-  addPlayer (playerId) {
+  addPlayer (playerId: string): void {
     if (!this.state.players.find(player => { return player.id === playerId })) {
-      let player = GameObjectFactory.getPlayer(
+      const player = GameObjectFactory.getPlayer(
         playerId,
         this.state.spawnPoint.position.x,
         this.state.spawnPoint.position.y,
@@ -44,11 +46,11 @@ export class JumpAndRun {
   }
 
   /**
-   * Remove player from game by id.
+   * Remove player from game by ID.
    *
-   * @param {string} playerId player id
+   * @param playerId Player id.
    */
-  removePlayer (playerId) {
+  removePlayer (playerId: string): void {
     this.state.players = this.state.players.filter(player => { return player.id !== playerId })
   }
 
@@ -58,7 +60,7 @@ export class JumpAndRun {
    * @param playerId id of the player to be updated
    * @param actions player input
    */
-  registerPlayerAction (playerId, actions) {
+  registerPlayerAction (playerId: string, actions): void {
     this.state.players.find(player => { return player.id === playerId }).registeredInputs = actions
   }
 
@@ -67,11 +69,13 @@ export class JumpAndRun {
    *
    * @param callback function that sends game state data to destination
    */
-  run (callback) {
+  run (callback): void {
     let lastUpdateTime = (new Date()).getTime()
+
     setInterval(() => {
-      let currentTime = (new Date()).getTime()
-      let timeDifference = currentTime - lastUpdateTime
+      const currentTime = (new Date()).getTime()
+      const timeDifference = currentTime - lastUpdateTime
+
       this.state.update(timeDifference)
       lastUpdateTime = currentTime
       callback(this.state.players)

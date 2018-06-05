@@ -1,12 +1,13 @@
-import { Editor } from './application/Editor'
+import Editor from './application/Editor'
 
 /**
  * Initializes all the click and drag events.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  let editor = new Editor()
-  let gameObjects = ['stone', 'coin', 'spawn']
-  let boxes = document.getElementsByClassName('box')
+  const editor = new Editor()
+  const gameObjects = ['stone', 'coin', 'spawn']
+  const boxes = document.getElementsByClassName('box')
+
   for (let i = 0; i < boxes.length; i++) {
     boxes[i].addEventListener('dragover', editor.allowDrop.bind(editor))
     boxes[i].addEventListener('drop', editor.drop.bind(editor))

@@ -19,10 +19,16 @@ export enum EntityType {
   COIN_SHEET = 'cointSheet'
 }
 
-export interface CollideAble {
+/**
+ * Interface used for collideable objects.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
+export default interface Collideable {
   type: EntityType
   collidesWith
   colliding: boolean
 
-  isCollideAbleWith (other: CollideAble): boolean
+  isCollideAbleWith (other: Collideable): boolean
 }

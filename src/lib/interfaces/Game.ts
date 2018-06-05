@@ -1,4 +1,10 @@
-export interface IGame {
+/**
+ * Game interface.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
+export default interface Game {
   canvas: HTMLCanvasElement
   context: CanvasRenderingContext2D
   playing: boolean

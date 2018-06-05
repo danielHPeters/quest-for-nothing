@@ -3,7 +3,7 @@ import * as winston from 'winston'
 winston['emitErrs'] = true
 // logger configuration here all files will be added to logs folder.
 // Warning: server may fail if /logs folder not present
-export let logger = new winston.Logger({
+export const logger = new winston.Logger({
   transports: [
     new winston.transports.File({
       level: 'info',
@@ -24,7 +24,7 @@ export let logger = new winston.Logger({
   exitOnError: false
 })
 
-export let stream = {
+export const stream = {
   write: function (message) {
     logger.info(message)
   }

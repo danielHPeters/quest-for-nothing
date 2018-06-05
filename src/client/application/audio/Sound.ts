@@ -1,12 +1,18 @@
-export class Sound {
-  audioContext: AudioContext
-  source: AudioBufferSourceNode
-  gainNode: GainNode
-  masterGain: GainNode
-  buffer
-  playing: boolean
+/**
+ * Container for game sound files.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
+export default class Sound {
+  private audioContext: AudioContext
+  private source: AudioBufferSourceNode
+  private gainNode: GainNode
+  private masterGain: GainNode
+  private buffer
+  private playing: boolean
 
-  constructor (audioContext, masterGain: GainNode, buffer) {
+  constructor (audioContext: AudioContext, masterGain: GainNode, buffer) {
     this.audioContext = audioContext
     this.masterGain = masterGain
     this.buffer = buffer
@@ -16,7 +22,7 @@ export class Sound {
     this.playing = false
   }
 
-  play (loop = false): void {
+  play (loop: boolean = false): void {
     this.source = this.audioContext.createBufferSource()
     this.source.buffer = this.buffer
     this.source.loop = loop

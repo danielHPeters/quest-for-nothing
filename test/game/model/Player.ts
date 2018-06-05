@@ -1,6 +1,6 @@
 import * as chai from 'chai'
-import { Player } from '../../../src/game/model/Player'
-import { Area } from '../../../src/game/model/Area'
+import Player from '../../../src/game/model/Player'
+import Area from '../../../src/game/model/Area'
 
 chai.should()
 

@@ -1,6 +1,6 @@
 import * as chai from 'chai'
-import { HitBox } from '../../../src/game/collision/HitBox'
-import { Entity } from '../../../src/game/model/Entity'
+import HitBox from '../../../src/game/collision/HitBox'
+import Entity from '../../../src/game/model/Entity'
 
 chai.should()
 

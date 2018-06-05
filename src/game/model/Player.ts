@@ -1,16 +1,29 @@
-import { Entity } from './Entity'
-import { Item } from './Item'
-import { GameState } from './GameState'
+import Entity from './Entity'
+import Item from './Item'
+import GameState from './GameState'
 import { Actions } from '../../client/application/InputManager'
+import Area from './Area'
+import Block from './Block'
+
+export interface Edges {
+  left: boolean
+  right: boolean
+  top: boolean
+  bottom: boolean
+}
+
+export interface ViewPort {
+  blocks: Block[]
+  areaId: string
+}
 
 /**
  * Player class containing player information and objects currently visible to him/her.
  *
  * @author Daniel Peters
  * @version 1.0
- * @type {Player}
  */
-export class Player extends Entity {
+export default class Player extends Entity {
   id: string
   lives: number
   coins: number
@@ -23,22 +36,23 @@ export class Player extends Entity {
   registeredInputs
   friction: number
   gravity: number
-  viewport
-  edges
+  viewport: ViewPort
+  edges: Edges
 
   /**
    * Constructor. Initializes position and surroundings information.
    *
-   * @param {string} id player id
-   * @param {number} x initial x
-   * @param {number} y initial y
-   * @param {number} width initial width
-   * @param {number} height initial height
-   * @param {string} type texture and sprite data
-   * @param {Area} area initial area
+   * @param id player id
+   * @param x initial x
+   * @param y initial y
+   * @param width initial width
+   * @param height initial height
+   * @param type texture and sprite data
+   * @param area initial area
    */
-  constructor (id, x, y, width, height, type, area) {
+  constructor (id: string, x: number, y: number, width: number, height: number, type: string, area: Area) {
     super(x, y, width, height, type)
+
     this.id = id
     this.lives = 3
     this.coins = 0
@@ -63,10 +77,10 @@ export class Player extends Entity {
   }
 
   /**
-   * Players object update method
+   * Players object update method.
    *
-   * @param {GameState} game
-   * @param {number} timeDifference
+   * @param game
+   * @param timeDifference
    */
   move (game: GameState, timeDifference: number): void {
     // Jump on 'w' or space keys pressed
@@ -129,31 +143,31 @@ export class Player extends Entity {
   /**
    * Player gain 1 heart.
    */
-  public gainLife (): void {
+  gainLife (): void {
     this.lives += 1
   }
 
   /**
    * Player loses one heart.
    */
-  public loseLife (): void {
+  loseLife (): void {
     this.lives -= 1
   }
 
   /**
    * Toggle this players running state.
    */
-  public toggleRun (): void {
+  toggleRun (): void {
     this.running = !this.running
   }
 
   /**
    * Check collision with other game objects.
    *
-   * @param object other object
-   * @returns {string} string indicating collision direction
+   * @param object Other object
+   * @returns String indicating collision direction
    */
-  checkCollision (object) {
+  checkCollision (object): string {
     if (!(object instanceof Entity) || !object.solid) {
       return ''
     }
@@ -203,7 +217,7 @@ export class Player extends Entity {
    * If yes the player object expresses intent to switch to next area.
    * The switching is handled by Area objects.
    *
-   * @param {GameState} game instance of the game
+   * @param game Instance of the game
    */
   checkEdges (game: GameState) {
     if (this.position.x > game.settings.canvasWidth) {

@@ -1,5 +1,5 @@
-import { Rectangle } from './Rectangle'
-import { Vector2 } from '../../../lib/Vector2'
+import Rectangle from './Rectangle'
+import Vector2 from '../../../lib/math/Vector2'
 
 export enum AXIS {
   NONE = 'none',
@@ -8,7 +8,14 @@ export enum AXIS {
   BOTH = 'both'
 }
 
-export class Camera {
+/**
+ * Camera class used to create a 'scrollable' viewport.
+ * The camera can follow an object (typically the player).
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
+export default class Camera {
   position: Vector2
   previousPosition: Vector2
   viewWidth: number
@@ -19,7 +26,7 @@ export class Camera {
   viewportRect: Rectangle
   worldRect: Rectangle
 
-  constructor (x, y, viewWidth, viewHeight, worldWidth, worldHeight) {
+  constructor (x: number, y: number, viewWidth: number, viewHeight: number, worldWidth: number, worldHeight: number) {
     // position of camera (left-top coordinate)
     this.position = new Vector2(x, y)
     this.previousPosition = new Vector2(x, y)
@@ -46,16 +53,16 @@ export class Camera {
   /**
    * Object needs to have "x" and "y" properties (as world(or room) position)
    *
-   * @param {} following
-   * @param xDeadZone
-   * @param yDeadZone
+   * @param following The object the camera is following
+   * @param xDeadZone X Dead zone
+   * @param yDeadZone Y Dead zone
    */
-  public follow (following, xDeadZone, yDeadZone): void {
+  follow (following, xDeadZone: number, yDeadZone: number): void {
     this.following = following
     this.deadZone.set(xDeadZone, yDeadZone)
   }
 
-  public update (): void {
+  update (): void {
     this.previousPosition.setVector(this.position)
     // keep following the player (or other desired object)
     if (this.following != null) {

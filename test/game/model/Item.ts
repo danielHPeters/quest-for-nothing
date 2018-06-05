@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import { Item } from '../../../src/game/model/Item'
+import Item from '../../../src/game/model/Item'
 
 const should = chai.should()
 
@@ -14,13 +14,6 @@ describe('Item', () => {
     it('should be a function', () => {
       item.action.should.be.a('function')
     })
-
-    it('should only accept functions', () => {
-      let func = () => {
-        item.action = 'function'
-      }
-      func.should.throw(Error)
-    })
   })
 
   describe('#use', () => {
@@ -30,12 +23,6 @@ describe('Item', () => {
   })
 
   describe('#description', () => {
-    it('should only accept strings', () => {
-      let func = () => {
-        item.description = 0
-      }
-      func.should.throw(Error)
-    })
     it('should return the description of the item', () => {
       item.description.should.equal('a regular bottle')
     })

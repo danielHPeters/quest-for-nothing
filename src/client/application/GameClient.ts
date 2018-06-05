@@ -1,10 +1,17 @@
-import { Actions, InputManager } from './InputManager'
-import { AssetManager, AssetType } from './AssetManager'
+import InputManager, { Actions } from './InputManager'
+import AssetManager, { AssetType } from './AssetManager'
 import Animation from '../graphics/2D/Animation'
 import { EntityType } from '../../lib/interfaces/CollideAble'
-import { Observer } from '../../lib/observer/Observer'
-import { Settings } from '../../game/model/Settings'
+import Observer from '../../lib/observer/Observer'
+import Settings from '../../game/model/Settings'
+import Remote from './Remote'
 
+/**
+ * Quest for nothing game client main class.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
 export default class GameClient implements Observer {
   playerId: string
   private canvas: HTMLCanvasElement
@@ -17,13 +24,19 @@ export default class GameClient implements Observer {
   private state
   private settings: Settings
 
-  constructor (remote, canvas) {
+  /**
+   * Constructor. Initializes the game client.
+   *
+   * @param remote Remote server reference
+   * @param canvas Main game canvas
+   */
+  constructor (remote: Remote, canvas: HTMLCanvasElement) {
     this.settings = new Settings()
     this.canvas = canvas
     this.backgroundCanvas = document.getElementById('background') as HTMLCanvasElement
     this.inputManager = new InputManager(this.settings)
-    this.inputManager.observers.push(remote)
-    this.inputManager.observers.push(this)
+    this.inputManager.register(remote)
+    this.inputManager.register(this)
     this.assetManager = new AssetManager()
     this.spritesLoaded = false
     this.ctx = null
@@ -31,8 +44,7 @@ export default class GameClient implements Observer {
     this.init()
   }
 
-  init () {
-    console.log('start')
+  init (): void {
     // check if canvas is supported by browser
     if (this.canvas.getContext) {
       this.ctx = this.canvas.getContext('2d')
@@ -74,7 +86,7 @@ export default class GameClient implements Observer {
     this.state = state
   }
 
-  loop () {
+  loop (): void {
     this.inputManager.notify()
     // Request new frame when ready. Allows the game to play in a loop in approximately 60fps
     window.requestAnimationFrame(() => this.loop())
@@ -84,7 +96,7 @@ export default class GameClient implements Observer {
    * Draw all objects.
    * @param players player objects with objects within their viewport
    */
-  render (players) {
+  render (players): void {
     let currentPlayer = players.find(player => { return player.id === this.playerId })
     if (this.playerId && currentPlayer && this.spritesLoaded) {
       if (this.state[Actions.UP] || this.state[Actions.JUMP]) {

@@ -5,10 +5,10 @@ import Remote from './application/Remote'
  * modern browser equivalent of jQuery $(document).ready()
  */
 document.addEventListener('DOMContentLoaded', () => {
-  let socket = io()
-  let remote = new Remote(socket)
-  let client = new GameClient(remote, document.getElementById('game'))
-  console.log('hi')
+  const socket = io()
+  const remote = new Remote(socket)
+  const client = new GameClient(remote, document.getElementById('game') as HTMLCanvasElement)
+
   /**
    * Initialize player id on remote connection
    */
@@ -21,7 +21,5 @@ document.addEventListener('DOMContentLoaded', () => {
    * Listen to remote sending objects to draw.
    * Contains the drawing loop
    */
-  socket.on('state', players => {
-    client.render(players)
-  })
+  socket.on('state', players => client.render(players))
 })

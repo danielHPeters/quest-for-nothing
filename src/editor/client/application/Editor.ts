@@ -1,6 +1,12 @@
-import { Ajax } from '../../../lib/Ajax'
+import Ajax, { HttpMethod } from '../../../lib/Ajax'
 
-export class Editor {
+/**
+ * Level editor class.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
+export default class Editor {
   objectsCount: number
   activeItem
   editorGrid: HTMLElement
@@ -18,25 +24,25 @@ export class Editor {
   /**
    * Allows dropping on an element by disabling the default behaviour.
    *
-   * @param event drag & drop event
+   * @param event Drag & drop event
    */
-  allowDrop (event) {
+  allowDrop (event): void {
     event.preventDefault()
   }
 
   /**
    * Drag handler.
-   * @param event drag event
+   * @param event Drag event
    */
-  drag (event) {
+  drag (event): void {
     event.dataTransfer.setData('text/html', event.target.id)
   }
 
   /**
    * Drop handler of drag & drop. Creates a copy of the item in the destination.
-   * @param event drop event
+   * @param event Drop event
    */
-  drop (event) {
+  drop (event): void {
     event.preventDefault()
     let data = event.dataTransfer.getData('text/html')
     let originalNode = document.getElementById(data)
@@ -51,9 +57,9 @@ export class Editor {
   /**
    * Toggles the active (highlighted) item in the objects sidebar when clicking on them.
    * Also sets the item to be added to the boxes on click.
-   * @param event click event
+   * @param event Click event
    */
-  toggleSelectItem (event) {
+  toggleSelectItem (event): void {
     let gameObjects = document.querySelectorAll('.game-object')
     for (let i = 0; i < gameObjects.length; i++) {
       gameObjects[i].classList.remove('selected')
@@ -66,9 +72,9 @@ export class Editor {
 
   /**
    * Adds or removes the currently active item to the selected box
-   * @param event click event
+   * @param event Click event
    */
-  setItem (event) {
+  setItem (event): void {
     // use currentTarget instead of target to avoid adding an image to an image
     let node = event.currentTarget
     if (this.activeItem) {
@@ -93,7 +99,7 @@ export class Editor {
    * Generates a level object based on the graphical box grid.
    * Currently only supports one area.
    *
-   * @returns {{}}
+   * @returns
    */
   generateLevel () {
     // Area exits and area id are currently hardcoded
@@ -140,24 +146,24 @@ export class Editor {
    *
    * @param message
    */
-  displayMessage (message) {
-    this.messageBox.appendChild(document.createTextNode(message))
+  displayMessage (message: string): void {
+    this.messageBox.textContent = message
   }
 
   /**
    * Submit the level to 'add-level' route
    *
-   * @param event submit event
+   * @param event Submit event
    */
-  submitLevel (event) {
+  submitLevel (event): void {
     event.preventDefault()
     Ajax.create(
       {
-        method: 'POST',
+        method: HttpMethod.POST,
         url: this.submitUrl,
         data: this.generateLevel()
       },
-      this.displayMessage('Level submitted!')
+      (response) => this.displayMessage('Level submitted!')
     )
   }
 }

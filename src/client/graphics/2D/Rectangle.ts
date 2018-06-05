@@ -1,4 +1,10 @@
-export class Rectangle {
+/**
+ * Recangle class representing a rectangle on the canvas.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
+export default class Rectangle {
   left: number
   right: number
   top: number
@@ -15,7 +21,7 @@ export class Rectangle {
     this.bottom = this.top + this.height
   }
 
-  public set (left: number, top: number, width?: number, height?: number): void {
+  set (left: number, top: number, width?: number, height?: number): void {
     this.left = left
     this.top = top
     this.width = width || this.width
@@ -24,14 +30,14 @@ export class Rectangle {
     this.bottom = (this.top + this.height)
   }
 
-  public within (other): boolean {
+  within (other: Rectangle): boolean {
     return (other.left <= this.left &&
       other.right >= this.right &&
       other.top <= this.top &&
       other.bottom >= this.bottom)
   }
 
-  public overlaps (other): boolean {
+  overlaps (other: Rectangle): boolean {
     return (this.left < other.right &&
       other.left < this.right &&
       this.top < other.bottom &&

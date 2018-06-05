@@ -1,6 +1,6 @@
 import * as chai from 'chai'
-import { Area } from '../../../src/game/model/Area'
-import { Player } from '../../../src/game/model/Player'
+import Area from '../../../src/game/model/Area'
+import Player from '../../../src/game/model/Player'
 
 const should = chai.should()
 
@@ -70,13 +70,6 @@ describe('Area', () => {
       area2.left = null
       should.equal(area2.left, null)
     })
-
-    it('only accepts Area instance or null as values', () => {
-      let func = () => {
-        area2.left = 'area'
-      }
-      func.should.throw(Error)
-    })
   })
 
   describe('#right', () => {
@@ -94,13 +87,6 @@ describe('Area', () => {
     it('can be changed', () => {
       area2.right = area
       area2.right.should.equal(area)
-    })
-
-    it('only accepts Area instance or null as values', () => {
-      let func = () => {
-        area2.right = 'area'
-      }
-      func.should.throw(Error)
     })
   })
 
@@ -120,13 +106,6 @@ describe('Area', () => {
       area2.top = null
       should.equal(area2.top, null)
     })
-
-    it('only accepts Area instance or null as values', () => {
-      let func = () => {
-        area2.top = 'area'
-      }
-      func.should.throw(Error)
-    })
   })
 
   describe('#bottom', () => {
@@ -145,13 +124,6 @@ describe('Area', () => {
     it('can be changed', () => {
       area2.bottom = null
       should.equal(area2.bottom, null)
-    })
-
-    it('only accepts Area instance or null as values', () => {
-      let func = () => {
-        area2.bottom = 'area'
-      }
-      func.should.throw(Error)
     })
   })
 

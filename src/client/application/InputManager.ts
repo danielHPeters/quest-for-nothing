@@ -1,19 +1,30 @@
-import { Observable } from '../../lib/observer/Observable'
-import { Settings } from '../../game/model/Settings'
+import Observable from '../../lib/observer/Observable'
+import Settings from '../../game/model/Settings'
 
 export enum Actions {
-  UP = 'UP', DOWN = 'DOWN', LEFT = 'LEFT', RIGHT = 'RIGHT', SHOOT = 'SHOOT', RESTART = 'RESTART', JUMP = 'JUMP'
+  UP = 'UP',
+  DOWN = 'DOWN',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT',
+  SHOOT = 'SHOOT',
+  RESTART = 'RESTART',
+  JUMP = 'JUMP'
 }
 
 /**
+ * Input manager class. Handles keyboard and touch inputs.
  *
+ * @author Daniel Peters
+ * @version 1.0
  */
-export class InputManager extends Observable {
+export default class InputManager extends Observable {
   inputMap
   touches
 
   /**
+   * Construtor. Initializes handler code.
    *
+   * @param settings Application settings object
    */
   constructor (settings: Settings) {
     super()

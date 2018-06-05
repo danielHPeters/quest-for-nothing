@@ -1,17 +1,16 @@
-import { Settings } from './Settings'
-import { SpawnPoint } from './SpawnPoint'
-import { Player } from './Player'
-import { Area } from './Area'
-import { Block } from './Block'
+import Settings from './Settings'
+import SpawnPoint from './SpawnPoint'
+import Player from './Player'
+import Area from './Area'
+import Block from './Block'
 
 /**
  * Game class containing objects and player state.
  *
  * @author Daniel Peters
- * @version 1.2
- * @type {GameState}
+ * @version 1.0
  */
-export class GameState {
+export default class GameState {
   settings: Settings
   spawnPoint: SpawnPoint
   players: Player[]
@@ -22,7 +21,7 @@ export class GameState {
   /**
    * Constructor. Requires default settings to calculate size of objects etc.
    *
-   * @param {module.Settings} settings
+   * @param settings Application settings
    */
   constructor (settings: Settings) {
     this.settings = settings
@@ -34,11 +33,11 @@ export class GameState {
   }
 
   /**
-   * Update all game objects
+   * Update all game objects.
    *
-   * @param {number} timeDifference
+   * @param timeDifference Time difference between now and last update
    */
-  public update (timeDifference: number): void {
+  update (timeDifference: number): void {
     this.players.forEach(player => player.move(this, timeDifference))
     this.areas.forEach(area => area.checkPlayers())
   }

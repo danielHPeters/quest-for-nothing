@@ -1,11 +1,17 @@
+/**
+ * Remote host class.
+ *
+ * @author Daniel Peters
+ * @version 1.0
+ */
 export default class Remote {
   private socket
 
-  public constructor (socket) {
+  constructor (socket: SocketIOClient.Socket) {
     this.socket = socket
   }
 
-  public update (data) {
+  update (data: any): void {
     this.socket.emit('input', data)
   }
 }

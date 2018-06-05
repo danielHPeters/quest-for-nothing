@@ -1,22 +1,22 @@
-import { Entity } from './Entity'
+import Entity from './Entity'
 
 /**
  * Block class. Used as obstacles or hidden doors.
  *
  * @author Daniel peters
  * @version 1.0
- * @type {Block}
  */
-export class Block extends Entity {
+export default class Block extends Entity {
   /**
-   * Constructor. Set position information and material
-   * @param {number} x
-   * @param {number} y
-   * @param {number} width
-   * @param {number} height
-   * @param {string} type
+   * Constructor. Set position information and material.
+   *
+   * @param x X coordinate
+   * @param y Y coordinate
+   * @param width Initial width
+   * @param height Initial Height
+   * @param type Entity type
    */
-  constructor (x, y, width, height, type) {
+  constructor (x: number, y: number, width: number, height: number, type: string) {
     super(x, y, width, height, type)
     this.solid = true
   }

@@ -1,5 +1,3 @@
-'use strict'
-
 const router = require('express').Router()
 const LevelLoader = require('../../editor/backend/LevelLoader')
 
@@ -7,9 +5,7 @@ const LevelLoader = require('../../editor/backend/LevelLoader')
 // '/' will redirect to the first one in the list
 const pages = ['Home', 'Game', 'Controls', 'About', 'Editor', 'Levels']
 
-router.get('/', (req, res, next) => {
-  res.redirect('/' + pages[0].toLowerCase())
-})
+router.get('/', (req, res, next) => res.redirect('/' + pages[0].toLowerCase()))
 
 pages.forEach((page) => {
   router.get('/' + page.toLowerCase(), (req, res, next) => {
@@ -17,8 +13,6 @@ pages.forEach((page) => {
   })
 })
 
-router.post('/add-level', (req, res, next) => {
-  LevelLoader.saveToJson(req.body)
-})
+router.post('/add-level', (req, res, next) => LevelLoader.saveToJson(req.body))
 
 export = router

@@ -1,12 +1,14 @@
-import { Vector2 } from '../../lib/Vector2'
-import { GameState } from './GameState'
-import { HitBox } from '../collision/HitBox'
+import Vector2 from '../../lib/math/Vector2'
+import GameState from './GameState'
+import HitBox from '../collision/HitBox'
 
 /**
+ * Entity base class.
  *
- * @type {Entity}
+ * @author Daniel Peters
+ * @version 1.0
  */
-export class Entity {
+export default class Entity {
   position: Vector2
   velocity: Vector2
   acceleration: Vector2
@@ -15,17 +17,18 @@ export class Entity {
   height: number
   collideAbleWith
   colliding: boolean
-  private _solid: boolean
+  solid: boolean
 
   /**
+   * Constructor.
    *
-   * @param {number} x
-   * @param {number} y
-   * @param {number} width
-   * @param {number} height
-   * @param {string} type
+   * @param x X coordinate
+   * @param y Y coordinate
+   * @param width Initial width
+   * @param height Initial Height
+   * @param type Entity type
    */
-  constructor (x, y, width, height, type) {
+  constructor (x: number, y: number, width: number, height: number, type: string) {
     this.position = new Vector2(x, y)
     this.velocity = new Vector2(0, 0)
     this.acceleration = new Vector2(0, 0)
@@ -37,46 +40,29 @@ export class Entity {
   }
 
   /**
-   * Get collision bounds in form of a surrounding rectangle
+   * Get collision bounds in form of a surrounding rectangle.
    *
-   * @returns {HitBox}
+   * @returns A hitbox representing a rectangle around this Entity
    */
-  public getCollisionBox () {
+  getCollisionBox (): HitBox {
     return new HitBox(this.position.x, this.position.y, this.width, this.height)
   }
 
-  public draw (): void {
+  draw (): void {
     throw new Error('Not Implemented!')
   }
 
-  public move (game: GameState, timeDifference: number): void {
+  move (game: GameState, timeDifference: number): void {
     throw new Error('Not Implemented!')
   }
 
   /**
    * Check if this Entity is collideable with another object
    *
-   * @param {Entity} object
-   * returns boolean
+   * @param other Other Entity
+   * @returns True if this Entity is collideable with other Entity
    */
-  public isCollideAbleWith (object) {
-    return this.collideAbleWith.includes(object.type)
-  }
-
-  /**
-   * Check if this block is solid. Players can travel through non solid ones.
-   *
-   * @returns {boolean} boolean flag telling if the block is solid
-   */
-  get solid (): boolean {
-    return this._solid
-  }
-
-  /**
-   * Set block state to solid
-   * @param {boolean} solid
-   */
-  set solid (solid: boolean) {
-    this._solid = solid
+  isCollideAbleWith (other: Entity): boolean {
+    return this.collideAbleWith.includes(other.type)
   }
 }

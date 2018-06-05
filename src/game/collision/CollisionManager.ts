@@ -1,7 +1,9 @@
-export class CollisionManager {
-  quadTree
+import QuadTree from './QuadTree'
 
-  constructor (quadTree) {
+export default class CollisionManager {
+  quadTree: QuadTree
+
+  constructor (quadTree: QuadTree) {
     this.quadTree = quadTree
   }
 

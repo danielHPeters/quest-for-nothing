@@ -1,10 +1,10 @@
-import { SpriteSheet } from './SpriteSheet'
+import SpriteSheet from './SpriteSheet'
 
 /**
  * Implements sprite animation using sprite sheet.
  *
  * @author Daniel Peters
- * @version 0.3
+ * @version 1.0
  */
 export default class Animation {
   private spriteSheet: SpriteSheet
@@ -17,13 +17,13 @@ export default class Animation {
   /**
    * Constructor Sets all animation data.
    *
-   * @param {SpriteSheet} spriteSheet corresponding sprite sheet
-   * @param {number} speed animation speed
-   * @param {number} start animation start frame
-   * @param {number} end animation end frame
-   * @param {number} offsetBottom drawing offset at the bottom of source image
+   * @param spriteSheet corresponding sprite sheet
+   * @param speed Animation speed
+   * @param start Animation start frame
+   * @param end Animation end frame
+   * @param offsetBottom Drawing offset at the bottom of source image
    */
-  constructor (spriteSheet, speed, start, end, offsetBottom = 0) {
+  constructor (spriteSheet: SpriteSheet, speed: number, start: number, end: number, offsetBottom: number = 0) {
     this.spriteSheet = spriteSheet
     this.speed = speed
     this.sequence = []
@@ -31,6 +31,7 @@ export default class Animation {
     this.counter = 0
     this.offsetBottom = offsetBottom
 
+    // Initialize sequence.
     for (let frame = start; frame <= end; frame++) {
       this.sequence.push(frame)
     }
@@ -39,7 +40,7 @@ export default class Animation {
   /**
    * Update animation frames.
    */
-  public update () {
+  update (): void {
     if (this.counter === (this.speed - 1)) {
       this.currentFrame = (this.currentFrame + 1) % this.sequence.length
     }
@@ -47,16 +48,18 @@ export default class Animation {
   }
 
   /**
-   * Draw current frame
-   * @param ctx canvas context
-   * @param x location x
-   * @param y location y
-   * @param width display width
-   * @param height display height
+   * Draw current frame.
+   *
+   * @param ctx Canvas context
+   * @param x X Coordinate
+   * @param y Y Coordinate
+   * @param width Display width
+   * @param height Display height
    */
-  public draw (ctx, x, y, width, height) {
-    let row = Math.floor(this.sequence[this.currentFrame] / this.spriteSheet.framesPerRow)
-    let col = Math.floor(this.sequence[this.currentFrame] % this.spriteSheet.framesPerRow)
+  public draw (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
+    const row = Math.floor(this.sequence[this.currentFrame] / this.spriteSheet.framesPerRow)
+    const col = Math.floor(this.sequence[this.currentFrame] % this.spriteSheet.framesPerRow)
+
     ctx.drawImage(
       this.spriteSheet.image,
       col * this.spriteSheet.frameWidth,

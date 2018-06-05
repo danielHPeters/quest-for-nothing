@@ -1,21 +1,23 @@
-import { GameObjectFactory } from './GameObjectFactory'
-import { Area } from '../model/Area'
-import { Entity } from '../model/Entity'
+import GameObjectFactory from './GameObjectFactory'
+import Area from '../model/Area'
+import Entity from '../model/Entity'
+import GameState from '../model/GameState'
 
 /**
- * Generate blocks and other game objects from json level files
+ * Generate blocks and other game objects from json level files.
  *
- * @type {BlockGenerator}
+ * @author Daniel Peters
+ * @version 1.0
  */
-export class BlockGenerator {
+export default class BlockGenerator {
   /**
    * Static factory method to generate game objects and spawn points for players.
-   * @param game
-   * @param {Area} area
-   * @param blocksList
-   * @returns {Entity[]}
+   * @param game Game instance
+   * @param area Game area
+   * @param blocksList Array containing block definitions
+   * @returns Array containing the gernerated block
    */
-  static generateBlocks (game, area: Area, blocksList): Entity[] {
+  static generateBlocks (game: GameState, area: Area, blocksList): Entity[] {
     let objWidth = game.settings.canvasWidth / blocksList[0].length
     let objHeight = game.settings.canvasHeight / blocksList.length
     let objX = 0
