@@ -27,7 +27,7 @@ export enum EntityType {
  */
 export default interface Collideable {
   type: EntityType
-  collidesWith
+  collidesWith: EntityType[]
   colliding: boolean
 
   isCollideAbleWith (other: Collideable): boolean
