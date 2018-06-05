@@ -1,7 +1,7 @@
 import InputManager, { Actions } from './InputManager'
 import AssetManager, { AssetType } from './AssetManager'
 import Animation from '../graphics/2D/Animation'
-import { EntityType } from '../../lib/interfaces/CollideAble'
+import { EntityType } from '../../lib/interfaces/Collideable'
 import Observer from '../../lib/observer/Observer'
 import Settings from '../../game/model/Settings'
 import Remote from './Remote'
