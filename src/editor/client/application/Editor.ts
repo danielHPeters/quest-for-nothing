@@ -8,7 +8,7 @@ import Ajax, { HttpMethod } from '../../../lib/Ajax'
  */
 export default class Editor {
   objectsCount: number
-  activeItem
+  activeItem: Element
   editorGrid: HTMLElement
   messageBox: HTMLElement
   submitUrl: string
@@ -34,15 +34,15 @@ export default class Editor {
    * Drag handler.
    * @param event Drag event
    */
-  drag (event): void {
-    event.dataTransfer.setData('text/html', event.target.id)
+  drag (event: DragEvent): void {
+    event.dataTransfer.setData('text/html', (event.target as Element).id)
   }
 
   /**
    * Drop handler of drag & drop. Creates a copy of the item in the destination.
    * @param event Drop event
    */
-  drop (event): void {
+  drop (event: DragEvent): void {
     event.preventDefault()
     let data = event.dataTransfer.getData('text/html')
     let originalNode = document.getElementById(data)
@@ -51,7 +51,7 @@ export default class Editor {
     clonedNode.id = originalNode.getAttribute('id') + this.objectsCount
     clonedNode.classList.add('fit')
     this.objectsCount++
-    event.target.appendChild(clonedNode)
+    (event.target as Element).appendChild(clonedNode)
   }
 
   /**
@@ -59,12 +59,12 @@ export default class Editor {
    * Also sets the item to be added to the boxes on click.
    * @param event Click event
    */
-  toggleSelectItem (event): void {
+  toggleSelectItem (event: Event): void {
     let gameObjects = document.querySelectorAll('.game-object')
     for (let i = 0; i < gameObjects.length; i++) {
       gameObjects[i].classList.remove('selected')
     }
-    this.activeItem = event.target !== this.activeItem ? event.target : null
+    this.activeItem = event.target !== this.activeItem ? (event.target as Element) : null
     if (this.activeItem) {
       this.activeItem.classList.add('selected')
     }
@@ -74,9 +74,9 @@ export default class Editor {
    * Adds or removes the currently active item to the selected box
    * @param event Click event
    */
-  setItem (event): void {
+  setItem (event: Event): void {
     // use currentTarget instead of target to avoid adding an image to an image
-    let node = event.currentTarget
+    let node = event.currentTarget as Element
     if (this.activeItem) {
       if (!node.hasChildNodes()) {
         let clonedNode = this.activeItem.cloneNode(true)
