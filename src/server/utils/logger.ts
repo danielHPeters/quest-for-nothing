@@ -1,24 +1,19 @@
 import * as winston from 'winston'
 
-winston['emitErrs'] = true
 // logger configuration here all files will be added to logs folder.
 // Warning: server may fail if /logs folder not present
-export const logger = new winston.Logger({
+export const logger = winston.createLogger({
   transports: [
     new winston.transports.File({
       level: 'info',
       filename: './logs/all-logs.log',
       handleExceptions: true,
-      json: true,
       maxsize: 5242880, // 5MB
-      maxFiles: 5,
-      colorize: false
+      maxFiles: 5
     }),
     new winston.transports.Console({
       level: 'debug',
-      handleExceptions: true,
-      json: false,
-      colorize: true
+      handleExceptions: true
     })
   ],
   exitOnError: false

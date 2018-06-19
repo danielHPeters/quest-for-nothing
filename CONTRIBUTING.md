@@ -1,4 +1,4 @@
-# Contributing to jump-and-run
+# Contributing to quest-for-nothing
 
 ## Editors
 

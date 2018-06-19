@@ -79,7 +79,7 @@ export default class Editor {
     let node = event.currentTarget as Element
     if (this.activeItem) {
       if (!node.hasChildNodes()) {
-        let clonedNode = this.activeItem.cloneNode(true)
+        const clonedNode = this.activeItem.cloneNode(true) as Element
         clonedNode.id = this.activeItem.getAttribute('id') + this.objectsCount
         clonedNode.classList.add(this.activeItem.getAttribute('id'))
         clonedNode.classList.add('fit')

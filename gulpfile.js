@@ -92,6 +92,6 @@ gulp.task('watch', () => {
 /**
  * Default task to perform all previously defined tasks.
  */
-gulp.task('default', gulp.series(['lint', 'test', 'build:server', 'build:client'], done => {
+gulp.task('default', gulp.series(['lint', 'build:server', 'build:client', 'test'], done => {
   done()
 }))
