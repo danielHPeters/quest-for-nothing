@@ -5,6 +5,7 @@ import { EntityType } from '../../lib/interfaces/Collideable'
 import Observer from '../../lib/observer/Observer'
 import Settings from '../../game/model/Settings'
 import Remote from './Remote'
+import Player from '../../game/model/Player'
 
 /**
  * Quest for nothing game client main class.
@@ -94,9 +95,9 @@ export default class GameClient implements Observer {
 
   /**
    * Draw all objects.
-   * @param players player objects with objects within their viewport
+   * @param {Player[]} players player objects with objects within their viewport
    */
-  render (players): void {
+  render (players: Player[]): void {
     let currentPlayer = players.find(player => { return player.id === this.playerId })
     if (this.playerId && currentPlayer && this.spritesLoaded) {
       if (this.state[Actions.UP] || this.state[Actions.JUMP]) {
@@ -120,15 +121,15 @@ export default class GameClient implements Observer {
           if (!player.registeredInputs[Actions.LEFT] && !player.registeredInputs[Actions.RIGHT]) {
             this.animations.current = this.animations.idle
           }
-          this.animations.current.draw(this.ctx, player.position._x, player.position._y, player.width, player.height)
+          this.animations.current.draw(this.ctx, player.position.x, player.position.y, player.width, player.height)
         }
       })
       // Draw all blocks
       currentPlayer.viewport.blocks.forEach(block => {
-        if (block.type === 'stone') {
-          this.ctx.drawImage(this.assetManager.getSprite(block.type), block.position._x, block.position._y, block.width, block.height)
-        } else if (block.type === 'coin') {
-          this.animations.coin.draw(this.ctx, block.position._x, block.position._y, block.width, block.height)
+        if (block.type === EntityType.STONE) {
+          this.ctx.drawImage(this.assetManager.getSprite(block.type), block.position.x, block.position.y, block.width, block.height)
+        } else if (block.type === EntityType.COIN) {
+          this.animations.coin.draw(this.ctx, block.position.x, block.position.y, block.width, block.height)
         }
       })
       // Display health

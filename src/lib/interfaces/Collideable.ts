@@ -14,9 +14,9 @@ export enum EntityType {
   JUMP = 'jump',
   STONE = 'stone',
   HEART = 'heart',
-  COIN = 'coint',
+  COIN = 'coin',
   PLAYER_SHEET = 'playerSheet',
-  COIN_SHEET = 'cointSheet'
+  COIN_SHEET = 'coinSheet'
 }
 
 /**
