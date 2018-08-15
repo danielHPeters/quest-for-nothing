@@ -13,7 +13,7 @@ export interface Edges {
 }
 
 export interface ViewPort {
-  blocks: Block[]
+  blocks: Entity[]
   areaId: string
 }
 
