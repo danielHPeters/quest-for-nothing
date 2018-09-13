@@ -30,7 +30,7 @@ export default class JumpAndRun {
    * @param playerId Player ID
    */
   addPlayer (playerId: string): void {
-    if (!this.state.players.find(player => { return player.id === playerId })) {
+    if (!this.state.players.find(player => player.id === playerId)) {
       const player = GameObjectFactory.getPlayer(
         playerId,
         this.state.spawnPoint.position.x,
@@ -51,7 +51,7 @@ export default class JumpAndRun {
    * @param playerId Player id.
    */
   removePlayer (playerId: string): void {
-    this.state.players = this.state.players.filter(player => { return player.id !== playerId })
+    this.state.players = this.state.players.filter(player => player.id !== playerId)
   }
 
   /**
@@ -61,7 +61,7 @@ export default class JumpAndRun {
    * @param actions player input
    */
   registerPlayerAction (playerId: string, actions): void {
-    this.state.players.find(player => { return player.id === playerId }).registeredInputs = actions
+    this.state.players.find(player => player.id === playerId).registeredInputs = actions
   }
 
   /**

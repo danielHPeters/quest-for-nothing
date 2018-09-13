@@ -98,7 +98,7 @@ export default class GameClient implements Observer {
    * @param {Player[]} players player objects with objects within their viewport
    */
   render (players: Player[]): void {
-    let currentPlayer = players.find(player => { return player.id === this.playerId })
+    let currentPlayer = players.find(player => player.id === this.playerId)
     if (this.playerId && currentPlayer && this.spritesLoaded) {
       if (this.state[Actions.UP] || this.state[Actions.JUMP]) {
         // Check if players is not already jumping
