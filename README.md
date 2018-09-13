@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/danielHPeters/quest-for-nothing.svg?branch=v2.0)](https://travis-ci.org/danielHPeters/quest-for-nothing)
 [![Coverage Status](https://coveralls.io/repos/github/danielHPeters/quest-for-nothing/badge.svg?branch=master)](https://coveralls.io/github/danielHPeters/quest-for-nothing?branch=master)
 [![Dependencies Status](https://david-dm.org/danielHpeters/quest-for-nothing.svg)](https://david-dm.org/danielHpeters/quest-for-nothing.svg)  
+[![CodeFactor](https://www.codefactor.io/repository/github/danielhpeters/quest-for-nothing/badge/master)](https://www.codefactor.io/repository/github/danielhpeters/quest-for-nothing/overview/master)  
 # quest-for-nothing
 A simple jump and run game.  
 This should run in any recent browser with html5 support.
