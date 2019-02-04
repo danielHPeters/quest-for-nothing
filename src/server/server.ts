@@ -53,26 +53,22 @@ export class Server {
       err['status'] = 404
       next(err)
     })
+
+    const appName = 'Quest for Nothing'
     const pages = ['Home', 'GameState', 'Controls', 'About', 'Levels']
 
     // error handlers
 
-    // development error handler
-    // will print stacktrace
-    if (this.app.get('env') === 'development') {
-      this.app.use((err, req, res, next) => {
-        console.log(err.status)
-        res.status(err.status || 500)
-        res.render('error', { title: '404', pages: pages, message: err.message, error: err })
-      })
-    }
+    this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+      // set locals, only providing error in development
+      res.locals.message = err.message
+      res.locals.error = req.app.get('env') === 'development' ? err : {}
+      res.locals.routes = pages
+      res.locals.appname = appName
 
-    // production error handler
-    // no stack traces leaked to user
-    this.app.use((err, req, res, next) => {
-      console.log(err.status)
+      // render the error page
       res.status(err.status || 500)
-      res.render('error', { title: '404', pages: pages, message: err.message, error: {} })
+      res.render('error')
     })
 
     this.app.set('port', process.env.PORT || 3000)

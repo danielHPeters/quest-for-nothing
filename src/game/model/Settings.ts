@@ -22,7 +22,7 @@ export interface PlayerSettings {
 export default class Settings {
   canvasWidth: number
   canvasHeight: number
-  keyBoard
+  keyBoard: any
   player: PlayerSettings
   audio: AudioSettings
 

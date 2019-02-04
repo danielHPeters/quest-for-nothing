@@ -1,9 +1,12 @@
 import * as chai from 'chai'
 import * as request from 'supertest'
 import { Server } from '../../src/server/server'
+import { Http2Server } from 'http2'
+
+chai.should()
 
 describe('server', () => {
-  let server
+  let server: Http2Server
   beforeEach(() => {
     delete require.cache[require.resolve('../../src/server/server')]
     server = Server.bootstrap().httpServer

@@ -1,6 +1,6 @@
 import Block from '../model/Block'
 import SpawnPoint from '../model/SpawnPoint'
-import Item from '../model/Item'
+import Item, { ItemAction } from '../model/Item'
 import Player from '../model/Player'
 import Area from '../model/Area'
 
@@ -42,16 +42,16 @@ export default class GameObjectFactory {
   /**
    * Get an Item instance.
    *
-   * @paramx - X coordinate
-   * @param y - Y coordinate
-   * @param w - Player width
-   * @param h - Player height
+   * @param x X coordinate
+   * @param y Y coordinate
+   * @param w Player width
+   * @param h Player height
    * @param type Item type
    * @param description Item description
    * @param action Use action
    * @returns New Item
    */
-  static getItem (x: number, y: number, h: number, w: number, type: string, description: string, action): Item {
+  static getItem (x: number, y: number, h: number, w: number, type: string, description: string, action: ItemAction): Item {
     return new Item(x, y, w, h, type, description, action)
   }
 

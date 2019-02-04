@@ -6,12 +6,14 @@ const should = chai.should()
 
 describe('GameState', () => {
   describe('#update', () => {
-    let game
+    let game: GameState
+    let settings = new Settings()
+
     beforeEach(() => {
-      game = new GameState(new Settings())
+      game = new GameState(settings)
     })
-    it('returns undefined', () => {
-      should.equal(game.update(), undefined)
+    it('has settings', () => {
+      should.equal(game.settings, settings)
     })
   })
 })

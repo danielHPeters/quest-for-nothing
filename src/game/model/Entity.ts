@@ -15,7 +15,7 @@ export default class Entity {
   type: string
   width: number
   height: number
-  collideAbleWith
+  collideAbleWith: string[]
   colliding: boolean
   solid: boolean
 

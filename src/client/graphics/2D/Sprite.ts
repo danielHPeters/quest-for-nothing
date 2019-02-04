@@ -5,8 +5,8 @@
  * @version 1.0
  */
 export default class Sprite {
-  private id: string
-  private path: string
+  id: string
+  path: string
 
   /**
    * Constructor. Sets the id and file path of the sprite.

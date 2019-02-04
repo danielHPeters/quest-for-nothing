@@ -4,7 +4,8 @@ import Item from '../../../src/game/model/Item'
 const should = chai.should()
 
 describe('Item', () => {
-  let item
+  let item: Item
+
   beforeEach(() => {
     item = new Item(10, 10, 20, 20, 'bottle', 'a regular bottle', () => {
       console.log('I am an Item')

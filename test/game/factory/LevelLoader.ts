@@ -7,9 +7,10 @@ chai.should()
 
 describe('LevelLoader', () => {
   describe('#loadLevel', () => {
-    let levelLoader
-    let gameSettings
-    let game
+    let levelLoader: LevelLoader
+    let gameSettings: Settings
+    let game: GameState
+
     beforeEach(() => {
       gameSettings = new Settings()
       game = new GameState(gameSettings)

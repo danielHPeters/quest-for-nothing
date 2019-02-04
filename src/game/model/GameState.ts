@@ -25,7 +25,6 @@ export default class GameState {
    */
   constructor (settings: Settings) {
     this.settings = settings
-    this.spawnPoint = null
     this.players = []
     this.running = false
     this.areas = []

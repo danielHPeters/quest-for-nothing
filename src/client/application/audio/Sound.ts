@@ -9,10 +9,10 @@ export default class Sound {
   private source: AudioBufferSourceNode
   private gainNode: GainNode
   private masterGain: GainNode
-  private buffer
+  private buffer: AudioBuffer
   private playing: boolean
 
-  constructor (audioContext: AudioContext, masterGain: GainNode, buffer) {
+  constructor (audioContext: AudioContext, masterGain: GainNode, buffer: AudioBuffer) {
     this.audioContext = audioContext
     this.masterGain = masterGain
     this.buffer = buffer
@@ -28,9 +28,13 @@ export default class Sound {
     this.source.loop = loop
     this.source.connect(this.gainNode)
     this.source.start(0)
+    this.playing = true
   }
 
   stop (): void {
-    this.source.stop(0)
+    if (this.playing) {
+      this.source.stop(0)
+      this.playing = false
+    }
   }
 }

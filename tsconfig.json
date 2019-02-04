@@ -1,9 +1,24 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2016",
+    "target": "es5",
+    "jsx": "react",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "importHelpers": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "experimentalDecorators": true,
+    "noUnusedLocals": true,
+    "lib": [
+      "dom",
+      "es6",
+      "es2016.array.include"
+    ]
   },
   "include": [
     "src/**/*"

@@ -1,4 +1,5 @@
 import Ajax, { HttpMethod } from '../../../lib/Ajax'
+import { LevelData } from '../../backend/LevelLoader'
 
 /**
  * Level editor class.
@@ -8,16 +9,16 @@ import Ajax, { HttpMethod } from '../../../lib/Ajax'
  */
 export default class Editor {
   objectsCount: number
-  activeItem: Element
+  activeItem: Element | undefined
   editorGrid: HTMLElement
   messageBox: HTMLElement
   submitUrl: string
 
-  constructor () {
+  constructor (editorGrid: HTMLElement, messageBox: HTMLElement) {
     this.objectsCount = 0
-    this.activeItem = null
-    this.editorGrid = document.getElementById('area-grid')
-    this.messageBox = document.getElementById('messages')
+    this.activeItem = undefined
+    this.editorGrid = editorGrid
+    this.messageBox = messageBox
     this.submitUrl = 'add-level'
   }
 
@@ -26,7 +27,7 @@ export default class Editor {
    *
    * @param event Drag & drop event
    */
-  allowDrop (event): void {
+  allowDrop (event: DragEvent): void {
     event.preventDefault()
   }
 
@@ -35,7 +36,11 @@ export default class Editor {
    * @param event Drag event
    */
   drag (event: DragEvent): void {
-    event.dataTransfer.setData('text/html', (event.target as Element).id)
+    const transfer = event.dataTransfer
+
+    if (transfer) {
+      transfer.setData('text/html', (event.target as Element).id)
+    }
   }
 
   /**
@@ -44,14 +49,21 @@ export default class Editor {
    */
   drop (event: DragEvent): void {
     event.preventDefault()
-    let data = event.dataTransfer.getData('text/html')
-    let originalNode = document.getElementById(data)
-    let clonedNode = originalNode.cloneNode(true) as HTMLElement
-    // Change id to avoid errors
-    clonedNode.id = originalNode.getAttribute('id') + this.objectsCount
-    clonedNode.classList.add('fit')
-    this.objectsCount++
-    (event.target as Element).appendChild(clonedNode)
+    const transfer = event.dataTransfer
+
+    if (transfer) {
+      const data = transfer.getData('text/html')
+      const originalNode = document.getElementById(data)
+
+      if (originalNode) {
+        const clonedNode = originalNode.cloneNode(true) as HTMLElement
+        // Change id to avoid errors
+        clonedNode.id = originalNode.id + this.objectsCount
+        clonedNode.classList.add('fit')
+        this.objectsCount++
+        (event.target as Element).appendChild(clonedNode)
+      }
+    }
   }
 
   /**
@@ -64,7 +76,7 @@ export default class Editor {
     for (let i = 0; i < gameObjects.length; i++) {
       gameObjects[i].classList.remove('selected')
     }
-    this.activeItem = event.target !== this.activeItem ? (event.target as Element) : null
+    this.activeItem = event.target !== this.activeItem ? (event.target as Element) : undefined
     if (this.activeItem) {
       this.activeItem.classList.add('selected')
     }
@@ -80,8 +92,8 @@ export default class Editor {
     if (this.activeItem) {
       if (!node.hasChildNodes()) {
         const clonedNode = this.activeItem.cloneNode(true) as Element
-        clonedNode.id = this.activeItem.getAttribute('id') + this.objectsCount
-        clonedNode.classList.add(this.activeItem.getAttribute('id'))
+        clonedNode.id = this.activeItem.id + this.objectsCount
+        clonedNode.classList.add(this.activeItem.id)
         clonedNode.classList.add('fit')
         this.objectsCount++
         node.appendChild(clonedNode)
@@ -103,7 +115,7 @@ export default class Editor {
   generateLevel () {
     // Area exits and area id are currently hardcoded
     // TODO: Make dynamic to allow adding of more areas
-    let data = {
+    let data: LevelData = {
       id: 'newLevel,',
       areas: [
         {
@@ -154,7 +166,7 @@ export default class Editor {
    *
    * @param event Submit event
    */
-  submitLevel (event): void {
+  submitLevel (event: MouseEvent): void {
     event.preventDefault()
     Ajax.create(
       {
@@ -162,7 +174,7 @@ export default class Editor {
         url: this.submitUrl,
         data: this.generateLevel()
       },
-      (response) => this.displayMessage('Level submitted!')
+      () => this.displayMessage('Level submitted!')
     )
   }
 }

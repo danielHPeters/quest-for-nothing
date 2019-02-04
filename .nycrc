@@ -12,8 +12,8 @@
     ".ts"
   ],
   "require": [
-      "ts-node/register"
-    ],
+    "ts-node/register"
+  ],
   "cache": false,
   "all": true
 }

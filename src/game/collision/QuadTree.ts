@@ -11,7 +11,7 @@ export default class QuadTree {
   maxObjects: number
   maxLevels: number
   hitBox: HitBox
-  objects
+  objects: any[]
   nodes: QuadTree[]
 
   /**
@@ -38,13 +38,13 @@ export default class QuadTree {
     this.nodes = []
   }
 
-  getAllObjects (returnedObjects) {
+  getAllObjects (returnedObjects: any[]) {
     this.nodes.forEach(node => node.getAllObjects(returnedObjects))
     this.objects.forEach(object => returnedObjects.push(object))
     return returnedObjects
   }
 
-  findObjects (returnedObjects, object) {
+  findObjects (returnedObjects: any[], object: any) {
     if (typeof object === 'undefined') {
       console.log('UNDEFINED OBJECT')
       return
@@ -62,7 +62,7 @@ export default class QuadTree {
    *
    * @param object
    */
-  insert (object): void {
+  insert (object: any): void {
     if (typeof object === 'undefined') {
       return
     }
@@ -102,7 +102,7 @@ export default class QuadTree {
    * @param object
    * @returns Index of the object
    */
-  getIndex (object): number {
+  getIndex (object: any): number {
     let index = -1
     let verticalMidpoint = this.hitBox.position.x + this.hitBox.width / 2
     let horizontalMidpoint = this.hitBox.position.y + this.hitBox.height / 2

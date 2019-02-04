@@ -11,10 +11,10 @@ export default class Area {
   id: string
   blocks: Block[]
   players: Player[]
-  top: Area
-  bottom: Area
-  left: Area
-  right: Area
+  top: Area | undefined
+  bottom: Area | undefined
+  left: Area | undefined
+  right: Area | undefined
 
   /**
    * Constructor sets id. Exits can be set optionally.
@@ -25,7 +25,13 @@ export default class Area {
    * @param top Top exit
    * @param bottom Bottom exit
    */
-  constructor (id: string, left: Area = null, right: Area = null, top: Area = null, bottom: Area = null) {
+  constructor (
+    id: string,
+    left: Area | undefined = undefined,
+    right: Area | undefined = undefined,
+    top: Area | undefined = undefined,
+    bottom: Area | undefined = undefined
+  ) {
     this.id = id
     this.top = top
     this.bottom = bottom
@@ -41,19 +47,19 @@ export default class Area {
    */
   checkPlayers (): void {
     this.players.forEach(player => {
-      if (player.edges.left && this.hasLeft()) {
+      if (player.edges.left && this.left) {
         player.edges.left = false
         this.left.add(player)
         this.remove(player)
-      } else if (player.edges.right && this.hasRight()) {
+      } else if (player.edges.right && this.right) {
         player.edges.right = false
         this.right.add(player)
         this.remove(player)
-      } else if (player.edges.bottom && this.hasBottom()) {
+      } else if (player.edges.bottom && this.bottom) {
         player.edges.bottom = false
         this.bottom.add(player)
         this.remove(player)
-      } else if (player.edges.top && this.hasTop()) {
+      } else if (player.edges.top && this.top) {
         player.edges.top = false
         this.top.add(player)
         this.remove(player)
@@ -80,41 +86,5 @@ export default class Area {
    */
   remove (player: Player): void {
     this.players = this.players.filter(item => item !== player)
-  }
-
-  /**
-   * Check if the area has a left exit.
-   *
-   * @returns True if exit not null
-   */
-  hasLeft (): boolean {
-    return this.left !== null
-  }
-
-  /**
-   * Check if the area has a right exit.
-   *
-   * @returns True if exit not null
-   */
-  hasRight (): boolean {
-    return this.right !== null
-  }
-
-  /**
-   * Check if the area has a top exit.
-   *
-   * @returns True if exit not null
-   */
-  hasTop (): boolean {
-    return this.top !== null
-  }
-
-  /**
-   * Check if the area has a bottom exit.
-   *
-   * @returns True if exit not null
-   */
-  hasBottom (): boolean {
-    return this.bottom !== null
   }
 }

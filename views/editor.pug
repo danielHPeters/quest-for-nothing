@@ -1,23 +1,23 @@
 extends templates/layout
 
 block stylesheets
-  link(rel='stylesheet' href='css/editor.css')
+  link(href='css/editor.css' rel='stylesheet')
 
 block content
   main.containter-fluid
     .game-objects
-      img.game-object(id='stone', src='assets/textures/stone-block.jpg', draggable='true')
-      img.game-object(id='spawn' src='assets/textures/player.png', draggable='true')
-      img.game-object(id='coin' src='assets/textures/coin.png', draggable='true')
-    #area-grid
+      img.game-object(id='stone', src='/assets/textures/stone-block.jpg', draggable='true')
+      img.game-object(id='spawn' src='/assets/textures/player.png', draggable='true')
+      img.game-object(id='coin' src='/assets/textures/coin.png', draggable='true')
+    #area-grid.area-grid
       -var row = 0
-        while row < 8
-          .row-container
-            - var col = 0
-            while col < 14
-              .box(id= row + '-' + col)
-              - col++
-          - row++
+      while row < 8
+        .row-container
+          - var col = 0
+          while col < 14
+            .box(id= row + '-' + col)
+            - col++
+        - row++
     .fix
     .controls
       button#submitButton.btn.btn-primary Save

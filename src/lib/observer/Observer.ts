@@ -1,5 +1,5 @@
 /**
- * Observer inteface.
+ * Observer interface.
  *
  * @author Daniel Peters
  * @version 1.0

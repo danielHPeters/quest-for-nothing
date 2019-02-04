@@ -3,9 +3,9 @@ extends templates/layout
 block content
   main.container.clearfix
     .game-container
-      canvas(width='900px' height='480px' id='background')
-      canvas(width='900px' height='480px' id='game')
+      canvas#background.background-canvas(width='900px' height='480px')
+      canvas#game.main-canvas(width='900px' height='480px')
     #unsupported
 block scripts
   script(src='/socket.io/socket.io.js')
-  script(src='js/game.min.js')
+  script(src='/js/game.min.js')

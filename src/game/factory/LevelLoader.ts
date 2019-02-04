@@ -1,9 +1,10 @@
 import Area from '../model/Area'
 import BlockGenerator from './BlockGenerator'
 import GameState from '../model/GameState'
+import { LevelData } from '../../editor/backend/LevelLoader'
 
 /**
- * LeveLoader class.
+ * LevelLoader class.
  *
  * @author Daniel Peters
  * @version 1.0
@@ -23,10 +24,11 @@ export default class LevelLoader {
   /**
    * Loads level file.
    *
+   * @param game
    * @param level Level name
    */
   loadLevel (game: GameState, level: string): void {
-    const levelDefinition = require(this.levelsPath + level)
+    const levelDefinition = require(this.levelsPath + level) as LevelData
 
     let areasDone = 0
 
@@ -47,7 +49,7 @@ export default class LevelLoader {
    * @param game GameState instance
    * @param levelDefinition Level definition data loaded from file
    */
-  setExits (game: GameState, levelDefinition): void {
+  setExits (game: GameState, levelDefinition: LevelData): void {
     levelDefinition.areas.forEach(areaDefinition => {
       let area = game.areas.filter(area => area.id === areaDefinition.id)[0]
       Object.keys(areaDefinition.exits).forEach((key) => {

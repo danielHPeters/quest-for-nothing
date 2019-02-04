@@ -7,6 +7,18 @@ export enum AssetType {
   SPRITE = 'SPRITE', SPRITE_SHEET = 'SPRITE_SHEET', AUDIO = 'AUDIO', AUDIO_LOOP = 'LOOP'
 }
 
+export type AssetOpts = {
+  frameWidth: number
+  frameHeight: number
+}
+
+export interface Asset {
+  id: EntityType
+  path: string
+  type: AssetType
+  opts?: AssetOpts
+}
+
 /**
  * Asset manager class.
  * Handles loading all static asset files.
@@ -15,9 +27,13 @@ export enum AssetType {
  * @version 1.0
  */
 export default class AssetManager {
-  audioContext
-  cache
-  queue
+  audioContext: AudioContext
+  cache: {
+    sprites: {},
+    spriteSheets: {},
+    audio: {}
+  }
+  queue: Asset[]
   downloadCount: number
   masterGain: GainNode
   effectsGain: GainNode
@@ -71,7 +87,7 @@ export default class AssetManager {
     return this.downloadCount === this.queue.length
   }
 
-  queueDownload (id: EntityType, path: string, type: AssetType, opts = null): void {
+  queueDownload (id: EntityType, path: string, type: AssetType, opts: AssetOpts | undefined = undefined): void {
     this.queue.push({
       id: id,
       path: path,
@@ -86,7 +102,7 @@ export default class AssetManager {
    * @param item object with name of file and path to file
    * @param callback function to execute on done
    */
-  loadAudioFromUrl (item, callback): void {
+  loadAudioFromUrl (item: Asset, callback: () => void): void {
     Ajax.create({
       url: item.path,
       responseType: 'arraybuffer'
@@ -95,7 +111,7 @@ export default class AssetManager {
     })
   }
 
-  decodeAudio (data, id, callback): void {
+  decodeAudio (data: any, id: EntityType, callback: () => void): void {
     this.audioContext.decodeAudioData(data).then(
       buffer => {
         this.cache.audio[id] = buffer
@@ -108,7 +124,7 @@ export default class AssetManager {
     )
   }
 
-  loadSprite (item, callback): void {
+  loadSprite (item: Asset, callback: () => void): void {
     let sprite = new Image()
     sprite.addEventListener('load', () => {
       this.downloadCount++
@@ -126,10 +142,14 @@ export default class AssetManager {
    * @param item sprite sheet info
    * @param callback called upon downloading all
    */
-  loadSpriteSheet (item, callback): void {
+  loadSpriteSheet (item: Asset, callback: () => void): void {
     let spriteSheet = new Image()
     spriteSheet.addEventListener('load', () => {
-      this.cache.spriteSheets[item.id] = new SpriteSheet(spriteSheet, item.opts.frameWidth || 0, item.opts.frameHeight || 0)
+      this.cache.spriteSheets[item.id] = new SpriteSheet(
+        spriteSheet,
+        item.opts ? item.opts.frameWidth : 0,
+        item.opts ? item.opts.frameHeight : 0
+      )
       this.downloadCount += 1
       if (this.done()) {
         callback()
@@ -143,7 +163,7 @@ export default class AssetManager {
    *
    * @param callback
    */
-  downloadAll (callback): void {
+  downloadAll (callback: () => void): void {
     this.queue.forEach(item => {
       if (item.type === AssetType.AUDIO) {
         this.loadAudioFromUrl(item, callback)

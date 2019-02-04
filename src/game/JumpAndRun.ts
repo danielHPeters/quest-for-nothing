@@ -2,6 +2,9 @@ import Settings from './model/Settings'
 import GameObjectFactory from './factory/GameObjectFactory'
 import GameState from './model/GameState'
 import LevelLoader from './factory/LevelLoader'
+import Player from './model/Player'
+
+export type RunCallback = (players: Player[]) => void
 
 /**
  * Main class of quest for nothing.
@@ -60,8 +63,12 @@ export default class JumpAndRun {
    * @param playerId id of the player to be updated
    * @param actions player input
    */
-  registerPlayerAction (playerId: string, actions): void {
-    this.state.players.find(player => player.id === playerId).registeredInputs = actions
+  registerPlayerAction (playerId: string, actions: any): void {
+    const player = this.state.players.find(player => player.id === playerId)
+
+    if (player) {
+      player.registeredInputs = actions
+    }
   }
 
   /**
@@ -69,7 +76,7 @@ export default class JumpAndRun {
    *
    * @param callback function that sends game state data to destination
    */
-  run (callback): void {
+  run (callback: RunCallback): void {
     let lastUpdateTime = (new Date()).getTime()
 
     setInterval(() => {

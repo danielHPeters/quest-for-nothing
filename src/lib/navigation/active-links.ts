@@ -3,6 +3,10 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
   const pathname = window.location.pathname
-  const element = document.querySelector('a[href="' + pathname + '"]').parentNode as HTMLElement
-  element.classList.add('active')
+  const child = document.querySelector('a[href="' + pathname + '"]')
+
+  if (child) {
+    const element = child.parentNode as HTMLElement
+    element.classList.add('active')
+  }
 })

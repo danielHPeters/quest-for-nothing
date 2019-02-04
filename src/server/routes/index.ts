@@ -1,5 +1,7 @@
-const router = require('express').Router()
-const LevelLoader = require('../../editor/backend/LevelLoader')
+import * as express from 'express'
+import LevelLoader from '../../editor/backend/LevelLoader'
+
+const router = express.Router()
 
 // Register all routes here. Each requires a pug view with same name in lowercase.
 // '/' will redirect to the first one in the list

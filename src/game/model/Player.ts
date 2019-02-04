@@ -3,7 +3,6 @@ import Item from './Item'
 import GameState from './GameState'
 import { Actions } from '../../client/application/InputManager'
 import Area from './Area'
-import Block from './Block'
 
 export interface Edges {
   left: boolean
@@ -33,7 +32,7 @@ export default class Player extends Entity {
   jumping: boolean
   grounded: boolean
   solid: boolean
-  registeredInputs
+  registeredInputs: any
   friction: number
   gravity: number
   viewport: ViewPort
@@ -167,7 +166,7 @@ export default class Player extends Entity {
    * @param object Other object
    * @returns String indicating collision direction
    */
-  checkCollision (object): string {
+  checkCollision (object: any): string {
     if (!(object instanceof Entity) || !object.solid) {
       return ''
     }

@@ -5,7 +5,7 @@
  * @version 1.0
  */
 export default class Remote {
-  private socket
+  private socket: SocketIOClient.Socket
 
   constructor (socket: SocketIOClient.Socket) {
     this.socket = socket

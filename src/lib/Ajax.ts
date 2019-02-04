@@ -8,7 +8,7 @@ export interface AjaxOptions {
   contentType: string
   responseType: XMLHttpRequestResponseType
   async: boolean
-  data
+  data: any
 }
 
 /**
@@ -54,7 +54,7 @@ export default class Ajax {
       )
     }
 
-    if (opts.hasOwnProperty('responseType')) {
+    if (opts.responseType) {
       xHttp.responseType = opts.responseType
     }
 

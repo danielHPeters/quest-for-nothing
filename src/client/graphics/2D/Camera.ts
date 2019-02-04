@@ -21,7 +21,7 @@ export default class Camera {
   viewWidth: number
   viewHeight: number
   axis: AXIS
-  following
+  following: any
   deadZone: Vector2
   viewportRect: Rectangle
   worldRect: Rectangle
@@ -57,7 +57,7 @@ export default class Camera {
    * @param xDeadZone X Dead zone
    * @param yDeadZone Y Dead zone
    */
-  follow (following, xDeadZone: number, yDeadZone: number): void {
+  follow (following: any, xDeadZone: number, yDeadZone: number): void {
     this.following = following
     this.deadZone.set(xDeadZone, yDeadZone)
   }

@@ -6,8 +6,9 @@ const should = chai.should()
 
 describe('Area', () => {
   describe('#ckeckPlayers', () => {
-    let area
-    let player
+    let area: Area
+    let player: Player
+
     beforeEach(() => {
       area = new Area(
         'area1',
@@ -29,6 +30,7 @@ describe('Area', () => {
       area.players[0].edges.left = true
       area.checkPlayers()
       area.players.should.deep.equal([])
+      // @ts-ignore
       area.left.players[0].should.equal(player)
     })
 
@@ -36,6 +38,7 @@ describe('Area', () => {
       area.players[0].edges.right = true
       area.checkPlayers()
       area.players.should.deep.equal([])
+      // @ts-ignore
       area.right.players[0].should.equal(player)
     })
 
@@ -43,6 +46,7 @@ describe('Area', () => {
       area.players[0].edges.top = true
       area.checkPlayers()
       area.players.should.deep.equal([])
+      // @ts-ignore
       area.top.players[0].should.equal(player)
     })
 
@@ -50,38 +54,42 @@ describe('Area', () => {
       area.players[0].edges.bottom = true
       area.checkPlayers()
       area.players.should.deep.equal([])
+      // @ts-ignore
       area.bottom.players[0].should.equal(player)
     })
   })
 
   describe('#left', () => {
-    let area
-    let area2
+    let area: Area
+    let area2: Area
+
     beforeEach(() => {
       area = new Area('area')
       area2 = new Area('area2', area)
     })
 
     it('returns the left value', () => {
+      // @ts-ignore
       area2.left.should.equal(area)
     })
 
     it('can be changed', () => {
-      area2.left = null
-      should.equal(area2.left, null)
+      area2.left = undefined
+      should.equal(area2.left, undefined)
     })
   })
 
   describe('#right', () => {
-    let area
-    let area2
+    let area: Area
+    let area2: Area
+
     beforeEach(() => {
       area = new Area('area')
       area2 = new Area('area2', area)
     })
 
     it('returns the right value', () => {
-      should.equal(area2.right, null)
+      should.equal(area2.right, undefined)
     })
 
     it('can be changed', () => {
@@ -91,103 +99,43 @@ describe('Area', () => {
   })
 
   describe('#top', () => {
-    let area
-    let area2
+    let area: Area
+    let area2: Area
+
     beforeEach(() => {
       area = new Area('area')
-      area2 = new Area('area2', null, null, area)
+      area2 = new Area('area2', undefined, undefined, area)
     })
 
     it('returns the right value', () => {
+      // @ts-ignore
       area2.top.should.equal(area)
     })
 
     it('can be changed', () => {
-      area2.top = null
-      should.equal(area2.top, null)
+      area2.top = undefined
+      should.equal(area2.top, undefined)
     })
   })
 
   describe('#bottom', () => {
-    let area
-    let area2
+    let area: Area
+    let area2: Area
+
     beforeEach(() => {
       area = new Area('area')
-      area2 = new Area('area2', null, null, null, area)
+      area2 = new Area('area2', undefined, undefined, undefined, area)
     })
 
     it('returns the right value', () => {
-      should.equal(area2.right, null)
+      should.equal(area2.right, undefined)
+      // @ts-ignore
       area2.bottom.should.equal(area)
     })
 
     it('can be changed', () => {
-      area2.bottom = null
-      should.equal(area2.bottom, null)
-    })
-  })
-
-  describe('#hasLeft', () => {
-    let area
-    let area2
-    beforeEach(() => {
-      area = new Area('area')
-      area2 = new Area('area2', area)
-    })
-
-    it('should return true if not null', () => {
-      area2.hasLeft().should.equal(true)
-    })
-    it('should return false if null', () => {
-      area.hasLeft().should.equal(false)
-    })
-  })
-
-  describe('#hasRight', () => {
-    let area
-    let area2
-    beforeEach(() => {
-      area = new Area('area')
-      area2 = new Area('area2', null, area)
-    })
-
-    it('should return true if not null', () => {
-      area2.hasRight().should.equal(true)
-    })
-    it('should return false if null', () => {
-      area.hasRight().should.equal(false)
-    })
-  })
-
-  describe('#hasTop', () => {
-    let area
-    let area2
-    beforeEach(() => {
-      area = new Area('area')
-      area2 = new Area('area2', null, null, area)
-    })
-
-    it('should return true if not null', () => {
-      area2.hasTop().should.equal(true)
-    })
-    it('should return false if null', () => {
-      area.hasTop().should.equal(false)
-    })
-  })
-
-  describe('#hasBottom', () => {
-    let area
-    let area2
-    beforeEach(() => {
-      area = new Area('area')
-      area2 = new Area('area2', null, null, null, area)
-    })
-
-    it('should return true if not null', () => {
-      area2.hasBottom().should.equal(true)
-    })
-    it('should return false if null', () => {
-      area.hasBottom().should.equal(false)
+      area2.bottom = undefined
+      should.equal(area2.bottom, undefined)
     })
   })
 })

@@ -4,7 +4,8 @@ import Block from '../../../src/game/model/Block'
 chai.should()
 
 describe('Block', () => {
-  let block
+  let block: Block
+
   beforeEach(() => {
     block = new Block(16, 20, 60, 60, 'stone')
   })

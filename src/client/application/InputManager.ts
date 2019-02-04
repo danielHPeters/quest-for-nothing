@@ -18,8 +18,8 @@ export enum Actions {
  * @version 1.0
  */
 export default class InputManager extends Observable {
-  inputMap
-  touches
+  inputMap: any
+  touches: any
 
   /**
    * Construtor. Initializes handler code.
@@ -69,27 +69,20 @@ export default class InputManager extends Observable {
       return false
     })
 
-    let start = []
-    let move = []
-    let touchstartX = 0
-    let touchstartY = 0
-    let toucheMoveX = 0
-    let touchMoveY = 0
+    let start: TouchList
+    let move
     let thisInstance = this
 
-    function handleTouchStart (evt): void {
+    function handleTouchStart (evt: TouchEvent): void {
       evt.preventDefault()
       start = evt.touches
-      touchstartX = evt.touches[0].pageX
-      touchstartY = evt.touches[0].pageY
     }
 
-    function handleTouchMove (evt): void {
+    function handleTouchMove (evt: TouchEvent): void {
       thisInstance.reset()
       evt.preventDefault()
       move = evt.changedTouches
-      toucheMoveX = evt.touches[0].pageX
-      touchMoveY = evt.touches[0].pageY
+
       for (let i = 0; i < evt.touches.length; i++) {
         // Positive values equals left. Negative values equals right
         if (move[i].pageX < start[i].pageX) {
@@ -108,7 +101,7 @@ export default class InputManager extends Observable {
       }
     }
 
-    function handleTouchEnd (evt): void {
+    function handleTouchEnd (evt: TouchEvent): void {
       evt.preventDefault()
       thisInstance.reset()
     }

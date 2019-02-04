@@ -5,7 +5,8 @@ import Area from '../../../src/game/model/Area'
 chai.should()
 
 describe('Player', () => {
-  let player
+  let player: Player
+
   beforeEach(() => {
     player = new Player('p1', 10, 20, 30, 30, 'Player', new Area('area1'))
   })
