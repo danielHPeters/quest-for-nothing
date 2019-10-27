@@ -8,7 +8,7 @@ import * as sassMiddleware from 'node-sass-middleware'
 import * as socketIo from 'socket.io'
 import { logger, stream } from './utils/logger'
 import { Http2Server } from 'http2'
-import GameLoop from './gameLoop'
+import GameLoop from './GameLoop'
 
 export class Server {
   app: express.Application
@@ -74,7 +74,7 @@ export class Server {
     this.app.set('port', process.env.PORT || 3000)
 
     this.httpServer.listen(this.app.get('port'), () => {
-      logger.log('info', 'Express server listening on port ' + this.httpServer.address().port)
+      logger.log('info', 'Express server listening on ' + this.httpServer.address())
     })
   }
 }
